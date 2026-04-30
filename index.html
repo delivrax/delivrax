@@ -1214,20 +1214,20 @@
     </div>
     <div class="form-wrapper">
       <h3>Demande de devis gratuit</h3>
-      <form class="form" action="https://formspree.io/f/mdabozne" method="POST">
+      <form class="form" action="https://formspree.io/f/mdabozne" method="POST" enctype="application/x-www-form-urlencoded">
         <div class="form-row">
           <div class="form-group">
             <label>Prénom & Nom</label>
-            <input type="text" placeholder="Jean Dupont" required>
+            <input type="text" name="nom" placeholder="Jean Dupont" required>
           </div>
           <div class="form-group">
             <label>Téléphone</label>
-            <input type="tel" placeholder="Contactez-nous par email ou formulaire" required>
+            <input type="tel" name="telephone" placeholder="Contactez-nous par email ou formulaire" required>
           </div>
         </div>
         <div class="form-group">
           <label>Type de service</label>
-          <select required>
+          <select name="service" required>
             <option value="">Choisissez un service...</option>
             <option>Meubles & objets encombrants</option>
             <option>Transport de moto</option>
@@ -1240,16 +1240,16 @@
         <div class="form-row">
           <div class="form-group">
             <label>Adresse de départ</label>
-            <input type="text" placeholder="Nivelles, Belgique" required>
+            <input type="text" name="depart" placeholder="Nivelles, Belgique" required>
           </div>
           <div class="form-group">
             <label>Adresse d'arrivée</label>
-            <input type="text" placeholder="Bruxelles, Belgique" required>
+            <input type="text" name="arrivee" placeholder="Bruxelles, Belgique" required>
           </div>
         </div>
         <div class="form-group">
           <label>Description</label>
-          <textarea placeholder="Décrivez ce que vous souhaitez transporter, le volume approximatif, une date souhaitée..."></textarea>
+          <textarea name="description" placeholder="Décrivez ce que vous souhaitez transporter, le volume approximatif, une date souhaitée..."></textarea>
         </div>
         <button type="submit" class="form-submit">Envoyer ma demande →</button>
         <p class="form-note">✓ Devis gratuit — Réponse sous 24h — Sans engagement</p>
