@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a2e6e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Delivrax">
+  <link rel="apple-touch-icon" href="icon-192.png">
   <title>Delivrax — Transport & Livraison en Belgique</title>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
@@ -401,6 +407,7 @@
     <a href="#services">Services</a>
     <a href="#tarifs">Tarifs</a>
     <a href="#zone">Zone</a>
+    <a href="#faq">FAQ</a>
     <a href="#partenaires">Partenaires</a>
     <a href="#contact">Contact</a>
   </div>
@@ -410,15 +417,21 @@
 <section class="hero">
   <h1>Transport & Livraison<br><span>Point A → Point B</span></h1>
   <p>Delivrax prend en charge tous vos transports en Belgique et à l'étranger. Rapide, fiable et soigné.</p>
+  <p style="margin-top:0.75rem; font-size:1rem; background:rgba(255,255,255,0.1); display:inline-block; padding:0.5rem 1.2rem; border-radius:50px; border:1px solid rgba(255,255,255,0.2);">
+    💰 Petite livraison à partir de <strong>49€</strong> &nbsp;|&nbsp; Standard à partir de <strong>89€</strong>
+  </p>
   <div class="hero-badges">
     <span class="badge">📦 Colis & Express</span>
+    <span class="badge">🎁 Livraison Cadeaux</span>
+    <span class="badge">📄 Documents Urgents</span>
     <span class="badge">🛋️ Meubles & Encombrants</span>
     <span class="badge">🏍️ Motos & Scooters</span>
     <span class="badge">🚚 Déménagement</span>
+    <span class="badge">🔍 Objets Oubliés</span>
     <span class="badge">🌍 Belgique & Étranger</span>
   </div>
   <a href="#contact" class="btn btn-red">Demander un devis gratuit</a>
-  <a href="tel:+32496849566" class="btn btn-outline">📞 Appeler maintenant</a>
+  <a href="tel:+32472762734" class="btn btn-outline">📞 Appeler maintenant</a>
 </section>
 
 <!-- SERVICES -->
@@ -429,7 +442,22 @@
     <div class="service-card">
       <div class="service-icon">📦</div>
       <h3>Livraison de Colis</h3>
-      <p>Livraison standard et express de vos colis en Belgique et à l'étranger. Réponse rapide et suivi personnalisé.</p>
+      <p>Livraison standard et express de vos colis en Belgique et à l'étranger. Réponse rapide et suivi personnalisé par WhatsApp à chaque étape.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎁</div>
+      <h3>Livraison de Cadeaux</h3>
+      <p>Faites livrer vos cadeaux directement chez vos proches, avec soin et discrétion. Service personnalisé pour les occasions spéciales.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📄</div>
+      <h3>Transport de Documents</h3>
+      <p>Livraison sécurisée de vos documents urgents, contrats, dossiers administratifs. Remise en main propre garantie.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Coursier Express & Documents Confidentiels</h3>
+      <p>Livraison urgente de documents confidentiels, contrats, dossiers sensibles pour entreprises et professionnels. Remise en main propre garantie. Idéal pour les entreprises du zoning.</p>
     </div>
     <div class="service-card">
       <div class="service-icon">🛋️</div>
@@ -447,14 +475,14 @@
       <p>Transport de vos affaires du point A au point B. Service soigné pour particuliers et professionnels.</p>
     </div>
     <div class="service-card">
-      <div class="service-icon">⚡</div>
-      <h3>Transport Express</h3>
-      <p>Besoin urgent ? On intervient rapidement pour vos livraisons express en Belgique et pays voisins.</p>
+      <div class="service-icon">🔍</div>
+      <h3>Récupération d'Objets Oubliés</h3>
+      <p>Vous avez oublié quelque chose quelque part ? On va le récupérer et vous le ramène rapidement où vous êtes.</p>
     </div>
     <div class="service-card">
       <div class="service-icon">🏢</div>
       <h3>Livraisons Pro</h3>
-      <p>Solutions sur mesure pour entreprises, e-commerce et artisans. Tarifs dégressifs selon volume.</p>
+      <p>Solutions sur mesure pour entreprises, e-commerce et artisans. Tarifs dégressifs selon volume et fréquence.</p>
     </div>
   </div>
 </section>
@@ -489,7 +517,30 @@
   </div>
 </section>
 
-<!-- TARIFS -->
+<!-- B2B HIGHLIGHT -->
+<section class="section" style="padding-top:0;">
+  <div style="background:linear-gradient(135deg, var(--blue) 0%, #2244a8 100%); border-radius:12px; padding:2.5rem; color:white; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,0.6); text-transform:uppercase; margin-bottom:0.5rem;">Pour les professionnels</div>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Vous êtes une <span style="color:#f03333;">entreprise</span> ?</div>
+      <p style="opacity:0.85; line-height:1.7; font-size:1rem;">Delivrax intervient dans les zonings industriels de Wallonie pour la livraison express de documents confidentiels, contrats urgents, pièces détachées et colis professionnels. Service B2B réactif, devis immédiat.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem;">
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">📄</span>
+        <div><strong>Documents & Contrats</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Remise en main propre — Confidentialité garantie</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">⚡</span>
+        <div><strong>Coursier Express</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Intervention rapide — 7j/7 — 8h à 20h</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">💼</span>
+        <div><strong>Tarifs Entreprises</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Dégressifs selon volume — Facturation possible</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 <section class="section" id="tarifs">
   <div class="section-title">Nos <span>Tarifs</span></div>
   <div class="section-sub">Tarifs indicatifs — devis personnalisé gratuit sur demande.</div>
@@ -497,7 +548,7 @@
     <div class="tarif-card">
       <h3>Petite Livraison</h3>
       <div class="tarif-price">49€ <small>à partir de</small></div>
-      <p>Colis, petits objets, courses express. Livraison rapide en zone locale.</p>
+      <p>Colis, documents, cadeaux, objets oubliés. Livraison rapide en zone locale.</p>
     </div>
     <div class="tarif-card featured">
       <h3>Livraison Standard</h3>
@@ -505,9 +556,54 @@
       <p>Meubles, électroménager, objets encombrants. Transport soigné avec chargement.</p>
     </div>
     <div class="tarif-card">
+      <h3>Longue Distance</h3>
+      <div class="tarif-price">150€ <small>à partir de</small></div>
+      <p>Transport +75 km, livraisons internationales France, Pays-Bas, Luxembourg.</p>
+    </div>
+    <div class="tarif-card">
       <h3>Déménagement</h3>
       <div class="tarif-price">Sur devis</div>
       <p>Transport complet de vos affaires. Tarif selon volume, distance et accessibilité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="why-section" id="faq">
+  <div class="why-inner">
+    <div class="section-title">Questions <span>Fréquentes</span></div>
+    <div class="section-sub">Tout ce que vous devez savoir sur Delivrax</div>
+    <div class="why-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📞</div>
+        <h4>Comment commander ?</h4>
+        <p>Remplissez le formulaire sur notre site, appelez-nous ou envoyez un message WhatsApp. On vous répond avec un devis en moins de 2h.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📍</div>
+        <h4>Comment suivre ma livraison ?</h4>
+        <p>On vous envoie des notifications par WhatsApp à chaque étape — prise en charge, en route, livraison effectuée. Contact direct avec le livreur.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🕐</div>
+        <h4>Quels sont vos horaires ?</h4>
+        <p>Nous sommes disponibles 7j/7 de 8h à 20h. Pour les urgences, n'hésitez pas à nous contacter en dehors de ces horaires.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🔒</div>
+        <h4>Mes colis sont-ils assurés ?</h4>
+        <p>Oui, nous transportons vos biens avec le plus grand soin. Chaque livraison est confirmée par une remise en main propre sécurisée.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">💳</div>
+        <h4>Quels modes de paiement ?</h4>
+        <p>Virement bancaire, Payconiq, carte bancaire via terminal. Paiement à la livraison ou à la commande selon votre préférence.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🌍</div>
+        <h4>Livrez-vous à l'étranger ?</h4>
+        <p>Oui ! Nous livrons en France, Pays-Bas, Luxembourg et plus encore. Contactez-nous pour un devis personnalisé longue distance.</p>
+      </div>
     </div>
   </div>
 </section>
@@ -575,7 +671,7 @@
       <p>Besoin d'un transport ou d'un devis ? Remplissez le formulaire ou contactez-nous directement. On vous répond rapidement !</p>
       <div class="contact-detail">
         <span class="ico">📞</span>
-        <a href="tel:+32496849566">+32 496 84 95 66</a>
+        <a href="tel:+32472762734">+32 472 76 27 34</a>
       </div>
       <div class="contact-detail">
         <span class="ico">📧</span>
@@ -588,6 +684,10 @@
       <div class="contact-detail">
         <span class="ico">📍</span>
         <span>Brabant Wallon, Belgique</span>
+      </div>
+      <div class="contact-detail">
+        <span class="ico">🕐</span>
+        <span>Disponible 7j/7 — 8h à 20h</span>
       </div>
     </div>
     <div class="devis-form">
@@ -612,10 +712,14 @@
           <select name="service" required>
             <option value="">Choisissez un service</option>
             <option>Livraison de colis</option>
+            <option>Livraison de cadeau</option>
+            <option>Transport de documents urgents</option>
+            <option>Récupération d'objet oublié</option>
             <option>Transport de meubles</option>
             <option>Transport de moto</option>
             <option>Déménagement</option>
-            <option>Transport express</option>
+            <option>Coursier Express & Documents Confidentiels</option>
+            <option>Livraison longue distance</option>
             <option>Livraison professionnelle</option>
           </select>
         </div>
@@ -642,9 +746,15 @@
 <!-- FOOTER -->
 <footer>
   <p><strong>DELIVRAX</strong> — Transport & Livraison en Belgique</p>
-  <p style="margin-top:0.5rem;">📞 +32 496 84 95 66 &nbsp;|&nbsp; 📧 contact.delivrax@gmail.com &nbsp;|&nbsp; 🌐 delivrax.be</p>
+  <p style="margin-top:0.5rem;">📞 +32 472 76 27 34 &nbsp;|&nbsp; 📧 contact.delivrax@gmail.com &nbsp;|&nbsp; 🌐 delivrax.be</p>
+  <p style="margin-top:0.3rem;">🕐 Disponible 7j/7 — 8h à 20h &nbsp;|&nbsp; 🇧🇪 Brabant Wallon, Belgique</p>
   <p style="margin-top:0.5rem; font-size:0.8rem;">© 2025 Delivrax. Tous droits réservés.</p>
 </footer>
 
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").then(() => console.log("SW registered"));
+}
+</script>
 </body>
 </html>
