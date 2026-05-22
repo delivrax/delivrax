@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a2e6e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Delivrax">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Delivrax — Mise à disposition véhicule avec chauffeur &amp; Manutention — Belgique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue: #1a2e6e;
+      --blue-light: #2244a8;
+      --red: #d42b2b;
+      --red-light: #f03333;
+      --bg: #f7f3ee;
+      --bg2: #efe9e0;
+      --text: #1a1a1a;
+      --text-light: #555;
+      --white: #fff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); }
+
+    /* NAV */
+    nav {
+      background: var(--blue);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 2px;
+      padding: 1rem 0;
+    }
+    .nav-logo span { color: var(--red-light); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red-light); }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 60%, var(--red) 100%);
+      color: var(--white);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero h1 span { color: var(--red-light); }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 0.4rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-red { background: var(--red); color: var(--white); }
+    .btn-red:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,43,43,0.4); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); margin-left: 1rem; }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
+
+    /* SERVICES */
+    .section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .section-title span { color: var(--red); }
+    .section-sub { color: var(--text-light); margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      border-top: 4px solid var(--red);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .service-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .service-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .service-card p { color: var(--text-light); line-height: 1.6; font-size: 0.95rem; }
+
+    /* POURQUOI */
+    .why-section {
+      background: var(--blue);
+      color: var(--white);
+      padding: 4rem 2rem;
+    }
+    .why-inner { max-width: 1100px; margin: 0 auto; }
+    .why-section .section-title { color: var(--white); }
+    .why-section .section-title span { color: var(--red-light); }
+    .why-section .section-sub { color: rgba(255,255,255,0.7); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .why-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .why-card h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.4rem; text-transform: uppercase; }
+    .why-card p { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
+
+    /* TARIFS */
+    .tarifs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .tarif-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      text-align: center;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .tarif-card.featured { border-color: var(--red); position: relative; }
+    .tarif-card.featured::before {
+      content: '⭐ POPULAIRE';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--red);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 1rem;
+      border-radius: 50px;
+      letter-spacing: 1px;
+    }
+    .tarif-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .tarif-price {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      margin: 1rem 0;
+    }
+    .tarif-price small { font-size: 1rem; color: var(--text-light); font-family: 'Barlow', sans-serif; font-weight: 400; }
+    .tarif-card p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
+
+    /* ZONE */
+    .zone-section { background: var(--bg2); padding: 4rem 2rem; }
+    .zone-inner { max-width: 1100px; margin: 0 auto; }
+    .zone-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+    .zone-tag {
+      background: var(--white);
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .zone-tag.red { border-color: var(--red); color: var(--red); }
+
+    /* PARTENAIRES */
+    .partners-section { background: var(--blue); color: var(--white); padding: 4rem 2rem; }
+    .partners-inner { max-width: 1100px; margin: 0 auto; }
+    .partners-section .section-title { color: var(--white); }
+    .partners-section .section-title span { color: var(--red-light); }
+    .partners-section .section-sub { color: rgba(255,255,255,0.7); }
+    .partners-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .partners-step {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .step-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--red-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .partners-step h4 { font-weight: 700; margin-bottom: 0.4rem; }
+    .partners-step p { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
+    .partners-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0; }
+    .partners-tag {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    /* CONTACT */
+    .contact-section { padding: 4rem 2rem; }
+    .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .contact-info h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--blue);
+      margin-bottom: 1rem;
+    }
+    .contact-info h2 span { color: var(--red); }
+    .contact-info p { color: var(--text-light); line-height: 1.7; margin-bottom: 1.5rem; }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .contact-detail .ico { font-size: 1.3rem; }
+    .contact-detail a { color: var(--blue); text-decoration: none; }
+    .contact-detail a:hover { color: var(--red); }
+
+    /* FORM */
+    .devis-form { background: var(--white); border-radius: 8px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .devis-form h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0d8ce;
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { outline: none; border-color: var(--blue); }
+    .form-group textarea { height: 100px; resize: vertical; }
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--red-light); transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer {
+      background: #111827;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
+    footer strong { color: white; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .btn-outline { margin-left: 0; margin-top: 0.75rem; display: block; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">DELIV<span>RAX</span></div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#zone">Zone</a>
+    <a href="#faq">FAQ</a>
+    <a href="#partenaires">Partenaires</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>Transport & Livraison<br><span>Point A → Point B</span></h1>
+  <p>Delivrax met à votre disposition un véhicule avec chauffeur pour tous vos besoins : aide au déménagement, manutention, remise en main propre et évacuation. Partout en Belgique et à l'étranger. Rapide, fiable et soigné.</p>
+  <p style="margin-top:0.75rem; font-size:1rem; background:rgba(255,255,255,0.1); display:inline-block; padding:0.5rem 1.2rem; border-radius:50px; border:1px solid rgba(255,255,255,0.2);">
+    💰 Petite livraison à partir de <strong>55€</strong> &nbsp;|&nbsp; Standard à partir de <strong>95€</strong>
+  </p>
+  <div class="hero-badges">
+    <span class="badge">📦 Colis & Express</span>
+    <span class="badge">🎁 Aide déménagement</span>
+    <span class="badge">🏠 Vide-maison / Débarras</span>
+    <span class="badge">🛋️ Meubles & Encombrants</span>
+    <span class="badge">🏍️ Motos & Scooters</span>
+    <span class="badge">🚚 Déménagement</span>
+    <span class="badge">🔍 Objets Oubliés</span>
+    <span class="badge">🌍 Belgique & Étranger</span>
+  </div>
+  <a href="#contact" class="btn btn-red">Demander un devis gratuit</a>
+  <a href="tel:+32496849566" class="btn btn-outline">📞 Appeler maintenant</a>
+</section>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-title">Nos <span>Services</span></div>
+  <div class="section-sub">Tout type de transport, pour particuliers et professionnels.</div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">📦</div>
+      <h3>Manutention &amp; Objets divers</h3>
+      <p>Mise à disposition du véhicule avec chauffeur pour vos objets divers, électroménager et petits meubles. Réponse rapide et suivi par WhatsApp.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🎁</div>
+      <h3>Livraison de Cadeaux</h3>
+      <p>Nous mettons notre véhicule et notre chauffeur à votre disposition pour vos déménagements. Chargement, transport et déchargement inclus.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📄</div>
+      <h3>Débarras &amp; Vide-maison</h3>
+      <p>Mise à disposition véhicule avec chauffeur pour la remise en main propre de vos documents urgents, contrats et dossiers sensibles. Confidentialité garantie.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Service rapide & Documents Confidentiels</h3>
+      <p>Mise à disposition rapide d'un véhicule avec chauffeur pour vos urgences professionnelles. Idéal pour les entreprises du zoning industriel.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛋️</div>
+      <h3>Meubles & Encombrants</h3>
+      <p>Transport soigné de vos meubles, électroménager et objets encombrants. Chargement et déchargement inclus.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏍️</div>
+      <h3>Motos & Scooters</h3>
+      <p>Transport sécurisé de vos deux-roues avec arrimage professionnel. Livraison partout en Belgique.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚚</div>
+      <h3>Déménagement</h3>
+      <p>Mise à disposition véhicule avec chauffeur et manutention pour votre déménagement complet. Service soigné pour particuliers et professionnels.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <h3>Récupération d'Objets Oubliés</h3>
+      <p>Vous avez oublié quelque chose quelque part ? On met le véhicule à disposition pour aller le récupérer et vous le ramener rapidement.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Livraisons Pro</h3>
+      <p>Mise à disposition véhicule avec chauffeur pour entreprises et artisans. Tarifs dégressifs selon volume et fréquence.</p>
+    </div>
+  </div>
+</section>
+
+<!-- POURQUOI -->
+<section class="why-section">
+  <div class="why-inner">
+    <div class="section-title">Pourquoi <span>Delivrax ?</span></div>
+    <div class="section-sub">Ce qui nous différencie de la concurrence</div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="icon">⚡</div>
+        <h4>Réactivité</h4>
+        <p>Devis en moins de 2h, intervention rapide selon disponibilités.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">💰</div>
+        <h4>Prix Compétitifs</h4>
+        <p>Tarifs transparents, sans surprise. Devis gratuit et sans engagement.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🤝</div>
+        <h4>Proximité</h4>
+        <p>Un interlocuteur direct, pas un call center. On vous répond personnellement.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">🌍</div>
+        <h4>Flexibilité</h4>
+        <p>Belgique entière et étranger. Petits colis ou gros volumes, on s'adapte.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- B2B HIGHLIGHT -->
+<section class="section" style="padding-top:0;">
+  <div style="background:linear-gradient(135deg, var(--blue) 0%, #2244a8 100%); border-radius:12px; padding:2.5rem; color:white; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
+    <div>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,0.6); text-transform:uppercase; margin-bottom:0.5rem;">Pour les professionnels</div>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Vous êtes une <span style="color:#f03333;">entreprise</span> ?</div>
+      <p style="opacity:0.85; line-height:1.7; font-size:1rem;">Delivrax intervient dans les zonings industriels de Wallonie pour la mise à disposition de véhicule avec chauffeur, manutention et aide au déménagement professionnel. Service B2B réactif, devis immédiat.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem;">
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">📄</span>
+        <div><strong>Documents & Contrats</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Remise en main propre — Confidentialité garantie</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">⚡</span>
+        <div><strong>Service rapide</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Intervention rapide — 7j/7 — 8h à 20h</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">💼</span>
+        <div><strong>Tarifs Entreprises</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Dégressifs selon volume — Facturation possible</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="section" id="tarifs">
+  <div class="section-title">Nos <span>Tarifs</span></div>
+  <div class="section-sub">Tarifs indicatifs — devis personnalisé gratuit sur demande.</div>
+  <div class="tarifs-grid">
+    <div class="tarif-card">
+      <h3>Petite Livraison</h3>
+      <div class="tarif-price">55€ <small>à partir de</small></div>
+      <p>Véhicule avec chauffeur pour objets, meubles légers, manutention locale.</p>
+    </div>
+    <div class="tarif-card featured">
+      <h3>Livraison Standard</h3>
+      <div class="tarif-price">95€ <small>à partir de</small></div>
+      <p>Véhicule avec chauffeur + manutention pour meubles, électroménager, objets encombrants.</p>
+    </div>
+    <div class="tarif-card">
+      <h3>Longue Distance</h3>
+      <div class="tarif-price">175€ <small>à partir de</small></div>
+      <p>Mise à disposition véhicule + chauffeur pour longue distance, France, Pays-Bas, Luxembourg.</p>
+    </div>
+    <div class="tarif-card">
+      <h3>Déménagement</h3>
+      <div class="tarif-price">Sur devis</div>
+      <p>Transport complet de vos affaires. Tarif selon volume, distance et accessibilité.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="why-section" id="faq">
+  <div class="why-inner">
+    <div class="section-title">Questions <span>Fréquentes</span></div>
+    <div class="section-sub">Tout ce que vous devez savoir sur Delivrax</div>
+    <div class="why-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📞</div>
+        <h4>Comment commander ?</h4>
+        <p>Remplissez le formulaire, appelez-nous ou envoyez un WhatsApp. On vous propose une mise à disposition véhicule avec chauffeur — devis gratuit en moins de 2h.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📍</div>
+        <h4>Comment suivre ma livraison ?</h4>
+        <p>On vous envoie des notifications par WhatsApp à chaque étape — prise en charge, en route, arrivée. Contact direct avec le chauffeur.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🕐</div>
+        <h4>Quels sont vos horaires ?</h4>
+        <p>Nous sommes disponibles 7j/7 de 8h à 20h. Pour les urgences, n'hésitez pas à nous contacter en dehors de ces horaires.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🔒</div>
+        <h4>Mes colis sont-ils assurés ?</h4>
+        <p>Oui, nous transportons vos biens avec le plus grand soin. Chaque livraison est confirmée par une remise en main propre sécurisée.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">💳</div>
+        <h4>Quels modes de paiement ?</h4>
+        <p>Virement bancaire, Payconiq, carte bancaire via terminal. Paiement à la livraison ou à la commande selon votre préférence.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🌍</div>
+        <h4>Livrez-vous à l'étranger ?</h4>
+        <p>Oui ! Nous livrons en France, Pays-Bas, Luxembourg et plus encore. Contactez-nous pour un devis personnalisé longue distance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ZONE -->
+<section class="zone-section" id="zone">
+  <div class="zone-inner">
+    <div class="section-title">Zone de <span style="color:var(--red)">Couverture</span></div>
+    <div class="section-sub">On se déplace partout où vous avez besoin.</div>
+    <div class="zone-tags">
+      <span class="zone-tag">🇧🇪 Belgique entière</span>
+      <span class="zone-tag">Brabant Wallon</span>
+      <span class="zone-tag">Bruxelles</span>
+      <span class="zone-tag">Liège</span>
+      <span class="zone-tag">Namur</span>
+      <span class="zone-tag">Anvers</span>
+      <span class="zone-tag">Gand</span>
+      <span class="zone-tag red">🇫🇷 France</span>
+      <span class="zone-tag red">🇳🇱 Pays-Bas</span>
+      <span class="zone-tag red">🇱🇺 Luxembourg</span>
+      <span class="zone-tag red">🌍 Et plus...</span>
+    </div>
+  </div>
+</section>
+
+<!-- PARTENAIRES -->
+<section class="partners-section" id="partenaires">
+  <div class="partners-inner">
+    <div class="section-title">Programme <span>Partenaires</span></div>
+    <div class="section-sub">Vous vendez des produits encombrants ? On s'occupe de la livraison.</div>
+    <div class="partners-steps">
+      <div class="partners-step">
+        <div class="step-num">01</div>
+        <h4>Votre client achète</h4>
+        <p>Dans votre magasin ou en ligne — il a besoin de livraison.</p>
+      </div>
+      <div class="partners-step">
+        <div class="step-num">02</div>
+        <h4>Delivrax intervient</h4>
+        <p>On récupère et livre directement chez votre client.</p>
+      </div>
+      <div class="partners-step">
+        <div class="step-num">03</div>
+        <h4>Tout le monde gagne</h4>
+        <p>Votre client est satisfait, vous proposez un service complet.</p>
+      </div>
+    </div>
+    <div class="partners-tags">
+      <span class="partners-tag">🔌 Électroménager</span>
+      <span class="partners-tag">🛋️ Meubles</span>
+      <span class="partners-tag">💻 High-Tech</span>
+      <span class="partners-tag">🔨 Bricolage</span>
+      <span class="partners-tag">🏪 E-commerce</span>
+    </div>
+    <p style="opacity:0.8; margin-bottom:1.5rem;">Intéressé par un partenariat ? Contactez-nous pour discuter d'un accord sur mesure.</p>
+    <a href="mailto:contact.delivrax@gmail.com" class="btn btn-red">Proposer un partenariat</a>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <h2>Contactez <span>Delivrax</span></h2>
+      <p>Besoin d'un transport ou d'un devis ? Remplissez le formulaire ou contactez-nous directement. On vous répond rapidement !</p>
+      <div class="contact-detail">
+        <span class="ico">📞</span>
+        <a href="tel:+32496849566">+32 496 84 95 66</a>
+      </div>
+      <div class="contact-detail">
+        <span class="ico">📧</span>
+        <a href="mailto:contact.delivrax@gmail.com">contact.delivrax@gmail.com</a>
+      </div>
+      <div class="contact-detail">
+        <span class="ico">🌐</span>
+        <a href="https://delivrax.be">delivrax.be</a>
+      </div>
+      <div class="contact-detail">
+        <span class="ico">📍</span>
+        <span>Brabant Wallon, Belgique</span>
+      </div>
+      <div class="contact-detail">
+        <span class="ico">🕐</span>
+        <span>Disponible 7j/7 — 8h à 20h</span>
+      </div>
+    </div>
+    <div class="devis-form">
+      <h3>Demande de Devis</h3>
+      <form action="https://formspree.io/f/mdabozne" method="POST">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nom & Prénom *</label>
+            <input type="text" name="nom" placeholder="Votre nom" required />
+          </div>
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input type="tel" name="telephone" placeholder="+32 ..." required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="votre@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Type de service *</label>
+          <select name="service" required>
+            <option value="">Choisissez un service</option>
+            <option>Mise à disposition véhicule — objets divers</option>
+            <option>Aide au déménagement</option>
+            <option>Remise en main propre — documents</option>
+            <option>Récupération d'objet</option>
+            <option>Mise à disposition véhicule — meubles</option>
+            <option>Mise à disposition véhicule — moto / scooter</option>
+            <option>Déménagement</option>
+            <option>Service rapide & Documents Confidentiels</option>
+            <option>Mise à disposition longue distance</option>
+            <option>Service pro avec véhicule</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Adresse de départ *</label>
+            <input type="text" name="depart" placeholder="Ville ou adresse" required />
+          </div>
+          <div class="form-group">
+            <label>Adresse d'arrivée *</label>
+            <input type="text" name="arrivee" placeholder="Ville ou adresse" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Détails supplémentaires</label>
+          <textarea name="description" placeholder="Décrivez votre besoin (dimensions, poids, date souhaitée...)"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">🚐 Envoyer ma demande</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p><strong>DELIVRAX</strong> — Mise à disposition véhicule avec chauffeur &amp; Manutention — Belgique</p>
+  <p style="margin-top:0.5rem;">📞 +32 496 84 95 66 &nbsp;|&nbsp; 📧 contact.delivrax@gmail.com &nbsp;|&nbsp; 🌐 delivrax.be</p>
+  <p style="margin-top:0.3rem;">🕐 Disponible 7j/7 — 8h à 20h &nbsp;|&nbsp; 🇧🇪 Brabant Wallon, Belgique</p>
+  <p style="margin-top:0.5rem; font-size:0.8rem;">© 2025 Delivrax. Tous droits réservés. — Brabant Wallon, Belgique</p>
+</footer>
+
+<script>
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").then(() => console.log("SW registered"));
+}
+</script>
+</body>
+</html>
