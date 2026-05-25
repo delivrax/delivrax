@@ -1032,8 +1032,8 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
       <div class="fact-admin-grid">
         <div class="fact-admin-card">
           <h3>👤 Vos informations</h3>
-          <div class="fact-field"><label>Nom / Raison sociale</label><input id="a-nom" placeholder="Delivrax" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Adresse</label><input id="a-adresse" placeholder="Votre adresse" oninput="updatePreviewAdmin()"></div>
+          <div class="fact-field"><label>Nom / Raison sociale</label><input id="a-nom" placeholder="Delivrax" value="Delivrax" oninput="updatePreviewAdmin()"></div>
+          <div class="fact-field"><label>Adresse</label><input id="a-adresse" placeholder="Brabant Wallon, Belgique" value="Brabant Wallon, Belgique" oninput="updatePreviewAdmin()"></div>
           <div class="fact-field"><label>Téléphone</label><input id="a-tel" value="+32 496 84 95 66" oninput="updatePreviewAdmin()"></div>
           <div class="fact-field"><label>Email</label><input id="a-email" value="contact.delivrax@gmail.com" oninput="updatePreviewAdmin()"></div>
           <div class="fact-field"><label>N° BCE / TVA (optionnel)</label><input id="a-tva" placeholder="BE 0xxx.xxx.xxx" oninput="updatePreviewAdmin()"></div>
@@ -1198,12 +1198,18 @@ function initAdmin(){
   const echo = new Date(); echo.setDate(echo.getDate()+15);
   document.getElementById('a-date').value = today;
   document.getElementById('a-echeance').value = echo.toISOString().split('T')[0];
-  // Charger infos sauvegardées
+  // Charger infos sauvegardées — avec valeurs Delivrax par défaut
   const saved = JSON.parse(localStorage.getItem('dlvx-infos')||'{}');
-  if(saved.nom) document.getElementById('a-nom').value = saved.nom;
-  if(saved.adresse) document.getElementById('a-adresse').value = saved.adresse;
+  document.getElementById('a-nom').value = saved.nom || 'Delivrax';
+  document.getElementById('a-adresse').value = saved.adresse || 'Brabant Wallon, Belgique';
+  document.getElementById('a-tel').value = saved.tel || '+32 496 84 95 66';
+  document.getElementById('a-email').value = saved.email || 'contact.delivrax@gmail.com';
   if(saved.tva) document.getElementById('a-tva').value = saved.tva;
   if(saved.iban) document.getElementById('a-iban').value = saved.iban;
+  // Vider les champs client — toujours vides au départ
+  ['a-client-nom','a-client-adresse','a-client-email','a-client-tel'].forEach(id=>{
+    document.getElementById(id).value = '';
+  });
   // Numéro auto
   const hist = JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
   aFactNum = hist.length + 1;
@@ -1278,7 +1284,14 @@ function updatePreviewAdmin(){
   document.getElementById('p-iban').textContent=iban?'💳 Paiement par virement : '+iban:'';
   document.getElementById('p-note').textContent=note;
   // Sauver infos
-  localStorage.setItem('dlvx-infos',JSON.stringify({nom,adresse,tva:tvaNum,iban}));
+  localStorage.setItem('dlvx-infos',JSON.stringify({
+    nom: document.getElementById('a-nom').value || 'Delivrax',
+    adresse: document.getElementById('a-adresse').value || 'Brabant Wallon, Belgique',
+    tel: document.getElementById('a-tel').value || '+32 496 84 95 66',
+    email: document.getElementById('a-email').value || 'contact.delivrax@gmail.com',
+    tva: document.getElementById('a-tva').value,
+    iban: document.getElementById('a-iban').value
+  }));
 }
 
 function getTexteFacture(){
