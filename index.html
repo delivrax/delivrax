@@ -979,7 +979,7 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
   📞 <a href="tel:+32496849566">+32 496 84 95 66</a> | ✉️ <a href="mailto:contact.delivrax@gmail.com">contact.delivrax@gmail.com</a> | 🌐 delivrax.be<br>
   🕐 Disponible 7j/7 — 10h à 20h | 📍 Brabant Wallon, Belgique<br><br>
   © 2025 Delivrax. Tous droits réservés. — Toutes les prestations sont formulées en conformité avec la réglementation SPF Mobilité belge.<br>
-  <a href="#admin" style="color:rgba(255,255,255,0.1);font-size:10px;text-decoration:none">·</a></p>
+  <a href="#dlvx-k9x2m7p4q8" style="color:rgba(255,255,255,0.08);font-size:10px;text-decoration:none">·</a></p>
 </footer>
 
 <a href="https://wa.me/32496849566?text=Bonjour Delivrax, je souhaite un devis pour une mise à disposition véhicule." class="wa-float" target="_blank">💬</a>
@@ -1146,24 +1146,73 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
 </div>
 
 <script>
-// ===== ADMIN =====
-const ADMIN_PWD = 'nivelles2030';
+// ===== ADMIN SÉCURISÉ =====
+// Mot de passe hashé SHA-256 — impossible à lire en clair
+const ADMIN_HASH = 'b87845edd9ac232056233cce5f3b1755bb8ec15148a2eb14895a502bc5672a0b';
+// URL secrète — seul toi la connais
+const SECRET_KEY = 'dlvx-k9x2m7p4q8';
+let loginAttempts = 0;
+let lockUntil = 0;
 
-function checkAdmin(){
+async function hashPassword(pwd){
+  const encoder = new TextEncoder();
+  const data = encoder.encode(pwd + 'delivrax-salt-2025');
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function checkAdmin(){
+  // Vérifier le blocage
+  if(Date.now() < lockUntil){
+    const secs = Math.ceil((lockUntil - Date.now()) / 1000);
+    showToast('🔒 Trop de tentatives — réessayez dans '+secs+'s');
+    return;
+  }
+
   const pwd = document.getElementById('admin-pwd').value;
-  if(pwd === ADMIN_PWD){
+  const hash = await hashPassword(pwd);
+
+  if(hash === ADMIN_HASH){
+    // Succès — créer session 2h
+    loginAttempts = 0;
+    const session = {token: Date.now(), expires: Date.now() + 7200000};
+    sessionStorage.setItem('dlvx-session', JSON.stringify(session));
     document.getElementById('admin-overlay').classList.remove('show');
     document.getElementById('admin-wrap').classList.add('show');
     document.body.style.overflow = 'hidden';
     initAdmin();
     document.getElementById('admin-pwd').value = '';
   } else {
+    loginAttempts++;
     const input = document.getElementById('admin-pwd');
     input.classList.add('error');
     input.value = '';
-    input.placeholder = '❌ Code incorrect';
-    setTimeout(()=>{ input.placeholder='••••••'; },2000);
+
+    if(loginAttempts >= 3){
+      // Blocage 5 minutes
+      lockUntil = Date.now() + 300000;
+      loginAttempts = 0;
+      input.placeholder = '🔒 Bloqué 5 minutes';
+      setTimeout(()=>{ input.placeholder='••••••'; },300000);
+      showToast('🔒 3 tentatives échouées — accès bloqué 5 minutes');
+    } else {
+      const restantes = 3 - loginAttempts;
+      input.placeholder = '❌ Incorrect ('+restantes+' essai'+(restantes>1?'s':'')+' restant'+(restantes>1?'s':'')+')';
+      setTimeout(()=>{ input.placeholder='••••••'; },3000);
+    }
   }
+}
+
+function checkSession(){
+  const s = sessionStorage.getItem('dlvx-session');
+  if(!s) return false;
+  const session = JSON.parse(s);
+  if(Date.now() > session.expires){
+    sessionStorage.removeItem('dlvx-session');
+    return false;
+  }
+  return true;
 }
 
 function fermerAdmin(){
@@ -1179,13 +1228,32 @@ function showAdminTab(tab, btn){
   if(tab==='historique') renderHistorique();
 }
 
-// Détecter #admin dans l'URL — après chargement complet
-window.addEventListener('hashchange', ()=>{ 
-  if(location.hash==='#admin') document.getElementById('admin-overlay').classList.add('show'); 
-});
-window.addEventListener('DOMContentLoaded', ()=>{
-  if(location.hash==='#admin') document.getElementById('admin-overlay').classList.add('show');
-});
+// Détecter l'URL secrète — après chargement complet
+function checkSecretURL(){
+  if(location.hash === '#'+SECRET_KEY){
+    if(checkSession()){
+      // Session valide — accès direct sans mot de passe
+      document.getElementById('admin-wrap').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      initAdmin();
+    } else {
+      document.getElementById('admin-overlay').classList.add('show');
+    }
+  }
+}
+
+window.addEventListener('hashchange', checkSecretURL);
+window.addEventListener('DOMContentLoaded', checkSecretURL);
+
+// Expiration session auto — vérifie toutes les minutes
+setInterval(()=>{
+  if(document.getElementById('admin-wrap').classList.contains('show')){
+    if(!checkSession()){
+      fermerAdmin();
+      showToast('⏱ Session expirée — reconnectez-vous');
+    }
+  }
+}, 60000);
 
 // ===== FACTURATION ADMIN =====
 let aLignes = [];
@@ -1714,9 +1782,9 @@ function submitForm(){
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{
     const href = a.getAttribute('href');
-    if(href === '#admin'){ 
+    if(href === '#'+SECRET_KEY || href === '#admin'){ 
       e.preventDefault();
-      document.getElementById('admin-overlay').classList.add('show');
+      checkSecretURL();
       return;
     }
     const t=document.querySelector(href);
