@@ -9,6 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -275,7 +276,10 @@ footer strong{color:#fff}
   .form-row{grid-template-columns:1fr}
   .hero h1{letter-spacing:-1px}
 }
-@media print{nav,footer,.wa-float,.wa-tooltip,.toast,#admin-overlay,.admin-nav,.admin-btns,.fact-admin-grid,.fact-lignes-admin,.fact-totaux-admin{display:none!important}.admin-wrap{position:static!important;background:#fff!important}.fact-preview-admin{border:none!important;padding:0!important}}
+@media print{
+  body > *{display:none!important}
+  #print-zone{display:block!important;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:99999;padding:20px}
+}
 /* ADMIN */
 #admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:5000;align-items:center;justify-content:center;padding:16px}
 #admin-overlay.show{display:flex}
@@ -333,8 +337,7 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
 </style>
 </head>
 <body>
-
-<nav>
+<div id="print-zone" style="display:none"></div>
   <a href="#" class="nav-logo">DELIV<span>RAX</span></a>
   <div class="nav-links" id="nav-links">
     <a href="#services" class="nav-link">Services</a>
@@ -1021,7 +1024,8 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
       <div class="admin-btns">
         <button class="btn-admin" style="background:var(--bleu);color:#fff" onclick="genererPDFetEmail()">📄✉️ Générer PDF & Envoyer email</button>
         <button class="btn-admin" style="background:#25d366;color:#fff" onclick="envoyerWhatsAppAdmin()">💬 Envoyer WhatsApp</button>
-        <button class="btn-admin" style="background:#FF8A65;color:#fff" onclick="window.print()">🖨️ Imprimer</button>
+        <button class="btn-admin" style="background:#FF8A65;color:#fff" onclick="genererPDF(true)">⬇️ Télécharger PDF</button>
+        <button class="btn-admin" style="background:#607D8B;color:#fff" onclick="imprimerFactureAdmin()">🖨️ Imprimer</button>
         <button class="btn-admin" style="background:var(--orange);color:#fff" onclick="nouvelleFactureAdmin()">➕ Nouvelle facture</button>
       </div>
 
@@ -1143,7 +1147,7 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
 
 <script>
 // ===== ADMIN =====
-const ADMIN_PWD = 'delivrax2025'; // ← CHANGE CE MOT DE PASSE !
+const ADMIN_PWD = 'nivelles2030';
 
 function checkAdmin(){
   const pwd = document.getElementById('admin-pwd').value;
@@ -1311,15 +1315,229 @@ function sauverHistorique(f){
   localStorage.setItem('dlvx-hist',JSON.stringify(hist.slice(0,50)));
 }
 
+function genererPDF(telecharger=true){
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({unit:'mm',format:'a4'});
+  const f = getTexteFacture();
+
+  // Couleurs
+  const bleu = [15,31,78];
+  const orange = [255,107,53];
+  const gris = [107,107,107];
+  const blanc = [255,255,255];
+
+  const pageW = 210;
+  const margin = 20;
+  let y = 20;
+
+  // ── HEADER ──
+  doc.setFillColor(...bleu);
+  doc.rect(0, 0, pageW, 40, 'F');
+
+  // Logo
+  doc.setTextColor(...blanc);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(22);
+  doc.text('DELIVRAX', margin, y+8);
+
+  // Numéro facture
+  doc.setFontSize(11);
+  doc.setFont('helvetica','normal');
+  doc.setTextColor(200,200,200);
+  doc.text('FACTURE', pageW-margin, y+4, {align:'right'});
+  doc.setTextColor(...blanc);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(14);
+  doc.text(f.num||'FA-001', pageW-margin, y+12, {align:'right'});
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(200,200,200);
+
+  const nom=document.getElementById('a-nom').value||'Delivrax';
+  const adresse=document.getElementById('a-adresse').value;
+  const tel=document.getElementById('a-tel').value;
+  const email=document.getElementById('a-email').value;
+  const tvaNum=document.getElementById('a-tva').value;
+  const iban=document.getElementById('a-iban').value;
+  const clientNom=document.getElementById('a-client-nom').value||'—';
+  const clientAdresse=document.getElementById('a-client-adresse').value;
+  const clientEmail=document.getElementById('a-client-email').value;
+  const dateVal=document.getElementById('a-date').value;
+  const echeanceVal=document.getElementById('a-echeance').value;
+  const note=document.getElementById('a-note').value;
+  const dateFr=dateVal?new Date(dateVal).toLocaleDateString('fr-BE'):'—';
+  const echeanceFr=echeanceVal?new Date(echeanceVal).toLocaleDateString('fr-BE'):'—';
+  const tvaPct=parseFloat(document.getElementById('a-tva-pct').value)||0;
+  const km=parseFloat(document.getElementById('a-km').value)||0;
+  const kmAmt=km*0.42;
+  const subtotal=aLignes.reduce((s,l)=>s+(l.qte*l.prix),0);
+  const tvaAmt=subtotal*tvaPct/100;
+  const total=subtotal+tvaAmt+kmAmt;
+
+  doc.text(`Date : ${dateFr}  |  Échéance : ${echeanceFr}`, pageW-margin, y+20, {align:'right'});
+
+  y = 50;
+
+  // ── ÉMETTEUR & CLIENT ──
+  doc.setTextColor(...gris);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','bold');
+  doc.text('ÉMETTEUR', margin, y);
+  doc.text('CLIENT', pageW/2+5, y);
+
+  y += 5;
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(10);
+  doc.setTextColor(...bleu);
+  doc.setFont('helvetica','bold');
+  doc.text(nom, margin, y);
+  doc.text(clientNom, pageW/2+5, y);
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  doc.setTextColor(60,60,60);
+  y += 5;
+  if(adresse){ doc.text(adresse, margin, y); y+=4; }
+  if(tel){ doc.text(tel, margin, y); y+=4; }
+  if(email){ doc.text(email, margin, y); y+=4; }
+  if(tvaNum){ doc.text('TVA: '+tvaNum, margin, y); y+=4; }
+
+  let yc = 55;
+  if(clientAdresse){ doc.text(clientAdresse, pageW/2+5, yc); yc+=5; }
+  if(clientEmail){ doc.text(clientEmail, pageW/2+5, yc); yc+=5; }
+
+  y = Math.max(y, yc) + 8;
+
+  // Ligne séparatrice
+  doc.setDrawColor(...orange);
+  doc.setLineWidth(0.8);
+  doc.line(margin, y, pageW-margin, y);
+  y += 8;
+
+  // ── TABLEAU PRESTATIONS ──
+  doc.setFillColor(...bleu);
+  doc.rect(margin, y, pageW-margin*2, 8, 'F');
+  doc.setTextColor(...blanc);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text('Description', margin+3, y+5.5);
+  doc.text('Qté', 130, y+5.5, {align:'center'});
+  doc.text('Prix unit. HT', 155, y+5.5, {align:'center'});
+  doc.text('Total HT', pageW-margin-3, y+5.5, {align:'right'});
+  y += 8;
+
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(9);
+  let rowBg = false;
+  aLignes.filter(l=>l.desc||l.prix).forEach(l=>{
+    if(rowBg){ doc.setFillColor(248,247,245); doc.rect(margin, y, pageW-margin*2, 7, 'F'); }
+    doc.setTextColor(40,40,40);
+    doc.text(l.desc||'—', margin+3, y+5);
+    doc.text(String(l.qte), 130, y+5, {align:'center'});
+    doc.text(eur(l.prix), 155, y+5, {align:'center'});
+    doc.setTextColor(...bleu);
+    doc.setFont('helvetica','bold');
+    doc.text(eur(l.qte*l.prix), pageW-margin-3, y+5, {align:'right'});
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(40,40,40);
+    y += 7;
+    rowBg = !rowBg;
+  });
+
+  y += 4;
+  doc.setDrawColor(220,220,220);
+  doc.setLineWidth(0.3);
+  doc.line(margin, y, pageW-margin, y);
+  y += 6;
+
+  // ── TOTAUX ──
+  const totW = 80;
+  const totX = pageW-margin-totW;
+
+  const addTotalRow = (label, val, bold=false, color=bleu)=>{
+    doc.setFontSize(bold?11:9);
+    doc.setFont('helvetica', bold?'bold':'normal');
+    doc.setTextColor(...gris);
+    doc.text(label, totX, y);
+    doc.setTextColor(...color);
+    doc.text(val, pageW-margin, y, {align:'right'});
+    y += bold ? 7 : 5;
+  };
+
+  addTotalRow('Sous-total HT', eur(subtotal));
+  if(km>0) addTotalRow(`Frais km (${km}km × 0,42€)`, eur(kmAmt));
+  addTotalRow(`TVA (${tvaPct}%)`, eur(tvaAmt));
+
+  // Ligne total
+  doc.setFillColor(...bleu);
+  doc.rect(totX-3, y-2, totW+margin+3, 10, 'F');
+  doc.setTextColor(...blanc);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(12);
+  doc.text('TOTAL TTC', totX, y+6);
+  doc.setTextColor(...orange);
+  doc.setFontSize(14);
+  doc.text(eur(total), pageW-margin, y+6, {align:'right'});
+  y += 18;
+
+  // ── PIED DE PAGE ──
+  if(iban){
+    doc.setFontSize(9);
+    doc.setFont('helvetica','bold');
+    doc.setTextColor(...bleu);
+    doc.text('Paiement par virement :', margin, y);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(60,60,60);
+    doc.text(iban, margin+52, y);
+    y += 6;
+  }
+  if(note){
+    doc.setFontSize(9);
+    doc.setTextColor(...gris);
+    doc.text(note, margin, y, {maxWidth: pageW-margin*2});
+    y += 6;
+  }
+
+  // Mention légale
+  doc.setFontSize(8);
+  doc.setTextColor(180,180,180);
+  doc.text('Delivrax — Mise à disposition véhicule avec chauffeur — Conforme réglementation SPF Mobilité belge', margin, 285);
+
+  if(telecharger){
+    doc.save(`Facture_${f.num||'FA'}_${clientNom.replace(/\s/g,'_')}.pdf`);
+    showToast('📄 PDF téléchargé !');
+  }
+  return doc;
+}
+
+function imprimerFactureAdmin(){
+  // Générer le PDF et l'ouvrir pour impression
+  const doc = genererPDF(false);
+  const blob = doc.output('blob');
+  const url = URL.createObjectURL(blob);
+  const win = window.open(url,'_blank');
+  if(win){ win.onload = ()=>{ win.print(); }; }
+  else { doc.save('Facture_Delivrax.pdf'); showToast('📄 PDF téléchargé — ouvrez et imprimez'); }
+}
+
 function genererPDFetEmail(){
-  const f=getTexteFacture();
-  if(!f.clientEmail){ showToast('⚠️ Entrez l\'email du client'); document.getElementById('a-client-email').focus(); return; }
-  // Ouvrir Gmail avec la facture
-  const sujet=encodeURIComponent(f.sujet);
-  const corps=encodeURIComponent(f.corps);
-  window.open(`mailto:${f.clientEmail}?subject=${sujet}&body=${corps}`,'_blank');
+  const f = getTexteFacture();
+  if(!f.clientEmail && !confirm('Aucun email client renseigné. Télécharger le PDF uniquement ?')) return;
+
+  // 1. Générer et télécharger le PDF
+  genererPDF(true);
+
+  // 2. Si email disponible, ouvrir Gmail
+  if(f.clientEmail){
+    setTimeout(()=>{
+      const sujet = encodeURIComponent(f.sujet);
+      const corps = encodeURIComponent(`Bonjour ${f.clientNom},\n\nVeuillez trouver en pièce jointe votre facture ${f.num}.\n\nMontant total : ${eur(f.total)}\n\nMerci pour votre confiance !\n\n${document.getElementById('a-nom').value||'Delivrax'}\n${document.getElementById('a-tel').value}`);
+      window.open(`mailto:${f.clientEmail}?subject=${sujet}&body=${corps}`,'_blank');
+      showToast('✅ PDF téléchargé + Email préparé !');
+    }, 800);
+  }
+
   sauverHistorique(f);
-  showToast('✅ Email préparé pour '+f.clientNom+' !');
   aFactNum++;
 }
 
