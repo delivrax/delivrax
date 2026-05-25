@@ -1288,24 +1288,65 @@ function getTexteFacture(){
   const km=parseFloat(document.getElementById('a-km').value)||0;
   const kmAmt=km*0.42;
   const total=subtotal+tvaAmt+kmAmt;
-  const nom=document.getElementById('a-nom').value||'Delivrax';
-  const tel=document.getElementById('a-tel').value;
-  const email=document.getElementById('a-email').value;
+  const nom='Delivrax'; // Toujours Delivrax
+  const tel=document.getElementById('a-tel').value||'+32 496 84 95 66';
+  const email=document.getElementById('a-email').value||'contact.delivrax@gmail.com';
   const iban=document.getElementById('a-iban').value;
   const tvaNum=document.getElementById('a-tva').value;
   const clientNom=document.getElementById('a-client-nom').value||'Client';
   const clientAdresse=document.getElementById('a-client-adresse').value;
   const num=document.getElementById('a-num').value||'FA-001';
-  const date=document.getElementById('a-date').value?new Date(document.getElementById('a-date').value).toLocaleDateString('fr-BE'):'—';
-  const echeance=document.getElementById('a-echeance').value?new Date(document.getElementById('a-echeance').value).toLocaleDateString('fr-BE'):'—';
+  const dateVal=document.getElementById('a-date').value;
+  const echeanceVal=document.getElementById('a-echeance').value;
+  const date=dateVal?new Date(dateVal).toLocaleDateString('fr-BE'):'—';
+  const echeance=echeanceVal?new Date(echeanceVal).toLocaleDateString('fr-BE'):'—';
   const note=document.getElementById('a-note').value;
-  const lignes=aLignes.filter(l=>l.desc||l.prix).map(l=>`  • ${l.desc} — ${l.qte} × ${eur(l.prix)} = ${eur(l.qte*l.prix)}`).join('\n');
+
+  // Lignes prestations formatées
+  const lignes=aLignes.filter(l=>l.desc||l.prix).map(l=>
+    `▸ ${l.desc||'Prestation'}\n   ${l.qte} × ${eur(l.prix)} = *${eur(l.qte*l.prix)}*`
+  ).join('\n');
+
+  // Message WhatsApp pro et lisible
+  const whatsappMsg =
+`🚐 *DELIVRAX — Facture N° ${num}*
+━━━━━━━━━━━━━━━━━━━━━
+
+Bonjour *${clientNom}*,
+
+Merci de faire confiance à *Delivrax* pour votre prestation. Veuillez trouver ci-dessous le détail de votre facture.
+
+📋 *DÉTAIL DES PRESTATIONS*
+━━━━━━━━━━━━━━━━━━━━━
+${lignes}
+
+💰 *RÉCAPITULATIF*
+━━━━━━━━━━━━━━━━━━━━━
+Sous-total HT   : ${eur(subtotal)}${km>0?'\nFrais km ('+km+'km)  : '+eur(kmAmt):''}
+TVA (${tvaPct}%)         : ${eur(tvaAmt)}
+*TOTAL TTC         : ${eur(total)}*
+
+📅 *Date :* ${date}
+⏰ *Échéance :* ${echeance}
+${iban?'\n💳 *Paiement par virement :*\n'+iban:''}
+${note?'\n📝 _'+note+'_':''}
+
+━━━━━━━━━━━━━━━━━━━━━
+Merci pour votre confiance ! 🙏
+N'hésitez pas à nous recontacter pour toute question.
+
+*Delivrax*
+📞 ${tel}
+✉️ ${email}
+🌐 delivrax.be`;
+
   return {
     num, clientNom, total,
-    sujet:`Facture ${num} — ${nom}`,
+    sujet:`Facture ${num} — Delivrax`,
     clientEmail:document.getElementById('a-client-email').value,
     clientTel:document.getElementById('a-client-tel').value,
-    corps:`Bonjour ${clientNom},\n\nVeuillez trouver ci-dessous le détail de votre facture.\n\n━━━━━━━━━━━━━━━━━━\nFACTURE N° ${num}\n━━━━━━━━━━━━━━━━━━\n\nÉmetteur : ${nom}\n${tel?'Tél : '+tel+'\n':''}${email?'Email : '+email+'\n':''}${tvaNum?'N° TVA : '+tvaNum+'\n':''}\nClient : ${clientNom}\n${clientAdresse}\n\nDate : ${date} | Échéance : ${echeance}\n\n━━━━━━━━━━━━━━━━━━\nPRESTATIONS\n━━━━━━━━━━━━━━━━━━\n${lignes}\n\n━━━━━━━━━━━━━━━━━━\nSous-total HT  : ${eur(subtotal)}\n${km>0?'Frais km       : '+eur(kmAmt)+'\n':''}TVA (${tvaPct}%)      : ${eur(tvaAmt)}\nTOTAL TTC      : ${eur(total)}\n━━━━━━━━━━━━━━━━━━\n\n${iban?'💳 Virement : '+iban+'\n':''}\n${note?'📝 '+note+'\n':''}\nMerci pour votre confiance !\n${nom} — ${tel||''}`
+    whatsappMsg,
+    corps:`Bonjour ${clientNom},\n\nVeuillez trouver en pièce jointe votre facture N° ${num} d'un montant de ${eur(total)}.\n\nMerci pour votre confiance !\n\nDelivrax\n${tel}\n${email}\ndelivrax.be`
   };
 }
 
@@ -1546,7 +1587,7 @@ function envoyerWhatsAppAdmin(){
   let tel=f.clientTel.replace(/[^0-9]/g,'');
   if(!tel){ tel=prompt('Numéro WhatsApp du client (ex: 32478123456) :'); if(!tel) return; }
   if(tel.startsWith('0')) tel='32'+tel.slice(1);
-  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(f.corps)}`,'_blank');
+  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(f.whatsappMsg)}`,'_blank');
   sauverHistorique(f);
   showToast('💬 WhatsApp ouvert pour '+f.clientNom+' !');
   aFactNum++;
