@@ -267,6 +267,17 @@ footer strong{color:#fff}
 /* TOAST */
 .toast{position:fixed;bottom:100px;right:24px;background:var(--bleu);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:1000;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;max-width:280px}
 .toast.show{opacity:1;transform:translateY(0)}
+.devis-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:3000;align-items:center;justify-content:center;padding:16px}
+.devis-modal-overlay.show{display:flex}
+.devis-modal{background:#fff;border-radius:20px;padding:32px;width:100%;max-width:420px;text-align:center}
+.devis-modal h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bleu);margin-bottom:6px}
+.devis-modal p{font-size:14px;color:var(--gris2);margin-bottom:24px}
+.devis-modal-btns{display:flex;flex-direction:column;gap:10px}
+.btn-devis-wa{background:#25d366;color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-devis-email{background:var(--bleu);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-devis-both{background:var(--orange);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-devis-cancel{background:none;border:none;color:var(--gris2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;padding:8px}
+.toast.show{opacity:1;transform:translateY(0)}
 
 @media(max-width:900px){
   .nav-links{display:none;position:fixed;top:68px;left:0;right:0;background:var(--bleu);flex-direction:column;padding:20px;gap:4px;border-bottom:1px solid rgba(255,255,255,0.1)}
@@ -986,6 +997,21 @@ table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px soli
 <a href="https://wa.me/32496849566?text=Bonjour Delivrax, je souhaite un devis pour une mise à disposition véhicule." class="wa-float" target="_blank">💬</a>
 <div class="wa-tooltip">Devis rapide sur WhatsApp !</div>
 <div class="toast" id="toast"></div>
+
+<!-- MODAL CHOIX ENVOI DEVIS -->
+<div class="devis-modal-overlay" id="devis-modal" onclick="if(event.target===this)fermerDevisModal()">
+  <div class="devis-modal">
+    <div style="font-size:36px;margin-bottom:12px">🚐</div>
+    <h3>Demande reçue !</h3>
+    <p>Merci <strong id="devis-nom"></strong> ! Comment voulez-vous envoyer votre demande à Delivrax ?</p>
+    <div class="devis-modal-btns">
+      <button class="btn-devis-wa" onclick="envoyerDevisWA()">💬 Envoyer via WhatsApp</button>
+      <button class="btn-devis-email" onclick="envoyerDevisEmail()">✉️ Envoyer par Email</button>
+      <button class="btn-devis-both" onclick="envoyerDevisLesDeux()">🚀 Envoyer les deux</button>
+      <button class="btn-devis-cancel" onclick="fermerDevisModal()">Annuler</button>
+    </div>
+  </div>
+</div>
 
 <!-- ADMIN LOGIN -->
 <div id="admin-overlay">
@@ -1763,20 +1789,91 @@ function showToast(msg){
 }
 
 function submitForm(){
-  const nom=document.getElementById('f-nom').value;
-  const tel=document.getElementById('f-tel').value;
-  const email=document.getElementById('f-email').value;
-  const service=document.getElementById('f-service').value;
-  const depart=document.getElementById('f-depart').value;
-  const arrivee=document.getElementById('f-arrivee').value;
-  if(!nom||!tel||!email||!service||!depart||!arrivee){
-    showToast('⚠️ Merci de remplir tous les champs obligatoires (*)');
-    return;
-  }
-  const details = document.getElementById('f-details').value;
-  const msg = encodeURIComponent(`Bonjour Delivrax,\n\nNom: ${nom}\nTél: ${tel}\nEmail: ${email}\nService: ${service}\nDépart: ${depart}\nArrivée: ${arrivee}\nDétails: ${details}\n\nMerci de me contacter pour un forfait.`);
-  window.location.href = `https://wa.me/32496849566?text=${msg}`;
-  showToast('✅ Redirection WhatsApp — merci !');
+  const nom = document.getElementById('f-nom').value.trim();
+  const tel = document.getElementById('f-tel').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const service = document.getElementById('f-service').value;
+  const depart = document.getElementById('f-depart').value.trim();
+  const arrivee = document.getElementById('f-arrivee').value.trim();
+  const details = document.getElementById('f-details').value.trim();
+
+  // Validation avec mise en rouge
+  let erreur = false;
+  if(!nom){ document.getElementById('f-nom').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-nom').style.border='';
+  if(!tel){ document.getElementById('f-tel').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-tel').style.border='';
+  if(!email){ document.getElementById('f-email').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-email').style.border='';
+  if(!service){ document.getElementById('f-service').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-service').style.border='';
+  if(!depart){ document.getElementById('f-depart').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-depart').style.border='';
+  if(!arrivee){ document.getElementById('f-arrivee').style.border='1.5px solid #D32F2F'; erreur=true; }
+  else document.getElementById('f-arrivee').style.border='';
+
+  if(erreur){ showToast('⚠️ Merci de remplir tous les champs obligatoires (*)'); return; }
+
+  // Message formaté
+  const msgTexte = `Bonjour Delivrax ! 🚐
+
+*Nouvelle demande de forfait*
+
+👤 *Nom :* ${nom}
+📞 *Tél :* ${tel}
+✉️ *Email :* ${email}
+🔧 *Service :* ${service}
+📍 *Départ :* ${depart}
+📍 *Arrivée :* ${arrivee}
+${details ? '📝 *Détails :* ' + details : ''}
+
+Merci de me recontacter pour un devis !`;
+
+  const sujetEmail = encodeURIComponent(`Demande de forfait Delivrax — ${service}`);
+  const corpsEmail = encodeURIComponent(`Bonjour Delivrax,\n\nJe souhaite obtenir un forfait pour :\n\nNom : ${nom}\nTél : ${tel}\nEmail : ${email}\nService : ${service}\nDépart : ${depart}\nArrivée : ${arrivee}\n${details?'Détails : '+details+'\n':''}\nMerci de me recontacter.\n\nCordialement,\n${nom}`);
+
+  // Ouvrir modal de choix d'envoi
+  document.getElementById('devis-modal').classList.add('show');
+  document.getElementById('devis-modal').dataset.wa = encodeURIComponent(msgTexte);
+  document.getElementById('devis-modal').dataset.email = `mailto:contact.delivrax@gmail.com?subject=${sujetEmail}&body=${corpsEmail}`;
+  document.getElementById('devis-nom').textContent = nom;
+}
+
+function envoyerDevisWA(){
+  const modal = document.getElementById('devis-modal');
+  const msg = modal.dataset.wa;
+  window.open(`https://wa.me/32496849566?text=${msg}`, '_blank');
+  fermerDevisModal();
+  showToast('💬 Redirection WhatsApp !');
+  resetForm();
+}
+
+function envoyerDevisEmail(){
+  const modal = document.getElementById('devis-modal');
+  window.location.href = modal.dataset.email;
+  fermerDevisModal();
+  showToast('✉️ Email préparé !');
+  resetForm();
+}
+
+function envoyerDevisLesDeux(){
+  const modal = document.getElementById('devis-modal');
+  window.open(`https://wa.me/32496849566?text=${modal.dataset.wa}`, '_blank');
+  setTimeout(()=>{ window.location.href = modal.dataset.email; }, 1000);
+  fermerDevisModal();
+  showToast('✅ WhatsApp + Email envoyés !');
+  resetForm();
+}
+
+function fermerDevisModal(){
+  document.getElementById('devis-modal').classList.remove('show');
+}
+
+function resetForm(){
+  ['f-nom','f-tel','f-email','f-depart','f-arrivee','f-details'].forEach(id=>{
+    const el = document.getElementById(id); if(el){ el.value=''; el.style.border=''; }
+  });
+  document.getElementById('f-service').value = '';
 }
 
 // Smooth nav scroll
