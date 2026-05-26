@@ -1797,7 +1797,7 @@ function submitForm(){
   const arrivee = document.getElementById('f-arrivee').value.trim();
   const details = document.getElementById('f-details').value.trim();
 
-  // Validation avec mise en rouge
+  // Validation
   let erreur = false;
   if(!nom){ document.getElementById('f-nom').style.border='1.5px solid #D32F2F'; erreur=true; }
   else document.getElementById('f-nom').style.border='';
@@ -1814,29 +1814,42 @@ function submitForm(){
 
   if(erreur){ showToast('⚠️ Merci de remplir tous les champs obligatoires (*)'); return; }
 
-  // Message formaté
-  const msgTexte = `Bonjour Delivrax ! 🚐
+  // Envoi via Formspree → email direct dans ta boîte Gmail
+  const btn = document.querySelector('#contact .btn-submit');
+  btn.textContent = '⏳ Envoi en cours...';
+  btn.disabled = true;
 
-*Nouvelle demande de forfait*
-
-👤 *Nom :* ${nom}
-📞 *Tél :* ${tel}
-✉️ *Email :* ${email}
-🔧 *Service :* ${service}
-📍 *Départ :* ${depart}
-📍 *Arrivée :* ${arrivee}
-${details ? '📝 *Détails :* ' + details : ''}
-
-Merci de me recontacter pour un devis !`;
-
-  const sujetEmail = encodeURIComponent(`Demande de forfait Delivrax — ${service}`);
-  const corpsEmail = encodeURIComponent(`Bonjour Delivrax,\n\nJe souhaite obtenir un forfait pour :\n\nNom : ${nom}\nTél : ${tel}\nEmail : ${email}\nService : ${service}\nDépart : ${depart}\nArrivée : ${arrivee}\n${details?'Détails : '+details+'\n':''}\nMerci de me recontacter.\n\nCordialement,\n${nom}`);
-
-  // Ouvrir modal de choix d'envoi
-  document.getElementById('devis-modal').classList.add('show');
-  document.getElementById('devis-modal').dataset.wa = encodeURIComponent(msgTexte);
-  document.getElementById('devis-modal').dataset.email = `mailto:contact.delivrax@gmail.com?subject=${sujetEmail}&body=${corpsEmail}`;
-  document.getElementById('devis-nom').textContent = nom;
+  fetch('https://formspree.io/f/mvzloaej', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+    body: JSON.stringify({
+      nom, telephone: tel, email, service,
+      depart, arrivee,
+      details: details || 'Aucun détail supplémentaire',
+      _subject: `🚐 Nouvelle demande Delivrax — ${service} — ${nom}`
+    })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if(data.ok){
+      btn.textContent = '✅ Demande envoyée !';
+      btn.style.background = '#4CAF50';
+      showToast('✅ Demande envoyée ! On vous répond dans 2h.');
+      // Reset formulaire
+      ['f-nom','f-tel','f-email','f-depart','f-arrivee','f-details'].forEach(id=>{
+        const el=document.getElementById(id); if(el){el.value='';el.style.border='';}
+      });
+      document.getElementById('f-service').value='';
+      setTimeout(()=>{ btn.textContent='🚐 Envoyer ma demande de forfait'; btn.style.background=''; btn.disabled=false; }, 4000);
+    } else {
+      throw new Error('Erreur envoi');
+    }
+  })
+  .catch(()=>{
+    btn.textContent = '🚐 Envoyer ma demande de forfait';
+    btn.disabled = false;
+    showToast('⚠️ Erreur — réessayez ou appelez le +32 496 84 95 66');
+  });
 }
 
 function envoyerDevisWA(){
