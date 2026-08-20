@@ -26,7 +26,6 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); }
 
-    /* NAV */
     nav {
       background: var(--blue);
       padding: 0 2rem;
@@ -59,7 +58,6 @@
     }
     .nav-links a:hover { color: var(--red-light); }
 
-    /* HERO */
     .hero {
       background: linear-gradient(135deg, var(--blue) 60%, var(--red) 100%);
       color: var(--white);
@@ -134,7 +132,6 @@
     .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); margin-left: 1rem; }
     .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
 
-    /* SERVICES */
     .section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
     .section-title {
       font-family: 'Barlow Condensed', sans-serif;
@@ -173,7 +170,6 @@
     }
     .service-card p { color: var(--text-light); line-height: 1.6; font-size: 0.95rem; }
 
-    /* POURQUOI */
     .why-section {
       background: var(--blue);
       color: var(--white);
@@ -200,7 +196,6 @@
     .why-card h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.4rem; text-transform: uppercase; }
     .why-card p { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
 
-    /* TARIFS */
     .tarifs-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -250,7 +245,6 @@
     .tarif-price small { font-size: 1rem; color: var(--text-light); font-family: 'Barlow', sans-serif; font-weight: 400; }
     .tarif-card p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
 
-    /* ZONE */
     .zone-section { background: var(--bg2); padding: 4rem 2rem; }
     .zone-inner { max-width: 1100px; margin: 0 auto; }
     .zone-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
@@ -265,7 +259,6 @@
     }
     .zone-tag.red { border-color: var(--red); color: var(--red); }
 
-    /* PARTENAIRES */
     .partners-section { background: var(--blue); color: var(--white); padding: 4rem 2rem; }
     .partners-inner { max-width: 1100px; margin: 0 auto; }
     .partners-section .section-title { color: var(--white); }
@@ -305,7 +298,6 @@
       font-weight: 600;
     }
 
-    /* CONTACT */
     .contact-section { padding: 4rem 2rem; }
     .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
     .contact-info h2 {
@@ -331,7 +323,6 @@
     .contact-detail a { color: var(--blue); text-decoration: none; }
     .contact-detail a:hover { color: var(--red); }
 
-    /* FORM */
     .devis-form { background: var(--white); border-radius: 8px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
     .devis-form h3 {
       font-family: 'Barlow Condensed', sans-serif;
@@ -379,7 +370,6 @@
     }
     .btn-submit:hover { background: var(--red-light); transform: translateY(-2px); }
 
-    /* FOOTER */
     footer {
       background: #111827;
       color: rgba(255,255,255,0.6);
@@ -389,7 +379,6 @@
     }
     footer strong { color: white; }
 
-    /* RESPONSIVE */
     @media (max-width: 768px) {
       .nav-links { display: none; }
       .contact-inner { grid-template-columns: 1fr; }
@@ -400,7 +389,6 @@
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">DELIV<span>RAX</span></div>
   <div class="nav-links">
@@ -413,7 +401,6 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <h1>Transport & Livraison<br><span>Point A → Point B</span></h1>
   <p>Delivrax met à votre disposition un véhicule avec chauffeur pour tous vos déménagements, manutentions et évacuations en Belgique et à l'étranger. Rapide, fiable et soigné.</p>
@@ -434,7 +421,6 @@
   <a href="tel:+32472762734" class="btn btn-outline">📞 Appeler maintenant</a>
 </section>
 
-<!-- SERVICES -->
 <section class="section" id="services">
   <div class="section-title">Nos <span>Services</span></div>
   <div class="section-sub">Tout type de transport, pour particuliers et professionnels.</div>
@@ -487,7 +473,6 @@
   </div>
 </section>
 
-<!-- POURQUOI -->
 <section class="why-section">
   <div class="why-inner">
     <div class="section-title">Pourquoi <span>Delivrax ?</span></div>
@@ -517,7 +502,6 @@
   </div>
 </section>
 
-<!-- B2B HIGHLIGHT -->
 <section class="section" style="padding-top:0;">
   <div style="background:linear-gradient(135deg, var(--blue) 0%, #2244a8 100%); border-radius:12px; padding:2.5rem; color:white; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
     <div>
@@ -568,7 +552,6 @@
   </div>
 </section>
 
-<!-- FAQ -->
 <section class="why-section" id="faq">
   <div class="why-inner">
     <div class="section-title">Questions <span>Fréquentes</span></div>
@@ -608,7 +591,6 @@
   </div>
 </section>
 
-<!-- ZONE -->
 <section class="zone-section" id="zone">
   <div class="zone-inner">
     <div class="section-title">Zone de <span style="color:var(--red)">Couverture</span></div>
@@ -629,7 +611,6 @@
   </div>
 </section>
 
-<!-- PARTENAIRES -->
 <section class="partners-section" id="partenaires">
   <div class="partners-inner">
     <div class="section-title">Programme <span>Partenaires</span></div>
@@ -663,7 +644,6 @@
   </div>
 </section>
 
-<!-- CONTACT -->
 <section class="contact-section" id="contact">
   <div class="contact-inner">
     <div class="contact-info">
@@ -743,7 +723,6 @@
   </div>
 </section>
 
-<!-- FOOTER -->
 <footer>
   <p><strong>DELIVRAX</strong> — Location véhicule avec chauffeur &amp; Aide au déménagement — Belgique</p>
   <p style="margin-top:0.5rem;">📞 +32 472 76 27 34 &nbsp;|&nbsp; 📧 contact@delivrax.be &nbsp;|&nbsp; 🌐 delivrax.be</p>
