@@ -1,2063 +1,739 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Delivrax — Mise à disposition véhicule avec chauffeur — Belgique</title>
-<meta name="description" content="Delivrax met à votre disposition un véhicule avec chauffeur pour votre déménagement, débarras, vide-maison et évacuation d'encombrants. Brabant Wallon et Belgique entière.">
-<meta name="theme-color" content="#0f1f4e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="google-site-verification" content="OwhfAK8M-MvwrzvGLlm-TvFopVF0a5ZOScDDZrBS3lA">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{
-  --bleu:#0f1f4e;
-  --bleu2:#1a2e6e;
-  --orange:#FF6B35;
-  --orange2:#ff8a65;
-  --blanc:#fff;
-  --gris:#f5f4f0;
-  --gris2:#6b6b6b;
-  --border:#e8e5df;
-  --text:#1a1a1a;
-  --radius:14px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:#fff;color:var(--text);overflow-x:hidden}
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1a2e6e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Delivrax">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <title>Delivrax — Location véhicule avec chauffeur &amp; Aide au déménagement — Belgique</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --blue: #1a2e6e;
+      --blue-light: #2244a8;
+      --red: #d42b2b;
+      --red-light: #f03333;
+      --bg: #f7f3ee;
+      --bg2: #efe9e0;
+      --text: #1a1a1a;
+      --text-light: #555;
+      --white: #fff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Barlow', sans-serif; background: var(--bg); color: var(--text); }
 
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 2rem;height:68px;display:flex;align-items:center;justify-content:space-between;background:rgba(15,31,78,0.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.08)}
-.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:#fff;letter-spacing:-0.5px;text-decoration:none}
-.nav-logo span{color:var(--orange)}
-.nav-links{display:flex;align-items:center;gap:6px}
-.nav-link{color:rgba(255,255,255,0.7);text-decoration:none;font-size:13px;font-weight:500;padding:7px 14px;border-radius:8px;transition:all 0.2s}
-.nav-link:hover{color:#fff;background:rgba(255,255,255,0.1)}
-.nav-cta{background:var(--orange);color:#fff!important;border-radius:8px;padding:8px 18px!important;font-weight:600!important}
-.nav-cta:hover{background:#e55a28!important;background:var(--orange)!important;transform:translateY(-1px)}
-.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
-.hamburger span{width:22px;height:2px;background:#fff;border-radius:2px;transition:all 0.3s}
+    nav {
+      background: var(--blue);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+    }
+    .nav-logo {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 2px;
+      padding: 1rem 0;
+    }
+    .nav-logo span { color: var(--red-light); }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--red-light); }
 
-/* HERO */
-.hero{min-height:100vh;background:var(--bleu);display:flex;flex-direction:column;justify-content:center;padding:100px 2rem 60px;position:relative;overflow:hidden}
-.hero-bg{position:absolute;inset:0;pointer-events:none}
-.hero-bg::before{content:'';position:absolute;top:-20%;right:-10%;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,53,0.12) 0%,transparent 70%)}
-.hero-bg::after{content:'';position:absolute;bottom:-10%;left:-5%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.04) 0%,transparent 70%)}
-.hero-grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:60px 60px}
-.hero-inner{max-width:1100px;margin:0 auto;width:100%;position:relative;z-index:1}
-.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,107,53,0.15);border:1px solid rgba(255,107,53,0.3);color:var(--orange2);padding:6px 16px;border-radius:30px;font-size:13px;font-weight:500;margin-bottom:28px}
-.hero-badge::before{content:'';width:7px;height:7px;background:var(--orange);border-radius:50%;animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}
-.hero h1{font-family:'Syne',sans-serif;font-size:clamp(36px,6vw,72px);font-weight:800;color:#fff;line-height:1.05;letter-spacing:-2px;margin-bottom:24px}
-.hero h1 em{font-style:normal;color:var(--orange)}
-.hero-sub{font-size:clamp(15px,2vw,18px);color:rgba(255,255,255,0.7);max-width:540px;line-height:1.7;margin-bottom:40px;font-weight:300}
-.hero-sub strong{color:#fff;font-weight:500}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:56px}
-.btn-primary{background:var(--orange);color:#fff;border:none;padding:15px 32px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s}
-.btn-primary:hover{background:#e55a28;transform:translateY(-2px);box-shadow:0 12px 32px rgba(255,107,53,0.35)}
-.btn-ghost{background:rgba(255,255,255,0.08);color:#fff;border:1.5px solid rgba(255,255,255,0.2);padding:15px 32px;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.25s}
-.btn-ghost:hover{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.4)}
-.hero-stats{display:flex;gap:40px;flex-wrap:wrap;padding-top:40px;border-top:1px solid rgba(255,255,255,0.1)}
-.hero-stat strong{display:block;font-family:'Syne',sans-serif;font-size:32px;font-weight:800;color:var(--orange)}
-.hero-stat span{font-size:13px;color:rgba(255,255,255,0.55);margin-top:2px;display:block}
-.hero-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
-.hero-tag{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.8);padding:6px 14px;border-radius:30px;font-size:13px}
+    .hero {
+      background: linear-gradient(135deg, var(--blue) 60%, var(--red) 100%);
+      color: var(--white);
+      padding: 5rem 2rem 4rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 300px; height: 300px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 50%;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 400px; height: 400px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 50%;
+    }
+    .hero h1 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      font-weight: 900;
+      letter-spacing: 3px;
+      line-height: 1.05;
+      margin-bottom: 1.2rem;
+      text-transform: uppercase;
+    }
+    .hero h1 span { color: var(--red-light); }
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      line-height: 1.6;
+    }
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      justify-content: center;
+      margin-bottom: 2.5rem;
+    }
+    .badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 50px;
+      padding: 0.4rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .btn {
+      display: inline-block;
+      padding: 0.9rem 2.5rem;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-red { background: var(--red); color: var(--white); }
+    .btn-red:hover { background: var(--red-light); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212,43,43,0.4); }
+    .btn-outline { background: transparent; color: var(--white); border: 2px solid rgba(255,255,255,0.5); margin-left: 1rem; }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,0.1); }
 
-/* SECTIONS */
-section{padding:80px 2rem}
-.container{max-width:1100px;margin:0 auto}
-.section-label{font-size:11px;font-weight:600;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:12px}
-.section-title{font-family:'Syne',sans-serif;font-size:clamp(26px,4vw,42px);font-weight:700;color:var(--bleu);line-height:1.15;letter-spacing:-0.5px;margin-bottom:16px}
-.section-sub{font-size:16px;color:var(--gris2);line-height:1.7;max-width:540px;margin-bottom:48px}
+    .section { padding: 4rem 2rem; max-width: 1100px; margin: 0 auto; }
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+    }
+    .section-title span { color: var(--red); }
+    .section-sub { color: var(--text-light); margin-bottom: 2.5rem; font-size: 1.05rem; }
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .service-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      border-top: 4px solid var(--red);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .service-icon { font-size: 2.2rem; margin-bottom: 1rem; }
+    .service-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .service-card p { color: var(--text-light); line-height: 1.6; font-size: 0.95rem; }
 
-/* ALERTE LÉGALE */
-.legal-banner{background:linear-gradient(135deg,#1a2e6e,#0f1f4e);color:#fff;padding:20px 2rem;text-align:center}
-.legal-banner p{font-size:14px;opacity:0.9;max-width:800px;margin:0 auto}
-.legal-banner strong{color:var(--orange2)}
+    .why-section {
+      background: var(--blue);
+      color: var(--white);
+      padding: 4rem 2rem;
+    }
+    .why-inner { max-width: 1100px; margin: 0 auto; }
+    .why-section .section-title { color: var(--white); }
+    .why-section .section-title span { color: var(--red-light); }
+    .why-section .section-sub { color: rgba(255,255,255,0.7); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .why-card {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .why-card .icon { font-size: 2rem; margin-bottom: 0.75rem; }
+    .why-card h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; margin-bottom: 0.4rem; text-transform: uppercase; }
+    .why-card p { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
 
-/* SERVICES */
-#services{background:var(--gris)}
-.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
-.service-card{background:#fff;border-radius:var(--radius);padding:28px;border:1px solid var(--border);transition:all 0.25s;position:relative;overflow:hidden}
-.service-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--orange),var(--orange2));transform:scaleX(0);transform-origin:left;transition:transform 0.3s}
-.service-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(15,31,78,0.1);border-color:transparent}
-.service-card:hover::before{transform:scaleX(1)}
-.service-icon{width:52px;height:52px;border-radius:12px;background:linear-gradient(135deg,var(--bleu),var(--bleu2));display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:18px}
-.service-card h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--bleu);margin-bottom:10px}
-.service-card p{font-size:14px;color:var(--gris2);line-height:1.7}
-.service-badge{display:inline-block;font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;background:#e8f5e9;color:#2e7d32;padding:3px 10px;border-radius:20px;margin-top:12px}
-.service-badge.warn{background:#fff3e0;color:#e65100}
+    .tarifs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+    .tarif-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 2rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      text-align: center;
+      border: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .tarif-card.featured { border-color: var(--red); position: relative; }
+    .tarif-card.featured::before {
+      content: '⭐ POPULAIRE';
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--red);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.2rem 1rem;
+      border-radius: 50px;
+      letter-spacing: 1px;
+    }
+    .tarif-card h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .tarif-price {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      margin: 1rem 0;
+    }
+    .tarif-price small { font-size: 1rem; color: var(--text-light); font-family: 'Barlow', sans-serif; font-weight: 400; }
+    .tarif-card p { color: var(--text-light); font-size: 0.95rem; line-height: 1.6; }
 
-/* LÉGALITÉ */
-#legalite{background:#fff}
-.legal-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
-.legal-card{border-radius:var(--radius);padding:28px;border:1px solid var(--border)}
-.legal-card.ok{border-color:#c8e6c9;background:#f9fffe}
-.legal-card.nok{border-color:#ffcdd2;background:#fff9f9}
-.legal-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.legal-card.ok h3{color:#2e7d32}
-.legal-card.nok h3{color:#c62828}
-.legal-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.legal-list li{font-size:13px;color:#555;display:flex;align-items:flex-start;gap:10px;line-height:1.6}
-.legal-list li::before{content:'✓';font-weight:700;color:#4caf50;flex-shrink:0;margin-top:1px}
-.legal-card.nok .legal-list li::before{content:'✕';color:#ef5350}
+    .zone-section { background: var(--bg2); padding: 4rem 2rem; }
+    .zone-inner { max-width: 1100px; margin: 0 auto; }
+    .zone-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+    .zone-tag {
+      background: var(--white);
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      padding: 0.4rem 1.1rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    .zone-tag.red { border-color: var(--red); color: var(--red); }
 
-/* CALCUL DEVIS */
-#devis{background:var(--gris)}
-.calc-wrap{background:#fff;border-radius:20px;border:1px solid var(--border);overflow:hidden;max-width:800px;margin:0 auto}
-.calc-header{background:var(--bleu);padding:28px 32px;color:#fff}
-.calc-header h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:4px}
-.calc-header p{font-size:14px;opacity:0.7}
-.calc-body{padding:32px}
-.calc-step{margin-bottom:28px}
-.calc-step label{display:block;font-size:13px;font-weight:600;color:var(--bleu);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
-.calc-options{display:flex;gap:10px;flex-wrap:wrap}
-.calc-option{background:var(--gris);border:2px solid transparent;border-radius:10px;padding:12px 18px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;transition:all 0.2s;color:var(--text)}
-.calc-option:hover{border-color:var(--bleu);background:#fff}
-.calc-option.active{background:var(--bleu);color:#fff;border-color:var(--bleu)}
-.calc-result{background:linear-gradient(135deg,var(--bleu),var(--bleu2));border-radius:14px;padding:24px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;flex-wrap:gap;gap:16px;margin-top:8px}
-.calc-result-price{font-family:'Syne',sans-serif;font-size:42px;font-weight:800;color:var(--orange2)}
-.calc-result-price small{font-size:14px;opacity:0.7;font-family:'DM Sans',sans-serif;font-weight:400;display:block;margin-top:2px}
-.calc-result p{font-size:14px;opacity:0.85;max-width:280px;line-height:1.6}
-.btn-devis-calc{background:var(--orange);color:#fff;border:none;padding:13px 26px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s}
-.btn-devis-calc:hover{background:#e55a28;transform:translateY(-1px)}
+    .partners-section { background: var(--blue); color: var(--white); padding: 4rem 2rem; }
+    .partners-inner { max-width: 1100px; margin: 0 auto; }
+    .partners-section .section-title { color: var(--white); }
+    .partners-section .section-title span { color: var(--red-light); }
+    .partners-section .section-sub { color: rgba(255,255,255,0.7); }
+    .partners-steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin: 2rem 0;
+    }
+    .partners-step {
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .step-num {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--red-light);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+    .partners-step h4 { font-weight: 700; margin-bottom: 0.4rem; }
+    .partners-step p { font-size: 0.9rem; opacity: 0.75; line-height: 1.5; }
+    .partners-tags { display: flex; flex-wrap: wrap; gap: 0.75rem; margin: 1.5rem 0; }
+    .partners-tag {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
 
-/* POURQUOI */
-#pourquoi{background:#fff}
-.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-.why-card{padding:28px;border-radius:var(--radius);border:1px solid var(--border);text-align:center;transition:all 0.2s}
-.why-card:hover{border-color:var(--orange);transform:translateY(-3px)}
-.why-icon{font-size:32px;margin-bottom:14px;display:block}
-.why-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--bleu);margin-bottom:8px}
-.why-card p{font-size:13px;color:var(--gris2);line-height:1.6}
+    .contact-section { padding: 4rem 2rem; }
+    .contact-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .contact-info h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 2.4rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--blue);
+      margin-bottom: 1rem;
+    }
+    .contact-info h2 span { color: var(--red); }
+    .contact-info p { color: var(--text-light); line-height: 1.7; margin-bottom: 1.5rem; }
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--blue);
+    }
+    .contact-detail .ico { font-size: 1.3rem; }
+    .contact-detail a { color: var(--blue); text-decoration: none; }
+    .contact-detail a:hover { color: var(--red); }
 
-/* TARIFS */
-#tarifs{background:var(--gris)}
-.tarifs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.tarif-card{background:#fff;border-radius:var(--radius);padding:28px;border:2px solid var(--border);transition:all 0.25s;text-align:center}
-.tarif-card.featured{border-color:var(--orange);position:relative}
-.tarif-card.featured::before{content:'Le plus demandé';position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--orange);color:#fff;font-size:11px;font-weight:700;padding:4px 14px;border-radius:20px;white-space:nowrap;letter-spacing:0.5px}
-.tarif-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(15,31,78,0.1)}
-.tarif-prix{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;color:var(--bleu);margin:12px 0 4px}
-.tarif-prix sup{font-size:18px;vertical-align:super}
-.tarif-prix small{font-size:13px;color:var(--gris2);font-family:'DM Sans',sans-serif;font-weight:400}
-.tarif-card h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--bleu);margin-bottom:6px}
-.tarif-desc{font-size:13px;color:var(--gris2);line-height:1.6;margin-bottom:16px}
-.tarif-list{list-style:none;text-align:left;display:flex;flex-direction:column;gap:8px;margin-bottom:20px}
-.tarif-list li{font-size:13px;color:#555;display:flex;align-items:center;gap:8px}
-.tarif-list li::before{content:'✓';color:var(--orange);font-weight:700;flex-shrink:0}
-.btn-tarif{width:100%;background:var(--bleu);color:#fff;border:none;padding:12px;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;text-decoration:none;display:block;text-align:center;transition:background 0.2s}
-.btn-tarif:hover{background:var(--bleu2)}
-.tarif-card.featured .btn-tarif{background:var(--orange)}
-.tarif-card.featured .btn-tarif:hover{background:#e55a28}
+    .devis-form { background: var(--white); border-radius: 8px; padding: 2rem; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    .devis-form h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1.5rem;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0d8ce;
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.95rem;
+      background: var(--bg);
+      color: var(--text);
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus { outline: none; border-color: var(--blue); }
+    .form-group textarea { height: 100px; resize: vertical; }
+    .btn-submit {
+      width: 100%;
+      padding: 1rem;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .btn-submit:hover { background: var(--red-light); transform: translateY(-2px); }
 
-/* AVIS */
-#avis{background:#fff}
-.avis-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
-.avis-card{background:var(--gris);border-radius:var(--radius);padding:24px;border:1px solid var(--border)}
-.avis-stars{color:var(--orange);font-size:16px;margin-bottom:10px;letter-spacing:2px}
-.avis-text{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:16px;font-style:italic}
-.avis-author{display:flex;align-items:center;gap:10px}
-.avis-avatar{width:36px;height:36px;border-radius:50%;background:var(--bleu);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.avis-name{font-size:13px;font-weight:600;color:var(--bleu)}
-.avis-loc{font-size:12px;color:var(--gris2)}
-/* Formulaire avis */
-.avis-form-btn{display:inline-flex;align-items:center;gap:8px;background:var(--bleu);color:#fff;border:none;padding:13px 26px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:32px;transition:all 0.2s}
-.avis-form-btn:hover{background:var(--bleu2);transform:translateY(-1px)}
-.avis-score{display:flex;align-items:center;gap:16px;background:var(--gris);border-radius:14px;padding:20px 24px;margin-bottom:32px}
-.avis-score-num{font-family:'Syne',sans-serif;font-size:52px;font-weight:800;color:var(--bleu);line-height:1}
-.avis-score-stars{font-size:22px;color:var(--orange);letter-spacing:3px;margin-bottom:4px}
-.avis-score-label{font-size:13px;color:var(--gris2)}
-.avis-score-count{font-size:13px;color:var(--gris2);margin-left:auto}
-/* Modal avis */
-.modal-avis-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:3000;align-items:center;justify-content:center;padding:16px}
-.modal-avis-overlay.show{display:flex}
-.modal-avis{background:#fff;border-radius:20px;padding:36px;width:100%;max-width:500px;position:relative;animation:modalIn 0.2s ease}
-@keyframes modalIn{from{transform:scale(0.93);opacity:0}to{transform:scale(1);opacity:1}}
-.modal-avis-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--gris2);line-height:1}
-.modal-avis h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--bleu);margin-bottom:6px}
-.modal-avis p{font-size:14px;color:var(--gris2);margin-bottom:24px}
-.star-selector{display:flex;gap:8px;margin-bottom:20px}
-.star-btn{font-size:32px;cursor:pointer;transition:transform 0.15s;filter:grayscale(1);opacity:0.4;background:none;border:none;padding:0}
-.star-btn.active,.star-btn:hover{filter:grayscale(0);opacity:1;transform:scale(1.2)}
-.avis-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border 0.2s;margin-bottom:14px;color:var(--text)}
-.avis-input:focus{border-color:var(--bleu)}
-.avis-textarea{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;resize:none;transition:border 0.2s;color:var(--text)}
-.avis-textarea:focus{border-color:var(--bleu)}
-.btn-submit-avis{width:100%;background:var(--orange);color:#fff;border:none;padding:14px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:14px;transition:all 0.2s}
-.btn-submit-avis:hover{background:#e55a28}
-.avis-new-badge{font-size:10px;font-weight:700;letter-spacing:1px;background:#e8f5e9;color:#2e7d32;padding:3px 9px;border-radius:20px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+    footer {
+      background: #111827;
+      color: rgba(255,255,255,0.6);
+      text-align: center;
+      padding: 2rem;
+      font-size: 0.9rem;
+    }
+    footer strong { color: white; }
 
-/* PRO */
-#pro{background:var(--bleu)}
-.pro-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center}
-.pro-text h2{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,38px);font-weight:800;color:#fff;line-height:1.2;letter-spacing:-0.5px;margin-bottom:16px}
-.pro-text p{font-size:15px;color:rgba(255,255,255,0.75);line-height:1.7;margin-bottom:32px}
-.pro-features{display:flex;flex-direction:column;gap:14px}
-.pro-feature{display:flex;align-items:flex-start;gap:14px;background:rgba(255,255,255,0.06);border-radius:12px;padding:16px;border:1px solid rgba(255,255,255,0.08)}
-.pro-feature-icon{width:40px;height:40px;border-radius:10px;background:rgba(255,107,53,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.pro-feature h4{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
-.pro-feature p{font-size:13px;color:rgba(255,255,255,0.6);line-height:1.5}
-
-/* PARTENAIRES */
-#partenaires{background:var(--gris)}
-.part-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:40px}
-.part-step{background:#fff;border-radius:var(--radius);padding:28px;border:1px solid var(--border);text-align:center;position:relative}
-.part-step-num{width:40px;height:40px;border-radius:50%;background:var(--bleu);color:#fff;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
-.part-step h3{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--bleu);margin-bottom:8px}
-.part-step p{font-size:13px;color:var(--gris2);line-height:1.6}
-.part-secteurs{display:flex;flex-wrap:wrap;gap:10px}
-.part-secteur{background:#fff;border:1px solid var(--border);border-radius:30px;padding:8px 18px;font-size:13px;font-weight:500;color:var(--bleu)}
-
-/* ZONE */
-#zone{background:#fff}
-.zone-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-.zone-list{display:flex;flex-direction:column;gap:10px}
-.zone-item{display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--gris);border-radius:10px;font-size:14px;font-weight:500;color:var(--bleu)}
-
-/* FAQ */
-#faq{background:var(--gris)}
-.faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
-.faq-item{background:#fff;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden}
-.faq-question{padding:20px 24px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--bleu);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.2s}
-.faq-question:hover{background:var(--gris)}
-.faq-question::after{content:'+';font-size:22px;font-weight:400;color:var(--orange);transition:transform 0.3s;flex-shrink:0}
-.faq-item.open .faq-question::after{transform:rotate(45deg)}
-.faq-answer{max-height:0;overflow:hidden;transition:max-height 0.4s ease;font-size:14px;color:var(--gris2);line-height:1.7}
-.faq-item.open .faq-answer{max-height:300px}
-.faq-answer-inner{padding:0 24px 20px}
-
-/* CONTACT */
-#contact{background:var(--bleu)}
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
-.contact-info h2{font-family:'Syne',sans-serif;font-size:clamp(24px,4vw,38px);font-weight:800;color:#fff;margin-bottom:16px;letter-spacing:-0.5px}
-.contact-info p{font-size:15px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:32px}
-.contact-items{display:flex;flex-direction:column;gap:14px}
-.contact-item{display:flex;align-items:center;gap:14px;color:#fff;text-decoration:none;font-size:15px;transition:opacity 0.2s}
-.contact-item:hover{opacity:0.8}
-.contact-item-icon{width:44px;height:44px;border-radius:12px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;transition:background 0.2s}
-.contact-item:hover .contact-item-icon{background:var(--orange)}
-.contact-item div strong{display:block;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;opacity:0.5;margin-bottom:2px}
-.contact-form{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:20px;padding:32px}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
-.form-group{margin-bottom:14px}
-.form-group label{display:block;font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
-.form-group input,.form-group select,.form-group textarea{width:100%;padding:12px 16px;background:rgba(255,255,255,0.08);border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:14px;color:#fff;outline:none;transition:border 0.2s}
-.form-group input::placeholder,.form-group textarea::placeholder{color:rgba(255,255,255,0.35)}
-.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--orange)}
-.form-group select option{background:var(--bleu);color:#fff}
-.btn-submit{width:100%;background:var(--orange);color:#fff;border:none;padding:15px;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-submit:hover{background:#e55a28;transform:translateY(-1px)}
-
-/* WHATSAPP FLOAT */
-.wa-float{position:fixed;bottom:24px;right:24px;z-index:200;background:#25d366;color:#fff;width:58px;height:58px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 24px rgba(37,211,102,0.4);transition:all 0.25s;animation:wa-bounce 3s ease-in-out infinite}
-.wa-float:hover{transform:scale(1.1);box-shadow:0 10px 32px rgba(37,211,102,0.5)}
-@keyframes wa-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.wa-tooltip{position:fixed;bottom:92px;right:24px;background:#fff;color:var(--bleu);font-size:13px;font-weight:600;padding:8px 14px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,0.12);white-space:nowrap;z-index:200;opacity:0;transform:translateY(4px);transition:all 0.3s;pointer-events:none}
-.wa-float:hover~.wa-tooltip,.wa-tooltip:hover{opacity:1;transform:translateY(0)}
-
-/* FOOTER */
-footer{background:#080f26;color:rgba(255,255,255,0.5);padding:32px 2rem;text-align:center}
-footer p{font-size:13px;line-height:1.8}
-footer a{color:var(--orange2);text-decoration:none}
-footer strong{color:#fff}
-
-/* TOAST */
-.toast{position:fixed;bottom:100px;right:24px;background:var(--bleu);color:#fff;padding:14px 20px;border-radius:12px;font-size:14px;font-weight:500;z-index:1000;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;max-width:280px}
-.toast.show{opacity:1;transform:translateY(0)}
-.devis-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:3000;align-items:center;justify-content:center;padding:16px}
-.devis-modal-overlay.show{display:flex}
-.devis-modal{background:#fff;border-radius:20px;padding:32px;width:100%;max-width:420px;text-align:center}
-.devis-modal h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--bleu);margin-bottom:6px}
-.devis-modal p{font-size:14px;color:var(--gris2);margin-bottom:24px}
-.devis-modal-btns{display:flex;flex-direction:column;gap:10px}
-.btn-devis-wa{background:#25d366;color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-devis-email{background:var(--bleu);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-devis-both{background:var(--orange);color:#fff;border:none;padding:14px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px}
-.btn-devis-cancel{background:none;border:none;color:var(--gris2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:6px;padding:8px}
-.toast.show{opacity:1;transform:translateY(0)}
-
-@media(max-width:900px){
-  .nav-links{display:none;position:fixed;top:68px;left:0;right:0;background:var(--bleu);flex-direction:column;padding:20px;gap:4px;border-bottom:1px solid rgba(255,255,255,0.1)}
-  .nav-links.open{display:flex}
-  .hamburger{display:flex}
-  .legal-grid,.pro-inner,.contact-grid,.zone-grid{grid-template-columns:1fr}
-  .part-steps{grid-template-columns:1fr}
-  .form-row{grid-template-columns:1fr}
-  .hero h1{letter-spacing:-1px}
-}
-@media print{
-  body > *{display:none!important}
-  #print-zone{display:block!important;position:fixed;top:0;left:0;right:0;bottom:0;background:#fff;z-index:99999;padding:20px}
-}
-/* ADMIN */
-#admin-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:5000;align-items:center;justify-content:center;padding:16px}
-#admin-overlay.show{display:flex}
-.admin-login{background:#fff;border-radius:20px;padding:40px;width:100%;max-width:380px;text-align:center}
-.admin-login h3{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bleu);margin-bottom:6px}
-.admin-login p{font-size:14px;color:var(--gris2);margin-bottom:28px}
-.admin-login input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:10px;font-size:16px;font-family:'DM Sans',sans-serif;outline:none;text-align:center;letter-spacing:4px;margin-bottom:14px}
-.admin-login input:focus{border-color:var(--bleu)}
-.admin-login input.error{border-color:#D32F2F;animation:shake 0.3s}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
-.admin-wrap{display:none;position:fixed;inset:0;background:#f5f4f0;z-index:5000;overflow-y:auto}
-.admin-wrap.show{display:block}
-.admin-nav{background:var(--bleu);padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.admin-nav-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#fff}
-.admin-nav-logo span{color:var(--orange)}
-.admin-nav-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.admin-tab{background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);border:none;padding:7px 16px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
-.admin-tab.active{background:#fff;color:var(--bleu)}
-.admin-close{background:var(--orange);color:#fff;border:none;padding:7px 14px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:600}
-.admin-body{max-width:1000px;margin:0 auto;padding:32px 2rem}
-.admin-section{display:none}
-.admin-section.show{display:block}
-.fact-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
-.fact-admin-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px}
-.fact-admin-card h3{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--bleu);margin-bottom:14px}
-.fact-field{margin-bottom:12px}
-.fact-field label{display:block;font-size:11px;font-weight:600;color:var(--gris2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px}
-.fact-field input,.fact-field select,.fact-field textarea{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border 0.2s;color:var(--text)}
-.fact-field input:focus,.fact-field select:focus{border-color:var(--bleu)}
-.fact-lignes-admin{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px}
-.fact-ligne-row{display:grid;grid-template-columns:3fr 80px 100px 90px 36px;gap:8px;margin-bottom:8px;align-items:center}
-.fact-ligne-row input{padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none;width:100%}
-.fact-ligne-row input:focus{border-color:var(--bleu)}
-.fact-ligne-total{padding:8px 10px;background:var(--gris);border-radius:8px;font-size:13px;font-weight:600;color:var(--bleu);text-align:center}
-.fact-totaux-admin{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;margin-bottom:16px}
-.fact-total-row-a{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:14px}
-.fact-total-row-a:last-child{border-bottom:none;font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--bleu)}
-.fact-total-row-a label{color:var(--gris2)}
-.admin-btns{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:24px}
-.btn-admin{padding:12px 22px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;display:inline-flex;align-items:center;gap:8px;transition:all 0.2s}
-.btn-admin:hover{transform:translateY(-1px);opacity:0.9}
-.fact-preview-admin{background:#fff;border:1px solid var(--border);border-radius:14px;padding:32px;margin-bottom:20px}
-.fact-prev-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;padding-bottom:18px;border-bottom:3px solid var(--bleu)}
-.fact-prev-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--bleu)}
-.fact-prev-logo span{color:var(--orange)}
-table.fact-prev-table{width:100%;border-collapse:collapse;margin:20px 0}
-table.fact-prev-table th{background:var(--bleu);color:#fff;padding:10px 12px;font-size:12px;text-align:left}
-table.fact-prev-table td{padding:10px 12px;font-size:13px;border-bottom:1px solid var(--border)}
-.hist-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.hist-info strong{display:block;font-family:'Syne',sans-serif;font-size:15px;color:var(--bleu)}
-.hist-info span{font-size:13px;color:var(--gris2)}
-.hist-montant{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--orange);white-space:nowrap}
-.hist-actions{display:flex;gap:6px}
-.btn-hist{background:var(--gris);border:1px solid var(--border);padding:7px 12px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;font-weight:500}
-</style>
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
+      .btn-outline { margin-left: 0; margin-top: 0.75rem; display: block; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-<div id="print-zone" style="display:none"></div>
-  <a href="#" class="nav-logo">DELIV<span>RAX</span></a>
-  <div class="nav-links" id="nav-links">
-    <a href="#services" class="nav-link">Services</a>
-    <a href="#tarifs" class="nav-link">Tarifs</a>
-    <a href="#zone" class="nav-link">Zone</a>
-    <a href="#faq" class="nav-link">FAQ</a>
-    <a href="#partenaires" class="nav-link">Partenaires</a>
-    <a href="#contact" class="nav-link nav-cta">Devis gratuit</a>
-  </div>
-  <div class="hamburger" onclick="toggleNav()" id="hamburger">
-    <span></span><span></span><span></span>
+
+<nav>
+  <div class="nav-logo">DELIV<span>RAX</span></div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#tarifs">Tarifs</a>
+    <a href="#zone">Zone</a>
+    <a href="#faq">FAQ</a>
+    <a href="#partenaires">Partenaires</a>
+    <a href="#contact">Contact</a>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero" id="accueil">
-  <div class="hero-bg"></div>
-  <div class="hero-grid-lines"></div>
-  <div class="hero-inner">
-    <div class="hero-badge">🟢 Disponible 7j/7 — 10h à 20h</div>
-    <h1>Mise à disposition<br>véhicule avec chauffeur<br><em>Point A → Point B</em></h1>
-    <p class="hero-sub">Delivrax met son véhicule et son chauffeur à votre disposition pour votre <strong>déménagement, débarras, vide-maison</strong> et évacuation d'encombrants. Partout en Belgique et à l'étranger.</p>
-    <div class="hero-tags">
-      <span class="hero-tag">📦 Aide au déménagement</span>
-      <span class="hero-tag">🏠 Vide-maison & Débarras</span>
-      <span class="hero-tag">🛋️ Meubles & Encombrants</span>
-      <span class="hero-tag">♻️ Évacuation déchetterie</span>
-      <span class="hero-tag">🏍️ Motos & Scooters</span>
-      <span class="hero-tag">🌍 Belgique & Étranger</span>
+<section class="hero">
+  <h1>Transport & Livraison<br><span>Point A → Point B</span></h1>
+  <p>Delivrax met à votre disposition un véhicule avec chauffeur pour tous vos déménagements, manutentions et évacuations en Belgique et à l'étranger. Rapide, fiable et soigné.</p>
+  <p style="margin-top:0.75rem; font-size:1rem; background:rgba(255,255,255,0.1); display:inline-block; padding:0.5rem 1.2rem; border-radius:50px; border:1px solid rgba(255,255,255,0.2);">
+    💰 Petite livraison à partir de <strong>55€</strong> &nbsp;|&nbsp; Standard à partir de <strong>95€</strong>
+  </p>
+  <div class="hero-badges">
+    <span class="badge">📦 Colis & Express</span>
+    <span class="badge">🎁 Aide déménagement</span>
+    <span class="badge">🏠 Vide-maison / Débarras</span>
+    <span class="badge">🛋️ Meubles & Encombrants</span>
+    <span class="badge">🏍️ Motos & Scooters</span>
+    <span class="badge">🚚 Déménagement</span>
+    <span class="badge">🔍 Objets Oubliés</span>
+    <span class="badge">🌍 Belgique & Étranger</span>
+  </div>
+  <a href="#contact" class="btn btn-red">Demander un devis gratuit</a>
+  <a href="tel:+32472762734" class="btn btn-outline">📞 Appeler maintenant</a>
+</section>
+
+<section class="section" id="services">
+  <div class="section-title">Nos <span>Services</span></div>
+  <div class="section-sub">Tout type de transport, pour particuliers et professionnels.</div>
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">📦</div>
+      <h3>Manutention &amp; Objets divers</h3>
+      <p>Mise à disposition du véhicule avec chauffeur pour vos objets divers, électroménager et petits meubles. Réponse rapide et suivi par WhatsApp.</p>
     </div>
-    <div class="hero-btns">
-      <a href="#contact" class="btn-primary">📋 Demander un devis gratuit</a>
-      <a href="tel:+32496849566" class="btn-ghost">📞 +32 496 84 95 66</a>
+    <div class="service-card">
+      <div class="service-icon">🎁</div>
+      <h3>Livraison de Cadeaux</h3>
+      <p>Nous mettons notre véhicule et notre chauffeur à votre disposition pour vos déménagements. Chargement, transport et déchargement inclus.</p>
     </div>
-    <div class="hero-stats">
-      <div class="hero-stat"><strong>55€</strong><span>À partir de — petite mise à disposition</span></div>
-      <div class="hero-stat"><strong>2h</strong><span>Délai de réponse garanti</span></div>
-      <div class="hero-stat"><strong>7j/7</strong><span>Disponibilité 10h–20h</span></div>
-      <div class="hero-stat"><strong>4 pays</strong><span>Belgique, France, Pays-Bas, Luxembourg</span></div>
+    <div class="service-card">
+      <div class="service-icon">📄</div>
+      <h3>Débarras &amp; Vide-maison</h3>
+      <p>Évacuation de vos encombrants, vide-grenier, vide-maison. Acheminement vers déchetterie ou centre de tri agréé.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Service rapide & Documents Confidentiels</h3>
+      <p>Mise à disposition rapide du véhicule avec chauffeur pour vos besoins urgents. Idéal pour les entreprises du zoning industriel.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛋️</div>
+      <h3>Meubles & Encombrants</h3>
+      <p>Transport soigné de vos meubles, électroménager et objets encombrants. Chargement et déchargement inclus.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏍️</div>
+      <h3>Motos & Scooters</h3>
+      <p>Transport sécurisé de vos deux-roues avec arrimage professionnel. Livraison partout en Belgique.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🚚</div>
+      <h3>Déménagement</h3>
+      <p>Mise à disposition véhicule avec chauffeur et manutention pour votre déménagement complet. Service soigné pour particuliers et professionnels.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🔍</div>
+      <h3>Récupération d'Objets Oubliés</h3>
+      <p>Vous avez oublié quelque chose quelque part ? On met le véhicule à disposition pour aller le récupérer et vous le ramener rapidement.</p>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏢</div>
+      <h3>Livraisons Pro</h3>
+      <p>Mise à disposition véhicule avec chauffeur pour entreprises et artisans. Tarifs dégressifs selon volume et fréquence.</p>
     </div>
   </div>
 </section>
 
-<!-- SERVICES -->
-<section id="services">
-  <div class="container">
-    <div class="section-label">Ce qu'on fait pour vous</div>
-    <h2 class="section-title">Nos prestations</h2>
-    <p class="section-sub">Mise à disposition véhicule avec chauffeur pour particuliers et professionnels — formulées dans le respect de la réglementation belge.</p>
-    <div class="services-grid">
-
-      <div class="service-card">
-        <div class="service-icon">📦</div>
-        <h3>Aide au déménagement</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour le transfert de vos effets personnels, meubles et cartons d'une adresse à une autre. Chargement et déchargement inclus.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🏠</div>
-        <h3>Débarras & Vide-maison</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour l'évacuation de vos objets encombrants, meubles usagés et affaires non désirées vers un point de collecte ou de recyclage agréé.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">♻️</div>
-        <h3>Acheminement en déchetterie</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour transporter vos déchets non dangereux vers le recyparc ou la déchetterie agréée la plus proche. Inscrit à l'OWD Wallonie.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🛋️</div>
-        <h3>Meubles & Objets encombrants</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour le transport soigné de vos meubles, électroménager et objets volumineux. Arrimage professionnel, protection des biens.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🏍️</div>
-        <h3>Motos & Scooters</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour le transport sécurisé de votre deux-roues. Arrimage professionnel avec sangles homologuées. Partout en Belgique.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🛍️</div>
-        <h3>Récupération achats Marketplace</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour accompagner et récupérer vos achats de seconde main — canapé, lit, vélo acheté sur 2ememain.be ou Facebook Marketplace.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🔍</div>
-        <h3>Récupération d'objets oubliés</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour récupérer un objet oublié quelque part et vous le ramener. Réponse rapide, suivi WhatsApp en temps réel.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">🏢</div>
-        <h3>Prestations pour entreprises</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour artisans, PME et zonings industriels. Déménagement de bureau, évacuation de matériel, manutention ponctuelle. Tarifs dégressifs.</p>
-        <span class="service-badge">✓ Autorisé</span>
-      </div>
-
-      <div class="service-card">
-        <div class="service-icon">📄</div>
-        <h3>Remise en main propre — Documents</h3>
-        <p>Mise à disposition véhicule avec chauffeur pour la remise en main propre de documents urgents, contrats et dossiers sensibles entre professionnels. Confidentialité garantie.</p>
-        <span class="service-badge warn">⚠️ Avec convention signée</span>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- LÉGALITÉ -->
-<section id="legalite">
-  <div class="container">
-    <div class="section-label">Transparence & conformité</div>
-    <h2 class="section-title">On travaille dans les règles</h2>
-    <p class="section-sub">Delivrax opère en toute conformité avec la réglementation belge du SPF Mobilité. Voici ce qu'on peut faire et ce qu'on ne fait pas.</p>
-    <div class="legal-grid">
-      <div class="legal-card ok">
-        <h3>✅ Ce qu'on fait</h3>
-        <ul class="legal-list">
-          <li>Mise à disposition véhicule avec chauffeur — vous restez responsable du chargement</li>
-          <li>Aide au déménagement particuliers et professionnels</li>
-          <li>Débarras, vide-maison, évacuation d'encombrants</li>
-          <li>Acheminement en déchetterie / recyparc agréé</li>
-          <li>Récupération d'achats Marketplace avec le client</li>
-          <li>Facturation au forfait de service ou à l'heure</li>
-          <li>Documents remis en main propre avec convention signée</li>
-        </ul>
-      </div>
-      <div class="legal-card nok">
-        <h3>❌ Ce qu'on ne fait pas</h3>
-        <ul class="legal-list">
-          <li>Transport de marchandises commerciales pour des tiers (nécessite licence SPF)</li>
-          <li>Sous-traitance pour plateformes de livraison de colis (DHL, DPD...)</li>
-          <li>Transport de fret ou marchandises neuves sans convention</li>
-          <li>Déchets dangereux (chimiques, amiante, batteries, huiles)</li>
-          <li>Facturation au kilomètre comme un transporteur agréé</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CALCULATEUR -->
-<section id="devis">
-  <div class="container">
-    <div class="section-label">Estimez votre prestation</div>
-    <h2 class="section-title">Calculateur de forfait</h2>
-    <p class="section-sub">Obtenez une estimation immédiate. Devis définitif gratuit en moins de 2h.</p>
-    <div class="calc-wrap">
-      <div class="calc-header">
-        <h3>⚡ Estimation rapide</h3>
-        <p>Sélectionnez votre besoin — le prix s'affiche instantanément</p>
-      </div>
-      <div class="calc-body">
-        <div class="calc-step">
-          <label>Type de prestation</label>
-          <div class="calc-options" id="calc-type">
-            <div class="calc-option active" data-type="demenagement" onclick="calcSelect('type',this)">🚚 Déménagement</div>
-            <div class="calc-option" data-type="debarras" onclick="calcSelect('type',this)">🏠 Débarras</div>
-            <div class="calc-option" data-type="meuble" onclick="calcSelect('type',this)">🛋️ Meuble/objet</div>
-            <div class="calc-option" data-type="dechetterie" onclick="calcSelect('type',this)">♻️ Déchetterie</div>
-            <div class="calc-option" data-type="moto" onclick="calcSelect('type',this)">🏍️ Moto/scooter</div>
-          </div>
-        </div>
-        <div class="calc-step">
-          <label>Distance estimée</label>
-          <div class="calc-options" id="calc-dist">
-            <div class="calc-option active" data-dist="local" onclick="calcSelect('dist',this)">📍 Locale (&lt;20km)</div>
-            <div class="calc-option" data-dist="regional" onclick="calcSelect('dist',this)">🗺️ Régionale (20–80km)</div>
-            <div class="calc-option" data-dist="national" onclick="calcSelect('dist',this)">🇧🇪 Nationale (&gt;80km)</div>
-            <div class="calc-option" data-dist="international" onclick="calcSelect('dist',this)">🌍 International</div>
-          </div>
-        </div>
-        <div class="calc-step">
-          <label>Manutention nécessaire ?</label>
-          <div class="calc-options" id="calc-manu">
-            <div class="calc-option active" data-manu="non" onclick="calcSelect('manu',this)">🙋 Non merci</div>
-            <div class="calc-option" data-manu="oui" onclick="calcSelect('manu',this)">💪 Oui (+20€)</div>
-          </div>
-        </div>
-        <div class="calc-result" id="calc-result">
-          <div>
-            <div class="calc-result-price" id="calc-price">95 €</div>
-            <small id="calc-note">Forfait indicatif — devis définitif gratuit</small>
-          </div>
-          <p id="calc-desc">Mise à disposition véhicule avec chauffeur pour votre déménagement local. Chargement, transport et déchargement.</p>
-          <a href="#contact" class="btn-devis-calc">Obtenir le devis exact →</a>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- POURQUOI -->
-<section id="pourquoi">
-  <div class="container">
-    <div class="section-label">Nos engagements</div>
-    <h2 class="section-title">Pourquoi Delivrax ?</h2>
-    <p class="section-sub">Ce qui nous différencie — des engagements concrets, pas des promesses vagues.</p>
+<section class="why-section">
+  <div class="why-inner">
+    <div class="section-title">Pourquoi <span>Delivrax ?</span></div>
+    <div class="section-sub">Ce qui nous différencie de la concurrence</div>
     <div class="why-grid">
       <div class="why-card">
-        <span class="why-icon">⚡</span>
-        <h3>Réactivité</h3>
-        <p>Devis en moins de 2h, réponse WhatsApp rapide, suivi en temps réel à chaque étape de la prestation.</p>
+        <div class="icon">⚡</div>
+        <h4>Réactivité</h4>
+        <p>Devis en moins de 2h, intervention rapide selon disponibilités.</p>
       </div>
       <div class="why-card">
-        <span class="why-icon">💰</span>
-        <h3>Prix transparents</h3>
-        <p>Tarifs forfaitaires clairs, sans surprise. Devis gratuit et sans engagement. Pas de facturation au km comme un transporteur.</p>
+        <div class="icon">💰</div>
+        <h4>Prix Compétitifs</h4>
+        <p>Tarifs transparents, sans surprise. Devis gratuit et sans engagement.</p>
       </div>
       <div class="why-card">
-        <span class="why-icon">🤝</span>
-        <h3>Contact direct</h3>
-        <p>Un interlocuteur unique, pas un call center. Vous parlez directement au chauffeur qui réalise votre prestation.</p>
+        <div class="icon">🤝</div>
+        <h4>Proximité</h4>
+        <p>Un interlocuteur direct, pas un call center. On vous répond personnellement.</p>
       </div>
       <div class="why-card">
-        <span class="why-icon">⚖️</span>
-        <h3>100% conforme</h3>
-        <p>Toutes nos prestations sont formulées en conformité avec la réglementation SPF Mobilité. Facturation légale.</p>
-      </div>
-      <div class="why-card">
-        <span class="why-icon">🌍</span>
-        <h3>Flexibilité maximale</h3>
-        <p>Belgique entière, France, Pays-Bas, Luxembourg. Petits objets ou gros volumes, on s'adapte à votre besoin.</p>
-      </div>
-      <div class="why-card">
-        <span class="why-icon">🔒</span>
-        <h3>Soin & sécurité</h3>
-        <p>Arrimage professionnel, sangles homologuées, protection des biens. Vos affaires sont entre de bonnes mains.</p>
+        <div class="icon">🌍</div>
+        <h4>Flexibilité</h4>
+        <p>Belgique entière et étranger. Petits colis ou gros volumes, on s'adapte.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TARIFS -->
-<section id="tarifs">
-  <div class="container">
-    <div class="section-label">Forfaits clairs</div>
-    <h2 class="section-title">Nos tarifs</h2>
-    <p class="section-sub">Tarifs indicatifs pour mise à disposition véhicule avec chauffeur. Devis personnalisé gratuit selon votre situation.</p>
-    <div class="tarifs-grid">
-      <div class="tarif-card">
-        <h3>Petite mise à disposition</h3>
-        <div class="tarif-prix"><sup>à partir de </sup>55€</div>
-        <p class="tarif-desc">Objets légers, meubles simples, manutention locale courte durée.</p>
-        <ul class="tarif-list">
-          <li>Véhicule + chauffeur inclus</li>
-          <li>Distance locale &lt; 20km</li>
-          <li>Durée estimée &lt; 2h</li>
-          <li>Suivi WhatsApp</li>
-        </ul>
-        <a href="#contact" class="btn-tarif">Demander ce forfait</a>
-      </div>
-      <div class="tarif-card featured">
-        <h3>Mise à disposition standard</h3>
-        <div class="tarif-prix"><sup>à partir de </sup>95€</div>
-        <p class="tarif-desc">Déménagement partiel, débarras, meubles volumineux, électroménager.</p>
-        <ul class="tarif-list">
-          <li>Véhicule + chauffeur inclus</li>
-          <li>Manutention disponible +20€</li>
-          <li>Distance régionale incluse</li>
-          <li>Suivi WhatsApp temps réel</li>
-          <li>Facturation légale possible</li>
-        </ul>
-        <a href="#contact" class="btn-tarif">Demander ce forfait</a>
-      </div>
-      <div class="tarif-card">
-        <h3>Longue distance</h3>
-        <div class="tarif-prix"><sup>à partir de </sup>175€</div>
-        <p class="tarif-desc">Prestations sur longue distance — Belgique entière, France, Pays-Bas, Luxembourg.</p>
-        <ul class="tarif-list">
-          <li>Véhicule + chauffeur inclus</li>
-          <li>Belgique + pays frontaliers</li>
-          <li>Devis personnalisé selon km</li>
-          <li>Suivi WhatsApp continu</li>
-        </ul>
-        <a href="#contact" class="btn-tarif">Demander ce forfait</a>
-      </div>
-      <div class="tarif-card">
-        <h3>Déménagement complet</h3>
-        <div class="tarif-prix">Sur devis</div>
-        <p class="tarif-desc">Mise à disposition véhicule + chauffeur pour déménagement intégral. Tarif selon volume, distance et accessibilité.</p>
-        <ul class="tarif-list">
-          <li>Évaluation sur place possible</li>
-          <li>Devis en moins de 2h</li>
-          <li>Tarif dégressif grands volumes</li>
-          <li>Facturation entreprises possible</li>
-        </ul>
-        <a href="#contact" class="btn-tarif">Demander un devis</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- AVIS -->
-<section id="avis">
-  <div class="container">
-    <div class="section-label">Ils nous font confiance</div>
-    <h2 class="section-title">Avis clients</h2>
-    <p class="section-sub">Ce que disent ceux qui ont fait appel à Delivrax pour leur mise à disposition véhicule avec chauffeur.</p>
-
-    <!-- Score global -->
-    <div class="avis-score">
-      <div>
-        <div class="avis-score-num" id="avis-note-global">4.9</div>
-        <div class="avis-score-stars">★★★★★</div>
-        <div class="avis-score-label">Note moyenne</div>
-      </div>
-      <div style="flex:1;padding:0 24px">
-        <div style="display:flex;flex-direction:column;gap:6px" id="avis-barres"></div>
-      </div>
-      <div class="avis-score-count"><strong id="avis-total-count">6</strong><br><span style="font-size:12px">avis</span></div>
-    </div>
-
-    <div class="avis-grid" id="avis-grid">
-      <div class="avis-card">
-        <div class="avis-stars">★★★★★</div>
-        <p class="avis-text">"Parfait pour mon déménagement de studio. Ponctuel, soigneux, et vraiment sympa. Le suivi WhatsApp m'a rassuré tout au long. Je recommande sans hésiter !"</p>
-        <div class="avis-author">
-          <div class="avis-avatar">SL</div>
-          <div><div class="avis-name">Sophie L.</div><div class="avis-loc">Wavre, Brabant Wallon</div></div>
-        </div>
-      </div>
-      <div class="avis-card">
-        <div class="avis-stars">★★★★★</div>
-        <p class="avis-text">"J'avais un canapé acheté sur Marketplace à récupérer à Namur. En 3h c'était chez moi. Tarif correct, chauffeur professionnel. Super service !"</p>
-        <div class="avis-author">
-          <div class="avis-avatar">MK</div>
-          <div><div class="avis-name">Marc K.</div><div class="avis-loc">Bruxelles</div></div>
-        </div>
-      </div>
-      <div class="avis-card">
-        <div class="avis-stars">★★★★★</div>
-        <p class="avis-text">"Vide-maison après le décès de ma mère. Réactif, discret et vraiment humain dans une situation difficile. Merci Delivrax pour votre professionnalisme."</p>
-        <div class="avis-author">
-          <div class="avis-avatar">PD</div>
-          <div><div class="avis-name">Patricia D.</div><div class="avis-loc">Namur</div></div>
-        </div>
-      </div>
-      <div class="avis-card">
-        <div class="avis-stars">★★★★☆</div>
-        <p class="avis-text">"Ma moto transportée de Liège à Bruxelles sans aucun problème. Arrimage nickel, communication top. Je referai appel à eux sans hésiter."</p>
-        <div class="avis-author">
-          <div class="avis-avatar">JB</div>
-          <div><div class="avis-name">Julien B.</div><div class="avis-loc">Liège</div></div>
-        </div>
-      </div>
-      <div class="avis-card">
-        <div class="avis-stars">★★★★★</div>
-        <p class="avis-text">"Évacuation d'une cuisine complète vers la déchetterie. Efficace, rapide, aucun souci. Devis reçu en 1h, prestation le lendemain. Top !"</p>
-        <div class="avis-author">
-          <div class="avis-avatar">FV</div>
-          <div><div class="avis-name">François V.</div><div class="avis-loc">Charleroi</div></div>
-        </div>
-      </div>
-      <div class="avis-card">
-        <div class="avis-stars">★★★★★</div>
-        <p class="avis-text">"Service pro pour notre entreprise — déménagement de bureau en un weekend. Discret, organisé, facturation impeccable. On retravaillera avec Delivrax."</p>
-        <div class="avis-author">
-          <div class="avis-avatar">AT</div>
-          <div><div class="avis-name">Adrien T.</div><div class="avis-loc">Ottignies — PME</div></div>
-        </div>
-      </div>
-    </div>
-
-    <button class="avis-form-btn" onclick="ouvrirModalAvis()">
-      ⭐ Laisser mon avis
-    </button>
-  </div>
-</section>
-
-<!-- MODAL AVIS -->
-<div class="modal-avis-overlay" id="modal-avis" onclick="if(event.target===this)fermerModalAvis()">
-  <div class="modal-avis">
-    <button class="modal-avis-close" onclick="fermerModalAvis()">✕</button>
-    <h3>⭐ Laisser un avis</h3>
-    <p>Vous avez fait appel à Delivrax ? Partagez votre expérience — ça nous aide beaucoup !</p>
-
+<section class="section" style="padding-top:0;">
+  <div style="background:linear-gradient(135deg, var(--blue) 0%, #2244a8 100%); border-radius:12px; padding:2.5rem; color:white; display:grid; grid-template-columns:1fr 1fr; gap:2rem; align-items:center;">
     <div>
-      <label style="display:block;font-size:12px;font-weight:600;color:var(--bleu);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px">Votre note *</label>
-      <div class="star-selector" id="star-selector">
-        <button class="star-btn" data-note="1" onclick="setNote(1)">★</button>
-        <button class="star-btn" data-note="2" onclick="setNote(2)">★</button>
-        <button class="star-btn" data-note="3" onclick="setNote(3)">★</button>
-        <button class="star-btn" data-note="4" onclick="setNote(4)">★</button>
-        <button class="star-btn" data-note="5" onclick="setNote(5)">★</button>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:2px; color:rgba(255,255,255,0.6); text-transform:uppercase; margin-bottom:0.5rem;">Pour les professionnels</div>
+      <div style="font-family:'Barlow Condensed',sans-serif; font-size:2rem; font-weight:900; text-transform:uppercase; letter-spacing:1px; margin-bottom:1rem;">Vous êtes une <span style="color:#f03333;">entreprise</span> ?</div>
+      <p style="opacity:0.85; line-height:1.7; font-size:1rem;">Delivrax intervient dans les zonings industriels de Wallonie pour la mise à disposition de véhicule avec chauffeur, manutention et aide au déménagement professionnel. Service B2B réactif, devis immédiat.</p>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:1rem;">
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">📄</span>
+        <div><strong>Documents & Contrats</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Remise en main propre — Confidentialité garantie</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">⚡</span>
+        <div><strong>Service rapide</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Intervention rapide — 7j/7 — 8h à 20h</span></div>
+      </div>
+      <div style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.15); border-radius:8px; padding:1rem; display:flex; gap:1rem; align-items:center;">
+        <span style="font-size:1.8rem;">💼</span>
+        <div><strong>Tarifs Entreprises</strong><br/><span style="font-size:0.85rem; opacity:0.7;">Dégressifs selon volume — Facturation possible</span></div>
       </div>
     </div>
-
-    <input class="avis-input" id="avis-prenom" placeholder="Votre prénom et initiale (ex: Marie L.) *">
-    <input class="avis-input" id="avis-ville" placeholder="Votre ville (ex: Wavre, Bruxelles...)">
-    <textarea class="avis-textarea" id="avis-commentaire" rows="4" placeholder="Décrivez votre expérience avec Delivrax — type de prestation, ponctualité, qualité du service... *"></textarea>
-    <button class="btn-submit-avis" onclick="soumettreAvis()">📤 Publier mon avis</button>
   </div>
-</div>
+</section>
+<section class="section" id="tarifs">
+  <div class="section-title">Nos <span>Tarifs</span></div>
+  <div class="section-sub">Tarifs indicatifs — devis personnalisé gratuit sur demande.</div>
+  <div class="tarifs-grid">
+    <div class="tarif-card">
+      <h3>Petite Livraison</h3>
+      <div class="tarif-price">55€ <small>à partir de</small></div>
+      <p>Véhicule avec chauffeur pour objets, meubles légers, manutention locale.</p>
+    </div>
+    <div class="tarif-card featured">
+      <h3>Livraison Standard</h3>
+      <div class="tarif-price">95€ <small>à partir de</small></div>
+      <p>Véhicule avec chauffeur + manutention pour meubles, électroménager, objets encombrants.</p>
+    </div>
+    <div class="tarif-card">
+      <h3>Longue Distance</h3>
+      <div class="tarif-price">175€ <small>à partir de</small></div>
+      <p>Mise à disposition véhicule + chauffeur pour longue distance, France, Pays-Bas, Luxembourg.</p>
+    </div>
+    <div class="tarif-card">
+      <h3>Déménagement</h3>
+      <div class="tarif-price">Sur devis</div>
+      <p>Transport complet de vos affaires. Tarif selon volume, distance et accessibilité.</p>
+    </div>
+  </div>
+</section>
 
-<!-- PRO -->
-<section id="pro">
-  <div class="container">
-    <div class="pro-inner">
-      <div class="pro-text">
-        <div class="section-label" style="color:var(--orange2)">Pour les professionnels</div>
-        <h2>Vous êtes une entreprise ou un artisan ?</h2>
-        <p>Delivrax intervient dans les zonings industriels de Wallonie et partout en Belgique pour la mise à disposition de véhicule avec chauffeur, manutention et aide au déménagement professionnel.</p>
-        <a href="#contact" class="btn-primary">Obtenir un devis entreprise →</a>
+<section class="why-section" id="faq">
+  <div class="why-inner">
+    <div class="section-title">Questions <span>Fréquentes</span></div>
+    <div class="section-sub">Tout ce que vous devez savoir sur Delivrax</div>
+    <div class="why-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📞</div>
+        <h4>Comment commander ?</h4>
+        <p>Remplissez le formulaire, appelez-nous ou envoyez un WhatsApp. On vous propose une mise à disposition avec devis en moins de 2h.</p>
       </div>
-      <div class="pro-features">
-        <div class="pro-feature">
-          <div class="pro-feature-icon">📄</div>
-          <div>
-            <h4>Remise en main propre — Documents & Contrats</h4>
-            <p>Convention de mise à disposition signée — confidentialité garantie pour dossiers sensibles.</p>
-          </div>
-        </div>
-        <div class="pro-feature">
-          <div class="pro-feature-icon">⚡</div>
-          <div>
-            <h4>Intervention rapide — 7j/7 — 10h à 20h</h4>
-            <p>Disponibilité élargie pour vos urgences professionnelles. Devis immédiat.</p>
-          </div>
-        </div>
-        <div class="pro-feature">
-          <div class="pro-feature-icon">💼</div>
-          <div>
-            <h4>Tarifs dégressifs — Facturation légale</h4>
-            <p>Tarifs selon volume et fréquence. Factures conformes aux codes NACE autorisés.</p>
-          </div>
-        </div>
-        <div class="pro-feature">
-          <div class="pro-feature-icon">🏭</div>
-          <div>
-            <h4>Zonings industriels Wallonie</h4>
-            <p>Connaissance terrain des zonings de Brabant Wallon, Namur, Hainaut et Liège.</p>
-          </div>
-        </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">📍</div>
+        <h4>Comment suivre ma livraison ?</h4>
+        <p>On vous envoie des notifications par WhatsApp à chaque étape — prise en charge, en route, arrivée. Contact direct avec le chauffeur.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🕐</div>
+        <h4>Quels sont vos horaires ?</h4>
+        <p>Nous sommes disponibles 7j/7 de 8h à 20h. Pour les urgences, n'hésitez pas à nous contacter en dehors de ces horaires.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🔒</div>
+        <h4>Mes colis sont-ils assurés ?</h4>
+        <p>Oui, nous transportons vos biens avec le plus grand soin. Chaque livraison est confirmée par une remise en main propre sécurisée.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">💳</div>
+        <h4>Quels modes de paiement ?</h4>
+        <p>Virement bancaire, Payconiq, carte bancaire via terminal. Paiement à la livraison ou à la commande selon votre préférence.</p>
+      </div>
+      <div class="why-card" style="text-align:left;">
+        <div class="icon">🌍</div>
+        <h4>Livrez-vous à l'étranger ?</h4>
+        <p>Oui ! Nous livrons en France, Pays-Bas, Luxembourg et plus encore. Contactez-nous pour un devis personnalisé longue distance.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PARTENAIRES -->
-<section id="partenaires">
-  <div class="container">
-    <div class="section-label">Programme partenaires</div>
-    <h2 class="section-title">Vous vendez des produits encombrants ?</h2>
-    <p class="section-sub">On s'occupe de la mise à disposition véhicule avec chauffeur pour livrer chez vos clients. Un service complet pour votre commerce.</p>
-    <div class="part-steps">
-      <div class="part-step">
-        <div class="part-step-num">01</div>
-        <h3>Votre client achète</h3>
-        <p>Dans votre magasin ou en ligne — il a besoin d'une mise à disposition véhicule pour récupérer ou recevoir son achat.</p>
-      </div>
-      <div class="part-step">
-        <div class="part-step-num">02</div>
-        <h3>Delivrax intervient</h3>
-        <p>On met notre véhicule et notre chauffeur à disposition pour récupérer et acheminer directement chez votre client.</p>
-      </div>
-      <div class="part-step">
-        <div class="part-step-num">03</div>
-        <h3>Tout le monde gagne</h3>
-        <p>Votre client est satisfait, vous proposez un service complet sans gérer la logistique vous-même.</p>
-      </div>
-    </div>
-    <div class="part-secteurs">
-      <span class="part-secteur">🔌 Électroménager</span>
-      <span class="part-secteur">🛋️ Meubles</span>
-      <span class="part-secteur">💻 High-Tech</span>
-      <span class="part-secteur">🔨 Bricolage</span>
-      <span class="part-secteur">🏪 E-commerce</span>
-      <span class="part-secteur">🌿 Jardinage</span>
-      <span class="part-secteur">🎸 Instruments</span>
-      <span class="part-secteur">🏋️ Sport & Fitness</span>
-    </div>
-    <div style="margin-top:28px">
-      <a href="mailto:contact.delivrax@gmail.com?subject=Proposition de partenariat Delivrax" class="btn-primary" style="display:inline-flex">📤 Proposer un partenariat</a>
+<section class="zone-section" id="zone">
+  <div class="zone-inner">
+    <div class="section-title">Zone de <span style="color:var(--red)">Couverture</span></div>
+    <div class="section-sub">On se déplace partout où vous avez besoin.</div>
+    <div class="zone-tags">
+      <span class="zone-tag">🇧🇪 Belgique entière</span>
+      <span class="zone-tag">Brabant Wallon</span>
+      <span class="zone-tag">Bruxelles</span>
+      <span class="zone-tag">Liège</span>
+      <span class="zone-tag">Namur</span>
+      <span class="zone-tag">Anvers</span>
+      <span class="zone-tag">Gand</span>
+      <span class="zone-tag red">🇫🇷 France</span>
+      <span class="zone-tag red">🇳🇱 Pays-Bas</span>
+      <span class="zone-tag red">🇱🇺 Luxembourg</span>
+      <span class="zone-tag red">🌍 Et plus...</span>
     </div>
   </div>
 </section>
 
-<!-- ZONE -->
-<section id="zone">
-  <div class="container">
-    <div class="section-label">Zone d'intervention</div>
-    <h2 class="section-title">On se déplace partout</h2>
-    <p class="section-sub">Delivrax intervient dans toute la Belgique et dans les pays frontaliers pour votre mise à disposition véhicule avec chauffeur.</p>
-    <div class="zone-grid">
-      <div>
-        <h3 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--bleu);margin-bottom:16px">🇧🇪 Belgique</h3>
-        <div class="zone-list">
-          <div class="zone-item">🏠 Brabant Wallon — Zone principale</div>
-          <div class="zone-item">🏙️ Bruxelles & périphérie</div>
-          <div class="zone-item">🏭 Liège & province</div>
-          <div class="zone-item">🌿 Namur & province</div>
-          <div class="zone-item">⚙️ Hainaut & Charleroi</div>
-          <div class="zone-item">🌲 Luxembourg belge</div>
-          <div class="zone-item">🚢 Anvers & Flandre</div>
-          <div class="zone-item">🏛️ Gand & Bruges</div>
-        </div>
+<section class="partners-section" id="partenaires">
+  <div class="partners-inner">
+    <div class="section-title">Programme <span>Partenaires</span></div>
+    <div class="section-sub">Vous vendez des produits encombrants ? On s'occupe de la livraison.</div>
+    <div class="partners-steps">
+      <div class="partners-step">
+        <div class="step-num">01</div>
+        <h4>Votre client achète</h4>
+        <p>Dans votre magasin ou en ligne — il a besoin de livraison.</p>
       </div>
-      <div>
-        <h3 style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--bleu);margin-bottom:16px">🌍 Étranger</h3>
-        <div class="zone-list">
-          <div class="zone-item">🇫🇷 France — Nord, Paris et au-delà</div>
-          <div class="zone-item">🇳🇱 Pays-Bas</div>
-          <div class="zone-item">🇱🇺 Luxembourg</div>
-          <div class="zone-item">🌍 Autres destinations sur devis</div>
-        </div>
-        <div style="margin-top:24px;background:var(--gris);border-radius:12px;padding:20px">
-          <p style="font-size:14px;color:var(--gris2);line-height:1.7">Vous n'êtes pas sûr que votre zone soit couverte ? Contactez-nous — on fait tout pour trouver une solution.</p>
-          <a href="tel:+32496849566" style="display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;font-weight:600;color:var(--bleu);text-decoration:none">📞 Appelez-nous directement →</a>
-        </div>
+      <div class="partners-step">
+        <div class="step-num">02</div>
+        <h4>Delivrax intervient</h4>
+        <p>On récupère et livre directement chez votre client.</p>
+      </div>
+      <div class="partners-step">
+        <div class="step-num">03</div>
+        <h4>Tout le monde gagne</h4>
+        <p>Votre client est satisfait, vous proposez un service complet.</p>
       </div>
     </div>
+    <div class="partners-tags">
+      <span class="partners-tag">🔌 Électroménager</span>
+      <span class="partners-tag">🛋️ Meubles</span>
+      <span class="partners-tag">💻 High-Tech</span>
+      <span class="partners-tag">🔨 Bricolage</span>
+      <span class="partners-tag">🏪 E-commerce</span>
+    </div>
+    <p style="opacity:0.8; margin-bottom:1.5rem;">Intéressé par un partenariat ? Contactez-nous pour discuter d'un accord sur mesure.</p>
+    <a href="mailto:contact@delivrax.be" class="btn btn-red">Proposer un partenariat</a>
   </div>
 </section>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="container">
-    <div class="section-label">Questions fréquentes</div>
-    <h2 class="section-title">Tout ce que vous devez savoir</h2>
-    <p class="section-sub" style="margin:0 auto 48px">Les réponses aux questions les plus courantes sur nos prestations.</p>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Comment commander une mise à disposition ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Remplissez le formulaire de devis, appelez-nous au +32 496 84 95 66 ou envoyez un message WhatsApp. On vous répond avec un forfait personnalisé en moins de 2h. Pas d'engagement avant validation de votre part.</div></div>
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-info">
+      <h2>Contactez <span>Delivrax</span></h2>
+      <p>Besoin d'un transport ou d'un devis ? Remplissez le formulaire ou contactez-nous directement. On vous répond rapidement !</p>
+      <div class="contact-detail">
+        <span class="ico">📞</span>
+        <a href="tel:+32472762734">+32 472 76 27 34</a>
       </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Comment suivre ma prestation ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Vous recevez des notifications WhatsApp à chaque étape — confirmation de la mise à disposition, en route, arrivée sur place, chargement terminé, arrivée à destination. Contact direct avec le chauffeur tout au long.</div></div>
+      <div class="contact-detail">
+        <span class="ico">📧</span>
+        <a href="mailto:contact@delivrax.be">contact@delivrax.be</a>
       </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Quels sont les horaires de disponibilité ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Nous sommes disponibles 7j/7 de 10h à 20h. Pour les urgences professionnelles, n'hésitez pas à nous contacter en dehors de ces horaires — on fait de notre mieux pour s'adapter.</div></div>
+      <div class="contact-detail">
+        <span class="ico">🌐</span>
+        <a href="https://delivrax.be">delivrax.be</a>
       </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">La mise à disposition inclut-elle la manutention ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">La formule de base inclut le véhicule et le chauffeur. Selon la réglementation en vigueur, vous restez juridiquement responsable du chargement. L'aide à la manutention est disponible en option pour +20€ et peut être incluse selon le type de prestation. Précisez-le dans votre demande.</div></div>
+      <div class="contact-detail">
+        <span class="ico">📍</span>
+        <span>Brabant Wallon, Belgique</span>
       </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Mes biens sont-ils en sécurité ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Absolument. Nous utilisons des sangles d'arrimage homologuées, des couvertures de protection et un arrimage professionnel. Chaque prestation se termine par une remise en main propre confirmée.</div></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Quels modes de paiement acceptez-vous ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Virement bancaire, Payconiq, carte bancaire via terminal portable. Paiement à la livraison ou à la commande selon votre préférence. Facturation légale disponible pour les professionnels avec codes NACE conformes.</div></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Intervenez-vous à l'étranger ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Oui ! On intervient en France, aux Pays-Bas, au Luxembourg et plus selon les demandes. Contactez-nous pour un forfait personnalisé longue distance. Le prix dépend de la distance, du volume et des conditions d'accès.</div></div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-question" onclick="toggleFaq(this)">Quelle différence avec un transporteur agréé ?</div>
-        <div class="faq-answer"><div class="faq-answer-inner">Delivrax propose une mise à disposition de véhicule avec chauffeur — vous restez responsable du chargement selon la réglementation SPF Mobilité. On ne fait pas de transport de marchandises commerciales pur (qui nécessite une licence). Nos prestations couvrent le déménagement, le débarras, l'aide au vide-maison et l'acheminement en déchetterie — toutes autorisées sans licence de transport.</div></div>
+      <div class="contact-detail">
+        <span class="ico">🕐</span>
+        <span>Disponible 7j/7 — 8h à 20h</span>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div class="container">
-    <div class="contact-grid">
-      <div class="contact-info">
-        <div class="section-label" style="color:var(--orange2)">On vous répond vite</div>
-        <h2>Contactez Delivrax</h2>
-        <p>Besoin d'une mise à disposition véhicule avec chauffeur ? Envoyez votre demande — devis gratuit en moins de 2h, 7j/7.</p>
-        <div class="contact-items">
-          <a href="tel:+32496849566" class="contact-item">
-            <div class="contact-item-icon">📞</div>
-            <div><strong>Téléphone</strong>+32 496 84 95 66</div>
-          </a>
-          <a href="https://wa.me/32496849566?text=Bonjour Delivrax, je souhaite un devis pour une mise à disposition véhicule." class="contact-item" target="_blank">
-            <div class="contact-item-icon">💬</div>
-            <div><strong>WhatsApp</strong>Message direct — réponse rapide</div>
-          </a>
-          <a href="mailto:contact.delivrax@gmail.com" class="contact-item">
-            <div class="contact-item-icon">✉️</div>
-            <div><strong>Email</strong>contact.delivrax@gmail.com</div>
-          </a>
-          <div class="contact-item">
-            <div class="contact-item-icon">📍</div>
-            <div><strong>Base</strong>Brabant Wallon, Belgique</div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-item-icon">🕐</div>
-            <div><strong>Disponibilité</strong>7j/7 — 10h à 20h</div>
-          </div>
-        </div>
-      </div>
-      <div class="contact-form">
-        <h3 style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:#fff;margin-bottom:6px">Demande de forfait</h3>
-        <p style="font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:24px">Devis personnalisé — réponse en moins de 2h</p>
-        <form action="https://formspree.io/f/mvzloaej" method="POST" id="contact-form">
-          <input type="hidden" name="_subject" value="🚐 Nouvelle demande Delivrax">
-          <input type="hidden" name="_next" value="https://delivrax.be/?merci=1">
-          <div class="form-row">
-            <div class="form-group"><label>Nom & Prénom *</label><input type="text" name="nom" id="f-nom" placeholder="Marie Dupont" required></div>
-            <div class="form-group"><label>Téléphone *</label><input type="tel" name="telephone" id="f-tel" placeholder="+32 4xx xx xx xx" required></div>
-          </div>
-          <div class="form-group"><label>Email *</label><input type="email" name="email" id="f-email" placeholder="marie@gmail.com" required></div>
+    <div class="devis-form">
+      <h3>Demande de Devis</h3>
+      <form action="https://formspree.io/f/mdabozne" method="POST">
+        <div class="form-row">
           <div class="form-group">
-            <label>Type de mise à disposition *</label>
-            <select name="service" id="f-service" required>
-              <option value="">Choisissez...</option>
-              <option>Aide au déménagement</option>
-              <option>Débarras & Vide-maison</option>
-              <option>Évacuation déchetterie / recyparc</option>
-              <option>Meubles & objets encombrants</option>
-              <option>Moto / Scooter</option>
-              <option>Récupération achat Marketplace</option>
-              <option>Récupération d'objet oublié</option>
-              <option>Remise en main propre — Documents</option>
-              <option>Prestation entreprise / zoning</option>
-              <option>Autre — à préciser</option>
-            </select>
+            <label>Nom & Prénom *</label>
+            <input type="text" name="nom" placeholder="Votre nom" required />
           </div>
-          <div class="form-row">
-            <div class="form-group"><label>Adresse de départ *</label><input type="text" name="depart" id="f-depart" placeholder="Rue, ville, code postal" required></div>
-            <div class="form-group"><label>Adresse d'arrivée *</label><input type="text" name="arrivee" id="f-arrivee" placeholder="Rue, ville, code postal" required></div>
+          <div class="form-group">
+            <label>Téléphone *</label>
+            <input type="tel" name="telephone" placeholder="+32 ..." required />
           </div>
-          <div class="form-group"><label>Détails supplémentaires</label>
-            <textarea name="details" id="f-details" rows="3" placeholder="Étages, ascenseur, dimensions particulières, date souhaitée..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" name="email" placeholder="votre@email.com" required />
+        </div>
+        <div class="form-group">
+          <label>Type de service *</label>
+          <select name="service" required>
+            <option value="">Choisissez un service</option>
+            <option>Livraison de colis</option>
+            <option>Livraison de cadeau</option>
+            <option>Transport de documents urgents</option>
+            <option>Récupération d'objet oublié</option>
+            <option>Transport de meubles</option>
+            <option>Transport de moto</option>
+            <option>Déménagement</option>
+            <option>Service rapide & Documents Confidentiels</option>
+            <option>Livraison longue distance</option>
+            <option>Livraison professionnelle</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Adresse de départ *</label>
+            <input type="text" name="depart" placeholder="Ville ou adresse" required />
           </div>
-          <button type="submit" class="btn-submit" id="btn-devis-submit">🚐 Envoyer ma demande de forfait</button>
-        </form>
-      </div>
+          <div class="form-group">
+            <label>Adresse d'arrivée *</label>
+            <input type="text" name="arrivee" placeholder="Ville ou adresse" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Détails supplémentaires</label>
+          <textarea name="description" placeholder="Décrivez votre besoin (dimensions, poids, date souhaitée...)"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">🚐 Envoyer ma demande</button>
+      </form>
     </div>
   </div>
 </section>
 
 <footer>
-  <p><strong>DELIVRAX</strong> — Mise à disposition véhicule avec chauffeur & Manutention — Belgique<br>
-  📞 <a href="tel:+32496849566">+32 496 84 95 66</a> | ✉️ <a href="mailto:contact.delivrax@gmail.com">contact.delivrax@gmail.com</a> | 🌐 delivrax.be<br>
-  🕐 Disponible 7j/7 — 10h à 20h | 📍 Brabant Wallon, Belgique<br><br>
-  © 2025 Delivrax. Tous droits réservés. — Toutes les prestations sont formulées en conformité avec la réglementation SPF Mobilité belge.<br>
-  <a href="#dlvx-k9x2m7p4q8" style="color:rgba(255,255,255,0.08);font-size:10px;text-decoration:none">·</a></p>
+  <p><strong>DELIVRAX</strong> — Location véhicule avec chauffeur &amp; Aide au déménagement — Belgique</p>
+  <p style="margin-top:0.5rem;">📞 +32 472 76 27 34 &nbsp;|&nbsp; 📧 contact@delivrax.be &nbsp;|&nbsp; 🌐 delivrax.be</p>
+  <p style="margin-top:0.3rem;">🕐 Disponible 7j/7 — 8h à 20h &nbsp;|&nbsp; 🇧🇪 Brabant Wallon, Belgique</p>
+  <p style="margin-top:0.5rem; font-size:0.8rem;">© 2025 Delivrax. Tous droits réservés.</p>
 </footer>
 
-<a href="https://wa.me/32496849566?text=Bonjour Delivrax, je souhaite un devis pour une mise à disposition véhicule." class="wa-float" target="_blank">💬</a>
-<div class="wa-tooltip">Devis rapide sur WhatsApp !</div>
-<div class="toast" id="toast"></div>
-
-<!-- MODAL CHOIX ENVOI DEVIS -->
-<div class="devis-modal-overlay" id="devis-modal" onclick="if(event.target===this)fermerDevisModal()">
-  <div class="devis-modal">
-    <div style="font-size:36px;margin-bottom:12px">🚐</div>
-    <h3>Demande reçue !</h3>
-    <p>Merci <strong id="devis-nom"></strong> ! Comment voulez-vous envoyer votre demande à Delivrax ?</p>
-    <div class="devis-modal-btns">
-      <button class="btn-devis-wa" onclick="envoyerDevisWA()">💬 Envoyer via WhatsApp</button>
-      <button class="btn-devis-email" onclick="envoyerDevisEmail()">✉️ Envoyer par Email</button>
-      <button class="btn-devis-both" onclick="envoyerDevisLesDeux()">🚀 Envoyer les deux</button>
-      <button class="btn-devis-cancel" onclick="fermerDevisModal()">Annuler</button>
-    </div>
-  </div>
-</div>
-
-<!-- ADMIN LOGIN -->
-<div id="admin-overlay">
-  <div class="admin-login">
-    <div style="font-size:40px;margin-bottom:12px">🔐</div>
-    <h3>Espace Delivrax</h3>
-    <p>Entrez votre code d'accès pour accéder à la facturation</p>
-    <input type="password" id="admin-pwd" placeholder="••••••" maxlength="20"
-      onkeydown="if(event.key==='Enter')checkAdmin()"
-      oninput="this.classList.remove('error')">
-    <button class="btn-submit" onclick="checkAdmin()" style="width:100%">🔓 Accéder</button>
-    <button onclick="document.getElementById('admin-overlay').classList.remove('show')"
-      style="margin-top:12px;background:none;border:none;color:var(--gris2);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif">
-      ✕ Fermer
-    </button>
-  </div>
-</div>
-
-<!-- ADMIN PANEL -->
-<div class="admin-wrap" id="admin-wrap">
-  <div class="admin-nav">
-    <div class="admin-nav-logo">DELIV<span>RAX</span> <span style="font-size:12px;opacity:0.6;font-family:'DM Sans',sans-serif;font-weight:400">Admin</span></div>
-    <div class="admin-nav-right">
-      <button class="admin-tab active" onclick="showAdminTab('facture',this)">🧾 Facturation</button>
-      <button class="admin-tab" onclick="showAdminTab('historique',this)">📋 Historique</button>
-      <button class="admin-close" onclick="fermerAdmin()">✕ Quitter</button>
-    </div>
-  </div>
-
-  <div class="admin-body">
-
-    <!-- SECTION FACTURE -->
-    <div class="admin-section show" id="admin-facture">
-      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bleu);margin-bottom:6px">🧾 Nouvelle facture</h2>
-      <p style="font-size:14px;color:var(--gris2);margin-bottom:24px">Visible uniquement par vous — vos clients ne voient pas cette page</p>
-
-      <div class="admin-btns">
-        <button class="btn-admin" style="background:var(--bleu);color:#fff" onclick="genererPDFetEmail()">📄✉️ Générer PDF & Envoyer email</button>
-        <button class="btn-admin" style="background:#25d366;color:#fff" onclick="envoyerWhatsAppAdmin()">💬 Envoyer WhatsApp</button>
-        <button class="btn-admin" style="background:#FF8A65;color:#fff" onclick="genererPDF(true)">⬇️ Télécharger PDF</button>
-        <button class="btn-admin" style="background:#607D8B;color:#fff" onclick="imprimerFactureAdmin()">🖨️ Imprimer</button>
-        <button class="btn-admin" style="background:var(--orange);color:#fff" onclick="nouvelleFactureAdmin()">➕ Nouvelle facture</button>
-      </div>
-
-      <div class="fact-admin-grid">
-        <div class="fact-admin-card">
-          <h3>👤 Vos informations</h3>
-          <div class="fact-field"><label>Nom / Raison sociale</label><input id="a-nom" placeholder="Delivrax" value="Delivrax" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Adresse</label><input id="a-adresse" placeholder="Brabant Wallon, Belgique" value="Brabant Wallon, Belgique" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Téléphone</label><input id="a-tel" value="+32 496 84 95 66" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Email</label><input id="a-email" value="contact.delivrax@gmail.com" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>N° BCE / TVA (optionnel)</label><input id="a-tva" placeholder="BE 0xxx.xxx.xxx" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>IBAN</label><input id="a-iban" placeholder="BE68 xxxx xxxx xxxx" oninput="updatePreviewAdmin()"></div>
-        </div>
-        <div class="fact-admin-card">
-          <h3>🏠 Client</h3>
-          <div class="fact-field"><label>Nom du client *</label><input id="a-client-nom" placeholder="Marie Dupont" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Adresse client</label><input id="a-client-adresse" placeholder="Rue, ville" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Email client *</label><input id="a-client-email" placeholder="client@email.com" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>Téléphone client</label><input id="a-client-tel" placeholder="+32 4xx xx xx xx" oninput="updatePreviewAdmin()"></div>
-          <div class="fact-field"><label>N° facture</label><input id="a-num" oninput="updatePreviewAdmin()"></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-            <div class="fact-field"><label>Date</label><input type="date" id="a-date" oninput="updatePreviewAdmin()"></div>
-            <div class="fact-field"><label>Échéance</label><input type="date" id="a-echeance" oninput="updatePreviewAdmin()"></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="fact-lignes-admin">
-        <h3 style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--bleu);margin-bottom:12px">📋 Prestations</h3>
-        <div style="display:grid;grid-template-columns:3fr 80px 100px 90px 36px;gap:8px;margin-bottom:8px;font-size:11px;font-weight:600;color:var(--gris2);text-transform:uppercase;letter-spacing:0.5px;padding:0 4px">
-          <span>Description</span><span>Qté</span><span>Prix unit.</span><span>Total HT</span><span></span>
-        </div>
-        <div id="a-lignes-list"></div>
-        <button onclick="ajouterLigneAdmin()" style="width:100%;background:none;border:1.5px dashed var(--border);color:var(--gris2);padding:8px;border-radius:8px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:4px">+ Ajouter une ligne</button>
-      </div>
-
-      <div class="fact-totaux-admin">
-        <div class="fact-total-row-a"><label>Sous-total HT</label><span id="a-subtotal">0,00 €</span></div>
-        <div class="fact-total-row-a" style="align-items:center">
-          <label>TVA</label>
-          <div style="display:flex;align-items:center;gap:8px">
-            <select id="a-tva-pct" onchange="updatePreviewAdmin()" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none">
-              <option value="0">0% — Franchise TVA</option>
-              <option value="6">6%</option>
-              <option value="12">12%</option>
-              <option value="21" selected>21%</option>
-            </select>
-            <span id="a-tva-montant">0,00 €</span>
-          </div>
-        </div>
-        <div class="fact-total-row-a">
-          <label>Frais km (optionnel)</label>
-          <div style="display:flex;align-items:center;gap:6px">
-            <input type="number" id="a-km" placeholder="km" style="width:70px;padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:13px;font-family:'DM Sans',sans-serif;outline:none" oninput="updatePreviewAdmin()">
-            <span style="font-size:12px;color:var(--gris2)">× 0,42€ =</span>
-            <span id="a-km-total">0,00 €</span>
-          </div>
-        </div>
-        <div class="fact-total-row-a"><label style="color:var(--bleu);font-weight:700">TOTAL TTC</label><span id="a-total-ttc" style="color:var(--orange)">0,00 €</span></div>
-      </div>
-
-      <div class="fact-admin-card" style="margin-bottom:20px">
-        <h3>📝 Note / Conditions de paiement</h3>
-        <div class="fact-field" style="margin:0">
-          <textarea id="a-note" rows="2" placeholder="Ex: Paiement sous 15 jours. Virement sur IBAN ci-dessous." oninput="updatePreviewAdmin()" style="resize:vertical"></textarea>
-        </div>
-      </div>
-
-      <!-- APERÇU -->
-      <div class="fact-preview-admin" id="fact-preview-admin">
-        <div class="fact-prev-header">
-          <div>
-            <div class="fact-prev-logo">DELIV<span>RAX</span></div>
-            <div id="p-nom" style="font-size:14px;font-weight:600;color:var(--bleu);margin-top:4px"></div>
-            <div id="p-adresse" style="font-size:12px;color:var(--gris2)"></div>
-            <div id="p-contact" style="font-size:12px;color:var(--gris2)"></div>
-            <div id="p-tva-num" style="font-size:12px;color:var(--gris2)"></div>
-          </div>
-          <div style="text-align:right">
-            <div style="font-size:11px;color:var(--gris2);text-transform:uppercase;letter-spacing:1px">Facture</div>
-            <div id="p-num" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--bleu)">N° —</div>
-            <div style="font-size:12px;color:var(--gris2);margin-top:4px">Date : <span id="p-date">—</span></div>
-            <div style="font-size:12px;color:var(--gris2)">Échéance : <span id="p-echeance">—</span></div>
-          </div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:20px">
-          <div><div style="font-size:11px;font-weight:600;color:var(--gris2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Émetteur</div><div id="p-emetteur" style="font-size:13px;line-height:1.7"></div></div>
-          <div><div style="font-size:11px;font-weight:600;color:var(--gris2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Client</div><div id="p-client" style="font-size:13px;line-height:1.7"></div></div>
-        </div>
-        <table class="fact-prev-table">
-          <thead><tr><th>Description</th><th>Qté</th><th>Prix unit. HT</th><th>Total HT</th></tr></thead>
-          <tbody id="p-lignes"></tbody>
-        </table>
-        <div style="display:flex;justify-content:flex-end">
-          <div style="width:260px">
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px"><span style="color:var(--gris2)">Sous-total HT</span><span id="p-sub">0,00 €</span></div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px" id="p-km-row" style="display:none"><span id="p-km-label" style="color:var(--gris2)">Frais km</span><span id="p-km-val">0,00 €</span></div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px"><span id="p-tva-label" style="color:var(--gris2)">TVA (21%)</span><span id="p-tva-val">0,00 €</span></div>
-            <div style="display:flex;justify-content:space-between;padding:8px 0;font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--bleu);border-top:2px solid var(--bleu);margin-top:4px"><span>TOTAL TTC</span><span id="p-total">0,00 €</span></div>
-          </div>
-        </div>
-        <div style="border-top:1px solid var(--border);padding-top:14px;margin-top:16px;font-size:12px;color:var(--gris2)">
-          <div id="p-iban" style="margin-bottom:4px"></div>
-          <div id="p-note"></div>
-          <div style="margin-top:8px;color:#ccc">Généré via Delivrax.be</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SECTION HISTORIQUE -->
-    <div class="admin-section" id="admin-historique">
-      <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--bleu);margin-bottom:6px">📋 Historique des factures</h2>
-      <p style="font-size:14px;color:var(--gris2);margin-bottom:24px">Factures créées depuis ce navigateur</p>
-      <div id="hist-list"></div>
-    </div>
-
-  </div>
-</div>
-
 <script>
-// ===== ADMIN SÉCURISÉ =====
-// Mot de passe hashé SHA-256 — impossible à lire en clair
-const ADMIN_HASH = 'b87845edd9ac232056233cce5f3b1755bb8ec15148a2eb14895a502bc5672a0b';
-// URL secrète — seul toi la connais
-const SECRET_KEY = 'dlvx-k9x2m7p4q8';
-let loginAttempts = 0;
-let lockUntil = 0;
-
-async function hashPassword(pwd){
-  const encoder = new TextEncoder();
-  const data = encoder.encode(pwd + 'delivrax-salt-2025');
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/sw.js").then(() => console.log("SW registered"));
 }
-
-async function checkAdmin(){
-  // Vérifier le blocage
-  if(Date.now() < lockUntil){
-    const secs = Math.ceil((lockUntil - Date.now()) / 1000);
-    showToast('🔒 Trop de tentatives — réessayez dans '+secs+'s');
-    return;
-  }
-
-  const pwd = document.getElementById('admin-pwd').value;
-  const hash = await hashPassword(pwd);
-
-  if(hash === ADMIN_HASH){
-    // Succès — créer session 2h
-    loginAttempts = 0;
-    const session = {token: Date.now(), expires: Date.now() + 7200000};
-    sessionStorage.setItem('dlvx-session', JSON.stringify(session));
-    document.getElementById('admin-overlay').classList.remove('show');
-    document.getElementById('admin-wrap').classList.add('show');
-    document.body.style.overflow = 'hidden';
-    initAdmin();
-    document.getElementById('admin-pwd').value = '';
-  } else {
-    loginAttempts++;
-    const input = document.getElementById('admin-pwd');
-    input.classList.add('error');
-    input.value = '';
-
-    if(loginAttempts >= 3){
-      // Blocage 5 minutes
-      lockUntil = Date.now() + 300000;
-      loginAttempts = 0;
-      input.placeholder = '🔒 Bloqué 5 minutes';
-      setTimeout(()=>{ input.placeholder='••••••'; },300000);
-      showToast('🔒 3 tentatives échouées — accès bloqué 5 minutes');
-    } else {
-      const restantes = 3 - loginAttempts;
-      input.placeholder = '❌ Incorrect ('+restantes+' essai'+(restantes>1?'s':'')+' restant'+(restantes>1?'s':'')+')';
-      setTimeout(()=>{ input.placeholder='••••••'; },3000);
-    }
-  }
-}
-
-function checkSession(){
-  const s = sessionStorage.getItem('dlvx-session');
-  if(!s) return false;
-  const session = JSON.parse(s);
-  if(Date.now() > session.expires){
-    sessionStorage.removeItem('dlvx-session');
-    return false;
-  }
-  return true;
-}
-
-function fermerAdmin(){
-  document.getElementById('admin-wrap').classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-function showAdminTab(tab, btn){
-  document.querySelectorAll('.admin-section').forEach(s=>s.classList.remove('show'));
-  document.querySelectorAll('.admin-tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('admin-'+tab).classList.add('show');
-  btn.classList.add('active');
-  if(tab==='historique') renderHistorique();
-}
-
-// Détecter l'URL secrète — après chargement complet
-function checkSecretURL(){
-  if(location.hash === '#'+SECRET_KEY){
-    if(checkSession()){
-      // Session valide — accès direct sans mot de passe
-      document.getElementById('admin-wrap').classList.add('show');
-      document.body.style.overflow = 'hidden';
-      initAdmin();
-    } else {
-      document.getElementById('admin-overlay').classList.add('show');
-    }
-  }
-}
-
-window.addEventListener('hashchange', checkSecretURL);
-window.addEventListener('DOMContentLoaded', checkSecretURL);
-
-// Expiration session auto — vérifie toutes les minutes
-setInterval(()=>{
-  if(document.getElementById('admin-wrap').classList.contains('show')){
-    if(!checkSession()){
-      fermerAdmin();
-      showToast('⏱ Session expirée — reconnectez-vous');
-    }
-  }
-}, 60000);
-
-// ===== FACTURATION ADMIN =====
-let aLignes = [];
-let aFactNum = 1;
-
-function eur(n){ return (parseFloat(n)||0).toFixed(2).replace('.',',')+' €'; }
-
-function initAdmin(){
-  const today = new Date().toISOString().split('T')[0];
-  const echo = new Date(); echo.setDate(echo.getDate()+15);
-  document.getElementById('a-date').value = today;
-  document.getElementById('a-echeance').value = echo.toISOString().split('T')[0];
-  // Charger infos sauvegardées — avec valeurs Delivrax par défaut
-  const saved = JSON.parse(localStorage.getItem('dlvx-infos')||'{}');
-  document.getElementById('a-nom').value = saved.nom || 'Delivrax';
-  document.getElementById('a-adresse').value = saved.adresse || 'Brabant Wallon, Belgique';
-  document.getElementById('a-tel').value = saved.tel || '+32 496 84 95 66';
-  document.getElementById('a-email').value = saved.email || 'contact.delivrax@gmail.com';
-  if(saved.tva) document.getElementById('a-tva').value = saved.tva;
-  if(saved.iban) document.getElementById('a-iban').value = saved.iban;
-  // Vider les champs client — toujours vides au départ
-  ['a-client-nom','a-client-adresse','a-client-email','a-client-tel'].forEach(id=>{
-    document.getElementById(id).value = '';
-  });
-  // Numéro auto
-  const hist = JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
-  aFactNum = hist.length + 1;
-  document.getElementById('a-num').value = 'FA-'+new Date().getFullYear()+'-'+(aFactNum<10?'00'+aFactNum:aFactNum<100?'0'+aFactNum:aFactNum);
-  // Lignes par défaut
-  aLignes = [{desc:'Mise à disposition véhicule avec chauffeur',qte:1,prix:0}];
-  renderLignesAdmin();
-  updatePreviewAdmin();
-}
-
-function renderLignesAdmin(){
-  const list = document.getElementById('a-lignes-list');
-  list.innerHTML = aLignes.map((l,i)=>`
-    <div class="fact-ligne-row">
-      <input value="${l.desc}" placeholder="Description de la prestation" oninput="aLignes[${i}].desc=this.value;updatePreviewAdmin()">
-      <input type="number" value="${l.qte}" min="0.5" step="0.5" style="text-align:center" oninput="aLignes[${i}].qte=parseFloat(this.value)||0;updatePreviewAdmin()">
-      <input type="number" value="${l.prix}" min="0" placeholder="0.00" style="text-align:right" oninput="aLignes[${i}].prix=parseFloat(this.value)||0;updatePreviewAdmin()">
-      <div class="fact-ligne-total" id="al-${i}">0,00 €</div>
-      <button onclick="aLignes.splice(${i},1);renderLignesAdmin();updatePreviewAdmin()" style="background:none;border:none;color:#D32F2F;font-size:18px;cursor:pointer">🗑</button>
-    </div>
-  `).join('');
-}
-
-function ajouterLigneAdmin(){
-  aLignes.push({desc:'',qte:1,prix:0});
-  renderLignesAdmin();
-}
-
-function updatePreviewAdmin(){
-  const subtotal = aLignes.reduce((s,l)=>s+(l.qte*l.prix),0);
-  aLignes.forEach((l,i)=>{ const el=document.getElementById('al-'+i); if(el) el.textContent=eur(l.qte*l.prix); });
-  const tvaPct = parseFloat(document.getElementById('a-tva-pct').value)||0;
-  const tvaAmt = subtotal*tvaPct/100;
-  const km = parseFloat(document.getElementById('a-km').value)||0;
-  const kmAmt = km*0.42;
-  const total = subtotal+tvaAmt+kmAmt;
-  document.getElementById('a-subtotal').textContent = eur(subtotal);
-  document.getElementById('a-tva-montant').textContent = eur(tvaAmt);
-  document.getElementById('a-km-total').textContent = eur(kmAmt);
-  document.getElementById('a-total-ttc').textContent = eur(total);
-  // Preview
-  const nom=document.getElementById('a-nom').value||'Delivrax';
-  const adresse=document.getElementById('a-adresse').value;
-  const tel=document.getElementById('a-tel').value;
-  const email=document.getElementById('a-email').value;
-  const tvaNum=document.getElementById('a-tva').value;
-  const iban=document.getElementById('a-iban').value;
-  const clientNom=document.getElementById('a-client-nom').value||'—';
-  const clientAdresse=document.getElementById('a-client-adresse').value;
-  const clientEmail=document.getElementById('a-client-email').value;
-  const num=document.getElementById('a-num').value;
-  const date=document.getElementById('a-date').value;
-  const echeance=document.getElementById('a-echeance').value;
-  const note=document.getElementById('a-note').value;
-  document.getElementById('p-nom').textContent=nom;
-  document.getElementById('p-adresse').textContent=adresse;
-  document.getElementById('p-contact').textContent=[tel,email].filter(Boolean).join(' — ');
-  document.getElementById('p-tva-num').textContent=tvaNum?'TVA: '+tvaNum:'';
-  document.getElementById('p-num').textContent=num?'N° '+num:'N° —';
-  document.getElementById('p-date').textContent=date?new Date(date).toLocaleDateString('fr-BE'):'—';
-  document.getElementById('p-echeance').textContent=echeance?new Date(echeance).toLocaleDateString('fr-BE'):'—';
-  document.getElementById('p-emetteur').innerHTML=[nom,adresse,tel,email,tvaNum?'TVA: '+tvaNum:''].filter(Boolean).join('<br>');
-  document.getElementById('p-client').innerHTML=[clientNom,clientAdresse,clientEmail].filter(Boolean).join('<br>');
-  document.getElementById('p-lignes').innerHTML=aLignes.filter(l=>l.desc||l.prix).map(l=>`<tr><td>${l.desc||'—'}</td><td>${l.qte}</td><td>${eur(l.prix)}</td><td>${eur(l.qte*l.prix)}</td></tr>`).join('');
-  document.getElementById('p-sub').textContent=eur(subtotal);
-  document.getElementById('p-tva-label').textContent='TVA ('+tvaPct+'%)';
-  document.getElementById('p-tva-val').textContent=eur(tvaAmt);
-  document.getElementById('p-total').textContent=eur(total);
-  const kmRow=document.getElementById('p-km-row');
-  if(km>0){kmRow.style.display='flex';document.getElementById('p-km-label').textContent=km+'km × 0,42€';document.getElementById('p-km-val').textContent=eur(kmAmt);}
-  else kmRow.style.display='none';
-  document.getElementById('p-iban').textContent=iban?'💳 Paiement par virement : '+iban:'';
-  document.getElementById('p-note').textContent=note;
-  // Sauver infos
-  localStorage.setItem('dlvx-infos',JSON.stringify({
-    nom: document.getElementById('a-nom').value || 'Delivrax',
-    adresse: document.getElementById('a-adresse').value || 'Brabant Wallon, Belgique',
-    tel: document.getElementById('a-tel').value || '+32 496 84 95 66',
-    email: document.getElementById('a-email').value || 'contact.delivrax@gmail.com',
-    tva: document.getElementById('a-tva').value,
-    iban: document.getElementById('a-iban').value
-  }));
-}
-
-function getTexteFacture(){
-  const subtotal=aLignes.reduce((s,l)=>s+(l.qte*l.prix),0);
-  const tvaPct=parseFloat(document.getElementById('a-tva-pct').value)||0;
-  const tvaAmt=subtotal*tvaPct/100;
-  const km=parseFloat(document.getElementById('a-km').value)||0;
-  const kmAmt=km*0.42;
-  const total=subtotal+tvaAmt+kmAmt;
-  const nom='Delivrax'; // Toujours Delivrax
-  const tel=document.getElementById('a-tel').value||'+32 496 84 95 66';
-  const email=document.getElementById('a-email').value||'contact.delivrax@gmail.com';
-  const iban=document.getElementById('a-iban').value;
-  const tvaNum=document.getElementById('a-tva').value;
-  const clientNom=document.getElementById('a-client-nom').value||'Client';
-  const clientAdresse=document.getElementById('a-client-adresse').value;
-  const num=document.getElementById('a-num').value||'FA-001';
-  const dateVal=document.getElementById('a-date').value;
-  const echeanceVal=document.getElementById('a-echeance').value;
-  const date=dateVal?new Date(dateVal).toLocaleDateString('fr-BE'):'—';
-  const echeance=echeanceVal?new Date(echeanceVal).toLocaleDateString('fr-BE'):'—';
-  const note=document.getElementById('a-note').value;
-
-  // Lignes prestations formatées
-  const lignes=aLignes.filter(l=>l.desc||l.prix).map(l=>
-    `▸ ${l.desc||'Prestation'}\n   ${l.qte} × ${eur(l.prix)} = *${eur(l.qte*l.prix)}*`
-  ).join('\n');
-
-  // Message WhatsApp pro et lisible
-  const whatsappMsg =
-`🚐 *DELIVRAX — Facture N° ${num}*
-━━━━━━━━━━━━━━━━━━━━━
-
-Bonjour *${clientNom}*,
-
-Merci de faire confiance à *Delivrax* pour votre prestation. Veuillez trouver ci-dessous le détail de votre facture.
-
-📋 *DÉTAIL DES PRESTATIONS*
-━━━━━━━━━━━━━━━━━━━━━
-${lignes}
-
-💰 *RÉCAPITULATIF*
-━━━━━━━━━━━━━━━━━━━━━
-Sous-total HT   : ${eur(subtotal)}${km>0?'\nFrais km ('+km+'km)  : '+eur(kmAmt):''}
-TVA (${tvaPct}%)         : ${eur(tvaAmt)}
-*TOTAL TTC         : ${eur(total)}*
-
-📅 *Date :* ${date}
-⏰ *Échéance :* ${echeance}
-${iban?'\n💳 *Paiement par virement :*\n'+iban:''}
-${note?'\n📝 _'+note+'_':''}
-
-━━━━━━━━━━━━━━━━━━━━━
-Merci pour votre confiance ! 🙏
-N'hésitez pas à nous recontacter pour toute question.
-
-*Delivrax*
-📞 ${tel}
-✉️ ${email}
-🌐 delivrax.be`;
-
-  return {
-    num, clientNom, total,
-    sujet:`Facture ${num} — Delivrax`,
-    clientEmail:document.getElementById('a-client-email').value,
-    clientTel:document.getElementById('a-client-tel').value,
-    whatsappMsg,
-    corps:`Bonjour ${clientNom},\n\nVeuillez trouver en pièce jointe votre facture N° ${num} d'un montant de ${eur(total)}.\n\nMerci pour votre confiance !\n\nDelivrax\n${tel}\n${email}\ndelivrax.be`
-  };
-}
-
-function sauverHistorique(f){
-  const hist=JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
-  hist.unshift({num:f.num,client:f.clientNom,total:f.total,date:new Date().toLocaleDateString('fr-BE')});
-  localStorage.setItem('dlvx-hist',JSON.stringify(hist.slice(0,50)));
-}
-
-function genererPDF(telecharger=true){
-  const {jsPDF} = window.jspdf;
-  const doc = new jsPDF({unit:'mm',format:'a4'});
-  const f = getTexteFacture();
-
-  // Couleurs
-  const bleu = [15,31,78];
-  const orange = [255,107,53];
-  const gris = [107,107,107];
-  const blanc = [255,255,255];
-
-  const pageW = 210;
-  const margin = 20;
-  let y = 20;
-
-  // ── HEADER ──
-  doc.setFillColor(...bleu);
-  doc.rect(0, 0, pageW, 40, 'F');
-
-  // Logo
-  doc.setTextColor(...blanc);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(22);
-  doc.text('DELIVRAX', margin, y+8);
-
-  // Numéro facture
-  doc.setFontSize(11);
-  doc.setFont('helvetica','normal');
-  doc.setTextColor(200,200,200);
-  doc.text('FACTURE', pageW-margin, y+4, {align:'right'});
-  doc.setTextColor(...blanc);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(14);
-  doc.text(f.num||'FA-001', pageW-margin, y+12, {align:'right'});
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(9);
-  doc.setTextColor(200,200,200);
-
-  const nom=document.getElementById('a-nom').value||'Delivrax';
-  const adresse=document.getElementById('a-adresse').value;
-  const tel=document.getElementById('a-tel').value;
-  const email=document.getElementById('a-email').value;
-  const tvaNum=document.getElementById('a-tva').value;
-  const iban=document.getElementById('a-iban').value;
-  const clientNom=document.getElementById('a-client-nom').value||'—';
-  const clientAdresse=document.getElementById('a-client-adresse').value;
-  const clientEmail=document.getElementById('a-client-email').value;
-  const dateVal=document.getElementById('a-date').value;
-  const echeanceVal=document.getElementById('a-echeance').value;
-  const note=document.getElementById('a-note').value;
-  const dateFr=dateVal?new Date(dateVal).toLocaleDateString('fr-BE'):'—';
-  const echeanceFr=echeanceVal?new Date(echeanceVal).toLocaleDateString('fr-BE'):'—';
-  const tvaPct=parseFloat(document.getElementById('a-tva-pct').value)||0;
-  const km=parseFloat(document.getElementById('a-km').value)||0;
-  const kmAmt=km*0.42;
-  const subtotal=aLignes.reduce((s,l)=>s+(l.qte*l.prix),0);
-  const tvaAmt=subtotal*tvaPct/100;
-  const total=subtotal+tvaAmt+kmAmt;
-
-  doc.text(`Date : ${dateFr}  |  Échéance : ${echeanceFr}`, pageW-margin, y+20, {align:'right'});
-
-  y = 50;
-
-  // ── ÉMETTEUR & CLIENT ──
-  doc.setTextColor(...gris);
-  doc.setFontSize(8);
-  doc.setFont('helvetica','bold');
-  doc.text('ÉMETTEUR', margin, y);
-  doc.text('CLIENT', pageW/2+5, y);
-
-  y += 5;
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(10);
-  doc.setTextColor(...bleu);
-  doc.setFont('helvetica','bold');
-  doc.text(nom, margin, y);
-  doc.text(clientNom, pageW/2+5, y);
-
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(9);
-  doc.setTextColor(60,60,60);
-  y += 5;
-  if(adresse){ doc.text(adresse, margin, y); y+=4; }
-  if(tel){ doc.text(tel, margin, y); y+=4; }
-  if(email){ doc.text(email, margin, y); y+=4; }
-  if(tvaNum){ doc.text('TVA: '+tvaNum, margin, y); y+=4; }
-
-  let yc = 55;
-  if(clientAdresse){ doc.text(clientAdresse, pageW/2+5, yc); yc+=5; }
-  if(clientEmail){ doc.text(clientEmail, pageW/2+5, yc); yc+=5; }
-
-  y = Math.max(y, yc) + 8;
-
-  // Ligne séparatrice
-  doc.setDrawColor(...orange);
-  doc.setLineWidth(0.8);
-  doc.line(margin, y, pageW-margin, y);
-  y += 8;
-
-  // ── TABLEAU PRESTATIONS ──
-  doc.setFillColor(...bleu);
-  doc.rect(margin, y, pageW-margin*2, 8, 'F');
-  doc.setTextColor(...blanc);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(9);
-  doc.text('Description', margin+3, y+5.5);
-  doc.text('Qté', 130, y+5.5, {align:'center'});
-  doc.text('Prix unit. HT', 155, y+5.5, {align:'center'});
-  doc.text('Total HT', pageW-margin-3, y+5.5, {align:'right'});
-  y += 8;
-
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(9);
-  let rowBg = false;
-  aLignes.filter(l=>l.desc||l.prix).forEach(l=>{
-    if(rowBg){ doc.setFillColor(248,247,245); doc.rect(margin, y, pageW-margin*2, 7, 'F'); }
-    doc.setTextColor(40,40,40);
-    doc.text(l.desc||'—', margin+3, y+5);
-    doc.text(String(l.qte), 130, y+5, {align:'center'});
-    doc.text(eur(l.prix), 155, y+5, {align:'center'});
-    doc.setTextColor(...bleu);
-    doc.setFont('helvetica','bold');
-    doc.text(eur(l.qte*l.prix), pageW-margin-3, y+5, {align:'right'});
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(40,40,40);
-    y += 7;
-    rowBg = !rowBg;
-  });
-
-  y += 4;
-  doc.setDrawColor(220,220,220);
-  doc.setLineWidth(0.3);
-  doc.line(margin, y, pageW-margin, y);
-  y += 6;
-
-  // ── TOTAUX ──
-  const totW = 80;
-  const totX = pageW-margin-totW;
-
-  const addTotalRow = (label, val, bold=false, color=bleu)=>{
-    doc.setFontSize(bold?11:9);
-    doc.setFont('helvetica', bold?'bold':'normal');
-    doc.setTextColor(...gris);
-    doc.text(label, totX, y);
-    doc.setTextColor(...color);
-    doc.text(val, pageW-margin, y, {align:'right'});
-    y += bold ? 7 : 5;
-  };
-
-  addTotalRow('Sous-total HT', eur(subtotal));
-  if(km>0) addTotalRow(`Frais km (${km}km × 0,42€)`, eur(kmAmt));
-  addTotalRow(`TVA (${tvaPct}%)`, eur(tvaAmt));
-
-  // Ligne total
-  doc.setFillColor(...bleu);
-  doc.rect(totX-3, y-2, totW+margin+3, 10, 'F');
-  doc.setTextColor(...blanc);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(12);
-  doc.text('TOTAL TTC', totX, y+6);
-  doc.setTextColor(...orange);
-  doc.setFontSize(14);
-  doc.text(eur(total), pageW-margin, y+6, {align:'right'});
-  y += 18;
-
-  // ── PIED DE PAGE ──
-  if(iban){
-    doc.setFontSize(9);
-    doc.setFont('helvetica','bold');
-    doc.setTextColor(...bleu);
-    doc.text('Paiement par virement :', margin, y);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(60,60,60);
-    doc.text(iban, margin+52, y);
-    y += 6;
-  }
-  if(note){
-    doc.setFontSize(9);
-    doc.setTextColor(...gris);
-    doc.text(note, margin, y, {maxWidth: pageW-margin*2});
-    y += 6;
-  }
-
-  // Mention légale
-  doc.setFontSize(8);
-  doc.setTextColor(180,180,180);
-  doc.text('Delivrax — Mise à disposition véhicule avec chauffeur — Conforme réglementation SPF Mobilité belge', margin, 285);
-
-  if(telecharger){
-    doc.save(`Facture_${f.num||'FA'}_${clientNom.replace(/\s/g,'_')}.pdf`);
-    showToast('📄 PDF téléchargé !');
-  }
-  return doc;
-}
-
-function imprimerFactureAdmin(){
-  // Générer le PDF et l'ouvrir pour impression
-  const doc = genererPDF(false);
-  const blob = doc.output('blob');
-  const url = URL.createObjectURL(blob);
-  const win = window.open(url,'_blank');
-  if(win){ win.onload = ()=>{ win.print(); }; }
-  else { doc.save('Facture_Delivrax.pdf'); showToast('📄 PDF téléchargé — ouvrez et imprimez'); }
-}
-
-function genererPDFetEmail(){
-  const f = getTexteFacture();
-  if(!f.clientEmail && !confirm('Aucun email client renseigné. Télécharger le PDF uniquement ?')) return;
-
-  // 1. Générer et télécharger le PDF
-  genererPDF(true);
-
-  // 2. Si email disponible, ouvrir Gmail
-  if(f.clientEmail){
-    setTimeout(()=>{
-      const sujet = encodeURIComponent(f.sujet);
-      const corps = encodeURIComponent(`Bonjour ${f.clientNom},\n\nVeuillez trouver en pièce jointe votre facture ${f.num}.\n\nMontant total : ${eur(f.total)}\n\nMerci pour votre confiance !\n\n${document.getElementById('a-nom').value||'Delivrax'}\n${document.getElementById('a-tel').value}`);
-      window.open(`mailto:${f.clientEmail}?subject=${sujet}&body=${corps}`,'_blank');
-      showToast('✅ PDF téléchargé + Email préparé !');
-    }, 800);
-  }
-
-  sauverHistorique(f);
-  aFactNum++;
-}
-
-function envoyerWhatsAppAdmin(){
-  const f=getTexteFacture();
-  let tel=f.clientTel.replace(/[^0-9]/g,'');
-  if(!tel){ tel=prompt('Numéro WhatsApp du client (ex: 32478123456) :'); if(!tel) return; }
-  if(tel.startsWith('0')) tel='32'+tel.slice(1);
-  window.open(`https://wa.me/${tel}?text=${encodeURIComponent(f.whatsappMsg)}`,'_blank');
-  sauverHistorique(f);
-  showToast('💬 WhatsApp ouvert pour '+f.clientNom+' !');
-  aFactNum++;
-}
-
-function nouvelleFactureAdmin(){
-  aLignes=[{desc:'Mise à disposition véhicule avec chauffeur',qte:1,prix:0}];
-  const today=new Date().toISOString().split('T')[0];
-  const echo=new Date(); echo.setDate(echo.getDate()+15);
-  document.getElementById('a-date').value=today;
-  document.getElementById('a-echeance').value=echo.toISOString().split('T')[0];
-  const hist=JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
-  aFactNum=hist.length+1;
-  document.getElementById('a-num').value='FA-'+new Date().getFullYear()+'-'+(aFactNum<10?'00'+aFactNum:aFactNum<100?'0'+aFactNum:aFactNum);
-  ['a-client-nom','a-client-adresse','a-client-email','a-client-tel','a-note','a-km'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  renderLignesAdmin();
-  updatePreviewAdmin();
-  showToast('📄 Nouvelle facture prête !');
-}
-
-function renderHistorique(){
-  const hist=JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
-  const el=document.getElementById('hist-list');
-  if(!hist.length){ el.innerHTML='<p style="color:var(--gris2);font-size:14px;text-align:center;padding:40px">Aucune facture créée pour l\'instant.</p>'; return; }
-  el.innerHTML=hist.map((h,i)=>`
-    <div class="hist-card">
-      <div class="hist-info">
-        <strong>Facture ${h.num}</strong>
-        <span>${h.client} — ${h.date}</span>
-      </div>
-      <div class="hist-montant">${typeof h.total==='number'?eur(h.total):h.total}</div>
-      <div class="hist-actions">
-        <button class="btn-hist" onclick="supprimerHistorique(${i})">🗑 Supprimer</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function supprimerHistorique(i){
-  const hist=JSON.parse(localStorage.getItem('dlvx-hist')||'[]');
-  hist.splice(i,1);
-  localStorage.setItem('dlvx-hist',JSON.stringify(hist));
-  renderHistorique();
-  showToast('🗑 Facture supprimée de l\'historique');
-}
-
-function toggleNav(){
-document.getElementById('nav-links').classList.toggle('open');
-}
-
-document.querySelectorAll('.nav-link').forEach(l=>{
-  l.addEventListener('click',()=>document.getElementById('nav-links').classList.remove('open'));
-});
-
-function toggleFaq(el){
-  const item = el.parentElement;
-  const wasOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!wasOpen) item.classList.add('open');
-}
-
-// Calculateur
-const calcData = {
-  type:{demenagement:{base:95,label:'déménagement'},debarras:{base:75,label:'débarras/vide-maison'},meuble:{base:55,label:'meuble/objet'},dechetterie:{base:65,label:'acheminement déchetterie'},moto:{base:85,label:'moto/scooter'}},
-  dist:{local:{mult:1,label:'local (<20km)'},regional:{mult:1.4,label:'régional (20-80km)'},national:{mult:1.9,label:'national (>80km)'},international:{mult:2.8,label:'international'}},
-  manu:{non:{add:0},oui:{add:20}}
-};
-let calcState = {type:'demenagement',dist:'local',manu:'non'};
-
-function calcSelect(dim,el){
-  const grp = el.parentElement;
-  grp.querySelectorAll('.calc-option').forEach(o=>o.classList.remove('active'));
-  el.classList.add('active');
-  calcState[dim] = el.dataset[dim];
-  updateCalc();
-}
-
-function updateCalc(){
-  const t = calcData.type[calcState.type];
-  const d = calcData.dist[calcState.dist];
-  const m = calcData.manu[calcState.manu];
-  const price = Math.round(t.base * d.mult) + m.add;
-  document.getElementById('calc-price').textContent = price+' €';
-  document.getElementById('calc-desc').textContent = `Mise à disposition véhicule avec chauffeur pour votre ${t.label} ${d.label}.${m.add>0?' Aide à la manutention incluse.':''}`;
-}
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),3500);
-}
-
-function submitForm(){
-  const nom = document.getElementById('f-nom').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
-  const email = document.getElementById('f-email').value.trim();
-  const service = document.getElementById('f-service').value;
-  const depart = document.getElementById('f-depart').value.trim();
-  const arrivee = document.getElementById('f-arrivee').value.trim();
-  const details = document.getElementById('f-details').value.trim();
-
-  // Validation
-  let erreur = false;
-  if(!nom){ document.getElementById('f-nom').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-nom').style.border='';
-  if(!tel){ document.getElementById('f-tel').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-tel').style.border='';
-  if(!email){ document.getElementById('f-email').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-email').style.border='';
-  if(!service){ document.getElementById('f-service').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-service').style.border='';
-  if(!depart){ document.getElementById('f-depart').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-depart').style.border='';
-  if(!arrivee){ document.getElementById('f-arrivee').style.border='1.5px solid #D32F2F'; erreur=true; }
-  else document.getElementById('f-arrivee').style.border='';
-
-  if(erreur){ showToast('⚠️ Merci de remplir tous les champs obligatoires (*)'); return; }
-
-  // Envoi via Formspree → email direct dans ta boîte Gmail
-  const btn = document.querySelector('#contact .btn-submit');
-  btn.textContent = '⏳ Envoi en cours...';
-  btn.disabled = true;
-
-  fetch('https://formspree.io/f/mvzloaej', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
-    body: JSON.stringify({
-      nom, telephone: tel, email, service,
-      depart, arrivee,
-      details: details || 'Aucun détail supplémentaire',
-      _subject: `🚐 Nouvelle demande Delivrax — ${service} — ${nom}`
-    })
-  })
-  .then(r => r.json())
-  .then(data => {
-    if(data.ok){
-      btn.textContent = '✅ Demande envoyée !';
-      btn.style.background = '#4CAF50';
-      showToast('✅ Demande envoyée ! On vous répond dans 2h.');
-      // Reset formulaire
-      ['f-nom','f-tel','f-email','f-depart','f-arrivee','f-details'].forEach(id=>{
-        const el=document.getElementById(id); if(el){el.value='';el.style.border='';}
-      });
-      document.getElementById('f-service').value='';
-      setTimeout(()=>{ btn.textContent='🚐 Envoyer ma demande de forfait'; btn.style.background=''; btn.disabled=false; }, 4000);
-    } else {
-      throw new Error('Erreur envoi');
-    }
-  })
-  .catch(()=>{
-    btn.textContent = '🚐 Envoyer ma demande de forfait';
-    btn.disabled = false;
-    showToast('⚠️ Erreur — réessayez ou appelez le +32 496 84 95 66');
-  });
-}
-
-function envoyerDevisWA(){
-  const modal = document.getElementById('devis-modal');
-  const msg = modal.dataset.wa;
-  window.open(`https://wa.me/32496849566?text=${msg}`, '_blank');
-  fermerDevisModal();
-  showToast('💬 Redirection WhatsApp !');
-  resetForm();
-}
-
-function envoyerDevisEmail(){
-  const modal = document.getElementById('devis-modal');
-  window.location.href = modal.dataset.email;
-  fermerDevisModal();
-  showToast('✉️ Email préparé !');
-  resetForm();
-}
-
-function envoyerDevisLesDeux(){
-  const modal = document.getElementById('devis-modal');
-  window.open(`https://wa.me/32496849566?text=${modal.dataset.wa}`, '_blank');
-  setTimeout(()=>{ window.location.href = modal.dataset.email; }, 1000);
-  fermerDevisModal();
-  showToast('✅ WhatsApp + Email envoyés !');
-  resetForm();
-}
-
-function fermerDevisModal(){
-  document.getElementById('devis-modal').classList.remove('show');
-}
-
-function resetForm(){
-  ['f-nom','f-tel','f-email','f-depart','f-arrivee','f-details'].forEach(id=>{
-    const el = document.getElementById(id); if(el){ el.value=''; el.style.border=''; }
-  });
-  document.getElementById('f-service').value = '';
-}
-
-// Formspree confirmation
-window.addEventListener('DOMContentLoaded', ()=>{
-  if(location.search.includes('merci=1')){
-    showToast('✅ Demande envoyée ! On vous répond dans 2h.');
-    document.getElementById('contact').scrollIntoView({behavior:'smooth'});
-    // Nettoyer l'URL
-    history.replaceState({}, '', location.pathname);
-  }
-  // Gérer submit du formulaire
-  const form = document.getElementById('contact-form');
-  if(form){
-    form.addEventListener('submit', function(){
-      const btn = document.getElementById('btn-devis-submit');
-      if(btn){ btn.textContent = '⏳ Envoi en cours...'; btn.disabled = true; }
-    });
-  }
-});
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click',e=>{
-    const href = a.getAttribute('href');
-    if(href === '#'+SECRET_KEY || href === '#admin'){ 
-      e.preventDefault();
-      checkSecretURL();
-      return;
-    }
-    const t=document.querySelector(href);
-    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
-  });
-});
-
-// Nav scroll effect
-window.addEventListener('scroll',()=>{
-  const nav=document.querySelector('nav');
-  nav.style.borderBottomColor = window.scrollY>50 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.08)';
-});
-
-// ===== SYSTÈME AVIS =====
-let noteSelectionnee = 0;
-
-// Avis stockés en localStorage
-let tousLesAvis = JSON.parse(localStorage.getItem('delivrax-avis') || '[]');
-
-// Avis de base (fictifs pour démarrage)
-const avisBase = [
-  {prenom:'Sophie L.',ville:'Wavre, Brabant Wallon',note:5,commentaire:'Parfait pour mon déménagement de studio. Ponctuel, soigneux, et vraiment sympa.'},
-  {prenom:'Marc K.',ville:'Bruxelles',note:5,commentaire:"J'avais un canapé acheté sur Marketplace. En 3h c'était chez moi. Super service !"},
-  {prenom:'Patricia D.',ville:'Namur',note:5,commentaire:'Vide-maison après le décès de ma mère. Réactif, discret et vraiment humain.'},
-  {prenom:'Julien B.',ville:'Liège',note:4,commentaire:'Ma moto transportée de Liège à Bruxelles sans aucun problème. Arrimage nickel.'},
-  {prenom:'François V.',ville:'Charleroi',note:5,commentaire:'Évacuation cuisine complète vers la déchetterie. Devis en 1h, prestation le lendemain.'},
-  {prenom:'Adrien T.',ville:'Ottignies — PME',note:5,commentaire:'Déménagement de bureau en un weekend. Discret, organisé, facturation impeccable.'},
-];
-
-function tousAvis(){ return [...avisBase, ...tousLesAvis]; }
-
-function etoiles(n){ return '★'.repeat(n) + '☆'.repeat(5-n); }
-
-function updateScoreGlobal(){
-  const all = tousAvis();
-  const moy = all.reduce((s,a)=>s+a.note,0) / all.length;
-  document.getElementById('avis-note-global').textContent = moy.toFixed(1);
-  document.getElementById('avis-total-count').textContent = all.length;
-
-  // Barres par note
-  const barres = document.getElementById('avis-barres');
-  if(!barres) return;
-  barres.innerHTML = [5,4,3,2,1].map(n=>{
-    const count = all.filter(a=>a.note===n).length;
-    const pct = Math.round((count/all.length)*100);
-    return `<div style="display:flex;align-items:center;gap:8px;font-size:12px">
-      <span style="color:var(--orange);width:16px">${n}★</span>
-      <div style="flex:1;height:6px;background:#e8e5df;border-radius:3px;overflow:hidden">
-        <div style="width:${pct}%;height:100%;background:var(--orange);border-radius:3px;transition:width 0.5s"></div>
-      </div>
-      <span style="color:var(--gris2);width:28px">${count}</span>
-    </div>`;
-  }).join('');
-}
-
-function renderNouveauxAvis(){
-  const grid = document.getElementById('avis-grid');
-  if(!grid || !tousLesAvis.length) return;
-  // Ajouter les nouveaux avis en haut
-  tousLesAvis.forEach(a=>{
-    const initiales = a.prenom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-    const card = document.createElement('div');
-    card.className = 'avis-card';
-    card.style.cssText = 'border-color:var(--orange);animation:fadeIn 0.4s ease';
-    card.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-        <div class="avis-stars" style="font-size:14px">${etoiles(a.note)}</div>
-        <span class="avis-new-badge">Nouveau</span>
-      </div>
-      <p class="avis-text">"${a.commentaire}"</p>
-      <div class="avis-author">
-        <div class="avis-avatar" style="background:var(--orange)">${initiales}</div>
-        <div><div class="avis-name">${a.prenom}</div><div class="avis-loc">${a.ville||'Belgique'}</div></div>
-      </div>`;
-    grid.prepend(card);
-  });
-}
-
-function setNote(n){
-  noteSelectionnee = n;
-  document.querySelectorAll('.star-btn').forEach((btn,i)=>{
-    btn.classList.toggle('active', i < n);
-  });
-}
-
-function ouvrirModalAvis(){
-  document.getElementById('modal-avis').classList.add('show');
-  document.body.style.overflow = 'hidden';
-}
-
-function fermerModalAvis(){
-  document.getElementById('modal-avis').classList.remove('show');
-  document.body.style.overflow = '';
-}
-
-function soumettreAvis(){
-  const prenom = document.getElementById('avis-prenom').value.trim();
-  const ville = document.getElementById('avis-ville').value.trim();
-  const commentaire = document.getElementById('avis-commentaire').value.trim();
-
-  if(!noteSelectionnee){ showToast('⚠️ Choisissez une note entre 1 et 5 étoiles'); return; }
-  if(!prenom){ showToast('⚠️ Entrez votre prénom'); document.getElementById('avis-prenom').focus(); return; }
-  if(commentaire.length < 20){ showToast('⚠️ Écrivez au moins 20 caractères'); document.getElementById('avis-commentaire').focus(); return; }
-
-  const nouvelAvis = { prenom, ville: ville||'Belgique', note: noteSelectionnee, commentaire, date: new Date().toLocaleDateString('fr-BE') };
-  tousLesAvis.unshift(nouvelAvis);
-  localStorage.setItem('delivrax-avis', JSON.stringify(tousLesAvis));
-
-  // Ajouter la carte en haut de la grille
-  const grid = document.getElementById('avis-grid');
-  const initiales = prenom.split(' ').map(n=>n[0]).join('').substring(0,2).toUpperCase();
-  const card = document.createElement('div');
-  card.className = 'avis-card';
-  card.style.cssText = 'border:2px solid var(--orange)';
-  card.innerHTML = `
-    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
-      <div class="avis-stars" style="font-size:14px">${etoiles(noteSelectionnee)}</div>
-      <span class="avis-new-badge">Nouveau ✓</span>
-    </div>
-    <p class="avis-text">"${commentaire}"</p>
-    <div class="avis-author">
-      <div class="avis-avatar" style="background:var(--orange)">${initiales}</div>
-      <div><div class="avis-name">${prenom}</div><div class="avis-loc">${ville||'Belgique'}</div></div>
-    </div>`;
-  grid.prepend(card);
-
-  updateScoreGlobal();
-  fermerModalAvis();
-
-  // Reset
-  noteSelectionnee = 0;
-  document.querySelectorAll('.star-btn').forEach(b=>b.classList.remove('active'));
-  ['avis-prenom','avis-ville','avis-commentaire'].forEach(id=>document.getElementById(id).value='');
-
-  showToast('✅ Merci pour votre avis ! Il est maintenant visible.');
-  document.getElementById('avis').scrollIntoView({behavior:'smooth'});
-}
-
-// Init
-updateScoreGlobal();
-renderNouveauxAvis();
-
 </script>
 </body>
 </html>
