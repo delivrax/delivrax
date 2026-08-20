@@ -385,6 +385,274 @@
       .form-row { grid-template-columns: 1fr; }
       .btn-outline { margin-left: 0; margin-top: 0.75rem; display: block; text-align: center; }
     }
+
+    /* ===== Admin access ===== */
+    .admin-trigger {
+      position: fixed;
+      bottom: 14px;
+      left: 14px;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(26,46,110,0.08);
+      color: var(--blue);
+      border: none;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 400;
+      opacity: 0.55;
+      transition: opacity 0.2s, background 0.2s;
+    }
+    .admin-trigger:hover { opacity: 1; background: rgba(26,46,110,0.15); }
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,14,30,0.55);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal-box {
+      background: var(--white);
+      border-radius: 10px;
+      padding: 2rem;
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .modal-box .icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .modal-box h3 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    .modal-box p { color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.2rem; }
+    .modal-box input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0d8ce;
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 1rem;
+      text-align: center;
+      letter-spacing: 3px;
+      margin-bottom: 0.6rem;
+    }
+    .modal-box input:focus { outline: none; border-color: var(--blue); }
+    .modal-error { color: var(--red); font-size: 0.85rem; min-height: 1.1rem; margin-bottom: 0.6rem; }
+    .modal-box .btn { width: 100%; margin-bottom: 0.6rem; }
+    .modal-close-link { background: none; border: none; color: var(--text-light); font-size: 0.85rem; cursor: pointer; text-decoration: underline; }
+
+    /* ===== Admin panel ===== */
+    .admin-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 450;
+      overflow-y: auto;
+    }
+    .admin-panel.open { display: block; }
+    .admin-topbar {
+      background: var(--blue);
+      color: white;
+      padding: 0.9rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 5;
+    }
+    .admin-topbar .admin-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 900;
+      letter-spacing: 2px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+    }
+    .admin-tabs { display: flex; gap: 0.5rem; }
+    .admin-tab-btn {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .admin-tab-btn.active, .admin-tab-btn:hover { background: var(--red); border-color: var(--red); }
+    .admin-quit { background: none; border: none; color: rgba(255,255,255,0.8); font-size: 0.9rem; cursor: pointer; font-weight: 600; }
+    .admin-quit:hover { color: white; }
+
+    .admin-body { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    .admin-view { display: none; }
+    .admin-view.active { display: block; }
+    .admin-notice {
+      background: #fff4e0;
+      border: 1px solid #f0d9a0;
+      color: #7a5a0a;
+      font-size: 0.85rem;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 1.5rem;
+    }
+
+    .inv-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; }
+    .inv-actions button {
+      background: var(--white);
+      border: 2px solid var(--blue);
+      color: var(--blue);
+      padding: 0.55rem 1.1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .inv-actions button:hover { background: var(--blue); color: white; }
+    .inv-actions button.primary { background: var(--red); border-color: var(--red); color: white; }
+    .inv-actions button.primary:hover { background: var(--red-light); }
+
+    .inv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .inv-card { background: var(--white); border-radius: 8px; padding: 1.5rem; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+    .inv-card h4 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 1.1rem;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid var(--bg2);
+      padding-bottom: 0.5rem;
+    }
+    .inv-card .form-group { margin-bottom: 0.75rem; }
+    .inv-card .form-group label { font-size: 0.75rem; }
+    .inv-card .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.6rem; }
+
+    .lines-table { width: 100%; border-collapse: collapse; margin-bottom: 0.75rem; }
+    .lines-table th {
+      text-align: left;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-light);
+      padding: 0.4rem;
+      border-bottom: 2px solid var(--bg2);
+    }
+    .lines-table td { padding: 0.35rem; vertical-align: top; }
+    .lines-table input {
+      width: 100%;
+      padding: 0.5rem 0.6rem;
+      border: 2px solid #e0d8ce;
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+      font-size: 0.85rem;
+      background: var(--bg);
+    }
+    .lines-table input:focus { outline: none; border-color: var(--blue); }
+    .lines-table .line-total { font-weight: 700; color: var(--blue); padding-top: 0.6rem; white-space: nowrap; }
+    .lines-table .line-del { background: none; border: none; color: var(--red); font-size: 1.1rem; cursor: pointer; padding-top: 0.5rem; }
+    .add-line-btn {
+      background: var(--bg2);
+      border: 1px dashed #c8bda8;
+      color: var(--blue);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .add-line-btn:hover { background: #e5ddd0; }
+
+    .inv-totals { margin-left: auto; max-width: 280px; }
+    .inv-totals .t-row { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.9rem; color: var(--text-light); }
+    .inv-totals .t-row.grand { border-top: 2px solid var(--blue); margin-top: 0.4rem; padding-top: 0.7rem; font-size: 1.2rem; font-weight: 800; color: var(--blue); }
+    .inv-totals select {
+      padding: 0.3rem 0.5rem;
+      border: 2px solid #e0d8ce;
+      border-radius: 4px;
+      font-family: 'Barlow', sans-serif;
+    }
+
+    #invoicePreview {
+      background: white;
+      border-radius: 8px;
+      padding: 2.5rem;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .preview-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 3px solid var(--blue); }
+    .preview-head .p-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 1.8rem; font-weight: 900; color: var(--blue); letter-spacing: 1px; }
+    .preview-head .p-logo span { color: var(--red); }
+    .preview-head .p-meta { text-align: right; font-size: 0.85rem; color: var(--text-light); }
+    .preview-head .p-meta strong { color: var(--text); font-size: 1.1rem; }
+    .preview-parties { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    .preview-parties .p-block h5 { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 0.4rem; }
+    .preview-parties .p-block p { font-size: 0.9rem; line-height: 1.5; white-space: pre-line; }
+    .preview-table { width: 100%; border-collapse: collapse; margin-bottom: 1.5rem; }
+    .preview-table th { text-align: left; font-size: 0.75rem; text-transform: uppercase; color: white; background: var(--blue); padding: 0.6rem 0.8rem; }
+    .preview-table th:last-child, .preview-table td:last-child { text-align: right; }
+    .preview-table td { padding: 0.6rem 0.8rem; border-bottom: 1px solid var(--bg2); font-size: 0.9rem; }
+    .preview-foot { display: flex; justify-content: flex-end; margin-bottom: 1.5rem; }
+    .preview-note { font-size: 0.85rem; color: var(--text-light); border-top: 1px solid var(--bg2); padding-top: 1rem; white-space: pre-line; }
+
+    .hist-list { display: flex; flex-direction: column; gap: 0.75rem; }
+    .hist-item {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .hist-item .h-main strong { color: var(--blue); }
+    .hist-item .h-main span { display: block; font-size: 0.8rem; color: var(--text-light); }
+    .hist-item .h-actions button {
+      background: var(--bg2);
+      border: none;
+      color: var(--blue);
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-left: 0.4rem;
+    }
+    .hist-item .h-actions button.del { color: var(--red); }
+    .hist-empty { color: var(--text-light); text-align: center; padding: 3rem 1rem; }
+
+    @media print {
+      body * { visibility: hidden; }
+      #invoicePreview, #invoicePreview * { visibility: visible; }
+      #invoicePreview { position: absolute; top: 0; left: 0; width: 100%; box-shadow: none; }
+      .admin-topbar, .inv-actions, .admin-trigger { display: none !important; }
+    }
+    @media (max-width: 768px) {
+      .inv-grid { grid-template-columns: 1fr; }
+      .preview-parties { grid-template-columns: 1fr; }
+      .admin-tabs { display: none; }
+    }
   </style>
 </head>
 <body>
@@ -729,6 +997,446 @@
   <p style="margin-top:0.3rem;">🕐 Disponible 7j/7 — 8h à 20h &nbsp;|&nbsp; 🇧🇪 Brabant Wallon, Belgique</p>
   <p style="margin-top:0.5rem; font-size:0.8rem;">© 2025 Delivrax. Tous droits réservés.</p>
 </footer>
+
+<!-- Discreet admin access -->
+<button class="admin-trigger" id="adminTrigger" title="Espace Delivrax">🔐</button>
+
+<div class="modal-overlay" id="lockModal">
+  <div class="modal-box">
+    <div class="icon">🔐</div>
+    <h3>Espace Delivrax</h3>
+    <p>Entrez votre code d'accès pour accéder à la facturation.</p>
+    <input type="password" id="lockCode" placeholder="Code d'accès" maxlength="12" inputmode="numeric" />
+    <div class="modal-error" id="lockError"></div>
+    <button class="btn btn-red" id="lockSubmit" style="width:100%;">🔓 Accéder</button>
+    <button class="modal-close-link" id="lockCancel">Fermer</button>
+  </div>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-topbar">
+    <div class="admin-title">DELIVRAX <span style="opacity:0.6;">Admin</span></div>
+    <div class="admin-tabs">
+      <button class="admin-tab-btn active" data-view="factureView">🧾 Facturation</button>
+      <button class="admin-tab-btn" data-view="histView">📋 Historique</button>
+    </div>
+    <button class="admin-quit" id="adminQuit">✕ Quitter</button>
+  </div>
+
+  <div class="admin-body">
+
+    <!-- FACTURATION -->
+    <div class="admin-view active" id="factureView">
+      <div class="section-title" style="font-size:1.8rem; margin-bottom:0.3rem;">🧾 Nouvelle <span>Facture</span></div>
+      <div class="admin-notice">Visible uniquement par vous — vos clients ne voient pas cette page.</div>
+
+      <div class="inv-actions">
+        <button class="primary" id="btnPdf">📄 Générer PDF</button>
+        <button id="btnEmail">✉️ Envoyer par Email</button>
+        <button id="btnWhatsapp">💬 Envoyer WhatsApp</button>
+        <button id="btnPrint">🖨️ Imprimer</button>
+        <button id="btnNew">➕ Nouvelle facture</button>
+      </div>
+
+      <div class="inv-grid">
+        <div class="inv-card">
+          <h4>👤 Vos informations</h4>
+          <div class="form-group"><label>Nom / Raison sociale</label><input type="text" id="issName" placeholder="Delivrax"/></div>
+          <div class="form-group"><label>Adresse</label><input type="text" id="issAddress" placeholder="Rue, code postal, ville"/></div>
+          <div class="form-group"><label>Téléphone</label><input type="text" id="issPhone" placeholder="+32 472 76 27 34"/></div>
+          <div class="form-group"><label>Email</label><input type="email" id="issEmail" placeholder="contact@delivrax.be"/></div>
+          <div class="form-group"><label>N° BCE / TVA (optionnel)</label><input type="text" id="issVat" placeholder="BE0000.000.000"/></div>
+          <div class="form-group"><label>IBAN</label><input type="text" id="issIban" placeholder="BE00 0000 0000 0000"/></div>
+        </div>
+
+        <div class="inv-card">
+          <h4>🏠 Client</h4>
+          <div class="form-group"><label>Nom du client *</label><input type="text" id="cliName" placeholder="Nom / société"/></div>
+          <div class="form-group"><label>Adresse client</label><input type="text" id="cliAddress" placeholder="Rue, code postal, ville"/></div>
+          <div class="form-group"><label>Email client *</label><input type="email" id="cliEmail" placeholder="client@email.com"/></div>
+          <div class="form-group"><label>Téléphone client</label><input type="text" id="cliPhone" placeholder="+32 ..."/></div>
+          <div class="form-row-3">
+            <div class="form-group"><label>N° facture</label><input type="text" id="invNumber" placeholder="2025-001"/></div>
+            <div class="form-group"><label>Date</label><input type="date" id="invDate"/></div>
+            <div class="form-group"><label>Échéance</label><input type="date" id="invDue"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-card" style="margin-bottom:1.5rem;">
+        <h4>📋 Prestations</h4>
+        <table class="lines-table" id="linesTable">
+          <thead><tr><th style="width:46%;">Description</th><th style="width:12%;">Qté</th><th style="width:18%;">Prix unit. HT</th><th style="width:18%;">Total HT</th><th></th></tr></thead>
+          <tbody id="linesBody"></tbody>
+        </table>
+        <button class="add-line-btn" id="btnAddLine">+ Ajouter une ligne</button>
+
+        <div class="inv-totals">
+          <div class="t-row"><span>Sous-total HT</span><span id="sumHT">0,00 €</span></div>
+          <div class="t-row">
+            <span>TVA</span>
+            <select id="vatRate">
+              <option value="0">0% — Franchise TVA</option>
+              <option value="6">6%</option>
+              <option value="12">12%</option>
+              <option value="21" selected>21%</option>
+            </select>
+          </div>
+          <div class="t-row"><span></span><span id="sumVat">0,00 €</span></div>
+          <div class="t-row"><span>Frais km (optionnel)</span><span><input type="number" id="kmCount" placeholder="0" style="width:70px; padding:0.2rem; border:2px solid #e0d8ce; border-radius:4px;"/> × 0,42€ = <span id="kmTotal">0,00 €</span></span></div>
+          <div class="t-row grand"><span>TOTAL TTC</span><span id="sumTTC">0,00 €</span></div>
+        </div>
+      </div>
+
+      <div class="inv-card">
+        <h4>📝 Note / Conditions de paiement</h4>
+        <textarea id="invNote" style="width:100%; min-height:80px; padding:0.75rem; border:2px solid #e0d8ce; border-radius:4px; font-family:'Barlow',sans-serif;" placeholder="Ex : Paiement à réception de facture. Virement, Payconiq ou carte via terminal accepté."></textarea>
+      </div>
+
+      <div id="invoicePreview" style="margin-top:2rem;">
+        <div class="preview-head">
+          <div>
+            <div class="p-logo">DELIV<span>RAX</span></div>
+            <div style="font-size:0.85rem; color:#555; margin-top:0.3rem;" id="pv-issuer-line">Mise à disposition véhicule avec chauffeur</div>
+          </div>
+          <div class="p-meta">
+            <strong>Facture</strong><br/>
+            N° <span id="pv-number">—</span><br/>
+            Date : <span id="pv-date">—</span><br/>
+            Échéance : <span id="pv-due">—</span>
+          </div>
+        </div>
+        <div class="preview-parties">
+          <div class="p-block"><h5>Émetteur</h5><p id="pv-issuer">—</p></div>
+          <div class="p-block"><h5>Client</h5><p id="pv-client">—</p></div>
+        </div>
+        <table class="preview-table">
+          <thead><tr><th>Description</th><th>Qté</th><th>Prix unit.</th><th>Total HT</th></tr></thead>
+          <tbody id="pv-lines"></tbody>
+        </table>
+        <div class="preview-foot">
+          <div class="inv-totals" style="max-width:260px;">
+            <div class="t-row"><span>Sous-total HT</span><span id="pv-ht">0,00 €</span></div>
+            <div class="t-row"><span>Frais km</span><span id="pv-km">0,00 €</span></div>
+            <div class="t-row"><span id="pv-vat-label">TVA (21%)</span><span id="pv-vat">0,00 €</span></div>
+            <div class="t-row grand"><span>TOTAL TTC</span><span id="pv-ttc">0,00 €</span></div>
+          </div>
+        </div>
+        <div class="preview-note" id="pv-note"></div>
+        <div style="text-align:center; margin-top:2rem; font-size:0.75rem; color:#999;">Généré via Delivrax.be</div>
+      </div>
+    </div>
+
+    <!-- HISTORIQUE -->
+    <div class="admin-view" id="histView">
+      <div class="section-title" style="font-size:1.8rem; margin-bottom:0.3rem;">📋 Historique <span>des factures</span></div>
+      <div class="admin-notice">Factures enregistrées dans ce navigateur.</div>
+      <div class="hist-list" id="histList"></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ================= Admin lock ================= */
+// Le code n'est jamais stocké en clair, seulement son empreinte SHA-256.
+// Code actuel : DLVX2734
+// Pour changer le code : ouvrez la console du navigateur sur cette page et tapez :
+//   await crypto.subtle.digest('SHA-256', new TextEncoder().encode('VOTRE-NOUVEAU-CODE'))
+//     .then(b => Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join(''))
+// puis remplacez la valeur ci-dessous par le résultat obtenu.
+const ADMIN_CODE_HASH = "b3e7dc61ec6bf9dbb4936d47e03b1ffd8dd2a0c46888ed4613d679ba15abcee4";
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS = 5 * 60 * 1000; // 5 minutes
+
+const adminTrigger = document.getElementById('adminTrigger');
+const lockModal = document.getElementById('lockModal');
+const lockCode = document.getElementById('lockCode');
+const lockError = document.getElementById('lockError');
+const adminPanel = document.getElementById('adminPanel');
+
+async function sha256Hex(str) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+function getLockState() {
+  return {
+    fails: parseInt(localStorage.getItem('delivrax_lock_fails') || '0', 10),
+    until: parseInt(localStorage.getItem('delivrax_lock_until') || '0', 10)
+  };
+}
+
+adminTrigger.addEventListener('click', () => {
+  lockModal.classList.add('open');
+  lockError.textContent = '';
+  lockCode.value = '';
+  const { until } = getLockState();
+  if (Date.now() < until) {
+    const mins = Math.ceil((until - Date.now()) / 60000);
+    lockError.textContent = `Trop de tentatives. Réessayez dans ${mins} min.`;
+  }
+  setTimeout(() => lockCode.focus(), 50);
+});
+document.getElementById('lockCancel').addEventListener('click', () => lockModal.classList.remove('open'));
+document.getElementById('lockSubmit').addEventListener('click', tryUnlock);
+lockCode.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+async function tryUnlock() {
+  const { fails, until } = getLockState();
+  const now = Date.now();
+  if (now < until) {
+    const mins = Math.ceil((until - now) / 60000);
+    lockError.textContent = `Trop de tentatives. Réessayez dans ${mins} min.`;
+    return;
+  }
+  const hash = await sha256Hex(lockCode.value.trim());
+  if (hash === ADMIN_CODE_HASH) {
+    localStorage.setItem('delivrax_lock_fails', '0');
+    localStorage.removeItem('delivrax_lock_until');
+    lockModal.classList.remove('open');
+    adminPanel.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  } else {
+    const newFails = fails + 1;
+    localStorage.setItem('delivrax_lock_fails', String(newFails));
+    if (newFails >= MAX_ATTEMPTS) {
+      localStorage.setItem('delivrax_lock_until', String(now + LOCKOUT_MS));
+      lockError.textContent = `Trop de tentatives. Réessayez dans ${Math.ceil(LOCKOUT_MS/60000)} min.`;
+    } else {
+      lockError.textContent = `Code incorrect. (${MAX_ATTEMPTS - newFails} essai(s) restant(s))`;
+    }
+  }
+}
+document.getElementById('adminQuit').addEventListener('click', () => {
+  adminPanel.classList.remove('open');
+  document.body.style.overflow = '';
+});
+
+/* Tabs */
+document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.view).classList.add('active');
+    if (btn.dataset.view === 'histView') renderHistory();
+  });
+});
+
+/* ================= Invoice builder ================= */
+const linesBody = document.getElementById('linesBody');
+let lineId = 0;
+
+function addLine(desc = '', qty = 1, price = 0) {
+  const id = 'l' + (lineId++);
+  const tr = document.createElement('tr');
+  tr.id = id;
+  tr.innerHTML = `
+    <td><input type="text" class="l-desc" placeholder="Ex : Mise à disposition véhicule + chauffeur" value="${desc}"/></td>
+    <td><input type="number" class="l-qty" min="0" step="1" value="${qty}"/></td>
+    <td><input type="number" class="l-price" min="0" step="0.01" value="${price}"/></td>
+    <td class="line-total">0,00 €</td>
+    <td><button class="line-del" title="Supprimer">✕</button></td>
+  `;
+  linesBody.appendChild(tr);
+  tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalc));
+  tr.querySelector('.line-del').addEventListener('click', () => { tr.remove(); recalc(); });
+  recalc();
+}
+document.getElementById('btnAddLine').addEventListener('click', () => addLine());
+
+function eur(n) { return n.toLocaleString('fr-BE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €'; }
+
+function recalc() {
+  let ht = 0;
+  linesBody.querySelectorAll('tr').forEach(tr => {
+    const qty = parseFloat(tr.querySelector('.l-qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.l-price').value) || 0;
+    const tot = qty * price;
+    tr.querySelector('.line-total').textContent = eur(tot);
+    ht += tot;
+  });
+  const km = parseFloat(document.getElementById('kmCount').value) || 0;
+  const kmTotal = km * 0.42;
+  const vatRate = parseFloat(document.getElementById('vatRate').value) || 0;
+  const base = ht + kmTotal;
+  const vat = base * (vatRate / 100);
+  const ttc = base + vat;
+
+  document.getElementById('sumHT').textContent = eur(ht);
+  document.getElementById('kmTotal').textContent = eur(kmTotal);
+  document.getElementById('sumVat').textContent = eur(vat);
+  document.getElementById('sumTTC').textContent = eur(ttc);
+
+  updatePreview({ ht, kmTotal, vat, ttc, vatRate });
+}
+document.getElementById('kmCount').addEventListener('input', recalc);
+document.getElementById('vatRate').addEventListener('change', recalc);
+
+function updatePreview(sums) {
+  document.getElementById('pv-number').textContent = document.getElementById('invNumber').value || '—';
+  document.getElementById('pv-date').textContent = document.getElementById('invDate').value || '—';
+  document.getElementById('pv-due').textContent = document.getElementById('invDue').value || '—';
+
+  const issuerParts = [
+    document.getElementById('issName').value,
+    document.getElementById('issAddress').value,
+    document.getElementById('issPhone').value,
+    document.getElementById('issEmail').value,
+    document.getElementById('issVat').value ? 'TVA : ' + document.getElementById('issVat').value : '',
+    document.getElementById('issIban').value ? 'IBAN : ' + document.getElementById('issIban').value : ''
+  ].filter(Boolean);
+  document.getElementById('pv-issuer').textContent = issuerParts.join('\n') || '—';
+
+  const clientParts = [
+    document.getElementById('cliName').value,
+    document.getElementById('cliAddress').value,
+    document.getElementById('cliEmail').value,
+    document.getElementById('cliPhone').value
+  ].filter(Boolean);
+  document.getElementById('pv-client').textContent = clientParts.join('\n') || '—';
+
+  const pvLines = document.getElementById('pv-lines');
+  pvLines.innerHTML = '';
+  linesBody.querySelectorAll('tr').forEach(tr => {
+    const desc = tr.querySelector('.l-desc').value;
+    const qty = parseFloat(tr.querySelector('.l-qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.l-price').value) || 0;
+    if (!desc && !qty && !price) return;
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${desc}</td><td>${qty}</td><td>${eur(price)}</td><td>${eur(qty*price)}</td>`;
+    pvLines.appendChild(row);
+  });
+
+  document.getElementById('pv-ht').textContent = eur(sums.ht);
+  document.getElementById('pv-km').textContent = eur(sums.kmTotal);
+  document.getElementById('pv-vat-label').textContent = `TVA (${sums.vatRate}%)`;
+  document.getElementById('pv-vat').textContent = eur(sums.vat);
+  document.getElementById('pv-ttc').textContent = eur(sums.ttc);
+  document.getElementById('pv-note').textContent = document.getElementById('invNote').value;
+}
+
+// Live update for issuer/client fields
+['issName','issAddress','issPhone','issEmail','issVat','issIban','cliName','cliAddress','cliEmail','cliPhone','invNumber','invDate','invDue','invNote']
+  .forEach(id => document.getElementById(id).addEventListener('input', recalc));
+
+/* Buttons */
+document.getElementById('btnNew').addEventListener('click', () => {
+  if (!confirm('Créer une nouvelle facture ? Les champs actuels seront réinitialisés.')) return;
+  document.querySelectorAll('#factureView input, #factureView textarea').forEach(el => el.value = '');
+  linesBody.innerHTML = '';
+  addLine();
+  recalc();
+});
+
+document.getElementById('btnPrint').addEventListener('click', () => window.print());
+document.getElementById('btnPdf').addEventListener('click', () => {
+  saveInvoiceToHistory();
+  alert('Astuce : utilisez "Imprimer" puis choisissez "Enregistrer en PDF" comme imprimante pour télécharger la facture.');
+  window.print();
+});
+document.getElementById('btnWhatsapp').addEventListener('click', () => {
+  saveInvoiceToHistory();
+  const num = document.getElementById('invNumber').value || '—';
+  const ttc = document.getElementById('sumTTC').textContent;
+  const client = document.getElementById('cliName').value || 'Client';
+  const msg = `Bonjour ${client}, voici votre facture Delivrax n°${num}. Montant total : ${ttc}. Merci de votre confiance !`;
+  const phone = (document.getElementById('cliPhone').value || '').replace(/[^0-9+]/g,'');
+  const url = `https://wa.me/${phone.replace('+','')}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('btnEmail').addEventListener('click', () => {
+  saveInvoiceToHistory();
+  const num = document.getElementById('invNumber').value || '—';
+  const client = document.getElementById('cliName').value || 'Client';
+  const ttc = document.getElementById('sumTTC').textContent;
+  const dueDate = document.getElementById('invDue').value || 'à réception';
+  const issName = document.getElementById('issName').value || 'Delivrax';
+
+  const lines = [];
+  linesBody.querySelectorAll('tr').forEach(tr => {
+    const desc = tr.querySelector('.l-desc').value;
+    const qty = tr.querySelector('.l-qty').value;
+    const price = tr.querySelector('.l-price').value;
+    if (desc) lines.push(`- ${desc} (x${qty}) : ${eur(parseFloat(qty)*parseFloat(price)||0)}`);
+  });
+
+  const subject = `Facture ${issName} n°${num}`;
+  const body =
+`Bonjour ${client},
+
+Veuillez trouver ci-dessous le récapitulatif de votre facture n°${num}.
+
+${lines.join('\n')}
+
+Total TTC : ${ttc}
+Échéance de paiement : ${dueDate}
+
+${document.getElementById('invNote').value || ''}
+
+Merci de votre confiance,
+${issName}`;
+
+  const cliEmail = document.getElementById('cliEmail').value || '';
+  const url = `mailto:${encodeURIComponent(cliEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = url;
+});
+
+/* ================= History (localStorage) ================= */
+function saveInvoiceToHistory() {
+  const num = document.getElementById('invNumber').value;
+  if (!num) return;
+  const data = {
+    number: num,
+    date: document.getElementById('invDate').value,
+    client: document.getElementById('cliName').value,
+    total: document.getElementById('sumTTC').textContent,
+    savedAt: new Date().toISOString()
+  };
+  let hist = JSON.parse(localStorage.getItem('delivrax_invoices') || '[]');
+  hist = hist.filter(h => h.number !== num);
+  hist.unshift(data);
+  localStorage.setItem('delivrax_invoices', JSON.stringify(hist));
+}
+
+function renderHistory() {
+  const list = document.getElementById('histList');
+  const hist = JSON.parse(localStorage.getItem('delivrax_invoices') || '[]');
+  if (!hist.length) {
+    list.innerHTML = '<div class="hist-empty">Aucune facture enregistrée pour le moment.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  hist.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hist-item';
+    div.innerHTML = `
+      <div class="h-main">
+        <strong>Facture n°${h.number}</strong>
+        <span>${h.client || 'Client non renseigné'} — ${h.date || 'date non renseignée'} — ${h.total}</span>
+      </div>
+      <div class="h-actions">
+        <button class="del" data-num="${h.number}">Supprimer</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let hist = JSON.parse(localStorage.getItem('delivrax_invoices') || '[]');
+      hist = hist.filter(h => h.number !== btn.dataset.num);
+      localStorage.setItem('delivrax_invoices', JSON.stringify(hist));
+      renderHistory();
+    });
+  });
+}
+
+/* Init */
+addLine('Mise à disposition véhicule avec chauffeur', 1, 55);
+document.getElementById('invDate').valueAsDate = new Date();
+</script>
 
 <script>
 if ("serviceWorker" in navigator) {
