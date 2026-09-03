@@ -1018,6 +1018,7 @@
     <div class="admin-title">DELIVRAX <span style="opacity:0.6;">Admin</span></div>
     <div class="admin-tabs">
       <button class="admin-tab-btn active" data-view="factureView">🧾 Facturation</button>
+      <button class="admin-tab-btn" data-view="devisView">🚚 Devis</button>
       <button class="admin-tab-btn" data-view="histView">📋 Historique</button>
     </div>
     <button class="admin-quit" id="adminQuit">✕ Quitter</button>
@@ -1084,7 +1085,7 @@
           </div>
           <div class="t-row"><span></span><span id="sumVat">0,00 €</span></div>
           <div class="t-row"><span>Frais km (optionnel)</span><span><input type="number" id="kmCount" placeholder="0" style="width:70px; padding:0.2rem; border:2px solid #e0d8ce; border-radius:4px;"/> × 0,42€ = <span id="kmTotal">0,00 €</span></span></div>
-          <div class="t-row grand"><span>TOTAL TTC</span><span id="sumTTC">0,00 €</span></div>
+          <div class="t-row grand"><span>TOTAL TTC&nbsp;</span><span id="sumTTC">0,00 €</span></div>
         </div>
       </div>
 
@@ -1119,10 +1120,126 @@
             <div class="t-row"><span>Sous-total HT</span><span id="pv-ht">0,00 €</span></div>
             <div class="t-row"><span>Frais km</span><span id="pv-km">0,00 €</span></div>
             <div class="t-row"><span id="pv-vat-label">TVA (21%)</span><span id="pv-vat">0,00 €</span></div>
-            <div class="t-row grand"><span>TOTAL TTC</span><span id="pv-ttc">0,00 €</span></div>
+            <div class="t-row grand"><span>TOTAL TTC&nbsp;</span><span id="pv-ttc">0,00 €</span></div>
           </div>
         </div>
         <div class="preview-note" id="pv-note"></div>
+        <div style="text-align:center; margin-top:2rem; font-size:0.75rem; color:#999;">Généré via Delivrax.be</div>
+      </div>
+    </div>
+
+    <!-- DEVIS -->
+    <div class="admin-view" id="devisView">
+      <div class="section-title" style="font-size:1.8rem; margin-bottom:0.3rem;">🚚 Nouveau <span>Devis</span></div>
+      <div class="admin-notice">Visible uniquement par vous — vos clients ne voient pas cette page.</div>
+
+      <div class="inv-actions">
+        <button class="primary" id="btnPdfDevis">📄 Générer PDF</button>
+        <button id="btnEmailDevis">✉️ Envoyer par Email</button>
+        <button id="btnWhatsappDevis">💬 Envoyer WhatsApp</button>
+        <button id="btnPrintDevis">🖨️ Imprimer</button>
+        <button id="btnNewDevis">➕ Nouveau devis</button>
+      </div>
+
+      <div class="inv-grid">
+        <div class="inv-card">
+          <h4>🏠 Client</h4>
+          <div class="form-group"><label>Nom du client *</label><input type="text" id="dvCliName" placeholder="Nom / société"/></div>
+          <div class="form-group"><label>Email client *</label><input type="email" id="dvCliEmail" placeholder="client@email.com"/></div>
+          <div class="form-group"><label>Téléphone client</label><input type="text" id="dvCliPhone" placeholder="+32 ..."/></div>
+          <div class="form-group"><label>Type de service</label>
+            <select id="dvService">
+              <option value="">Choisissez un service</option>
+              <option>Livraison de colis</option>
+              <option>Livraison de cadeau</option>
+              <option>Transport de documents urgents</option>
+              <option>Récupération d'objet oublié</option>
+              <option>Transport de meubles</option>
+              <option>Transport de moto</option>
+              <option>Déménagement</option>
+              <option>Service rapide & Documents Confidentiels</option>
+              <option>Livraison longue distance</option>
+              <option>Livraison professionnelle</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="inv-card">
+          <h4>🗺️ Trajet</h4>
+          <div class="form-group"><label>Adresse de départ *</label><input type="text" id="dvDepart" placeholder="Rue, code postal, ville"/></div>
+          <div class="form-group"><label>Adresse d'arrivée *</label><input type="text" id="dvArrivee" placeholder="Rue, code postal, ville"/></div>
+          <div class="form-row-3">
+            <div class="form-group"><label>N° devis</label><input type="text" id="dvNumber" placeholder="D-2025-001"/></div>
+            <div class="form-group"><label>Date</label><input type="date" id="dvDate"/></div>
+            <div class="form-group"><label>Valable jusqu'au</label><input type="date" id="dvValidity"/></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="inv-card" style="margin-bottom:1.5rem;">
+        <h4>📋 Prestations</h4>
+        <table class="lines-table" id="dvLinesTable">
+          <thead><tr><th style="width:46%;">Description</th><th style="width:12%;">Qté</th><th style="width:18%;">Prix unit. HT</th><th style="width:18%;">Total HT</th><th></th></tr></thead>
+          <tbody id="dvLinesBody"></tbody>
+        </table>
+        <button class="add-line-btn" id="btnAddLineDevis">+ Ajouter une ligne</button>
+
+        <div class="inv-totals">
+          <div class="t-row"><span>Sous-total HT</span><span id="dvSumHT">0,00 €</span></div>
+          <div class="t-row">
+            <span>TVA</span>
+            <select id="dvVatRate">
+              <option value="0">0% — Franchise TVA</option>
+              <option value="6">6%</option>
+              <option value="12">12%</option>
+              <option value="21" selected>21%</option>
+            </select>
+          </div>
+          <div class="t-row"><span></span><span id="dvSumVat">0,00 €</span></div>
+          <div class="t-row"><span>Distance (km)</span><span><input type="number" id="dvKm" placeholder="0" style="width:70px; padding:0.2rem; border:2px solid #e0d8ce; border-radius:4px;"/> × <input type="number" id="dvKmRate" value="0.42" step="0.01" style="width:60px; padding:0.2rem; border:2px solid #e0d8ce; border-radius:4px;"/>€/km = <span id="dvKmTotal">0,00 €</span></span></div>
+          <div class="t-row grand"><span>TOTAL TTC&nbsp;</span><span id="dvSumTTC">0,00 €</span></div>
+        </div>
+      </div>
+
+      <div class="inv-card">
+        <h4>📝 Note / Conditions</h4>
+        <textarea id="dvNote" style="width:100%; min-height:80px; padding:0.75rem; border:2px solid #e0d8ce; border-radius:4px; font-family:'Barlow',sans-serif;" placeholder="Ex : Devis valable 15 jours. Prix indicatif, confirmé après visite ou précisions du client."></textarea>
+      </div>
+
+      <div id="devisPreview" style="margin-top:2rem;">
+        <div class="preview-head">
+          <div>
+            <div class="p-logo">DELIV<span>RAX</span></div>
+            <div style="font-size:0.85rem; color:#555; margin-top:0.3rem;">Mise à disposition véhicule avec chauffeur</div>
+          </div>
+          <div class="p-meta">
+            <strong>Devis</strong><br/>
+            N° <span id="dvpv-number">—</span><br/>
+            Date : <span id="dvpv-date">—</span><br/>
+            Valable jusqu'au : <span id="dvpv-due">—</span>
+          </div>
+        </div>
+        <div class="preview-parties">
+          <div class="p-block"><h5>Émetteur</h5><p id="dvpv-issuer">—</p></div>
+          <div class="p-block"><h5>Client</h5><p id="dvpv-client">—</p></div>
+        </div>
+        <div class="preview-parties" style="margin-top:-1rem;">
+          <div class="p-block"><h5>Trajet</h5><p id="dvpv-trajet">—</p></div>
+          <div class="p-block"><h5>Service</h5><p id="dvpv-service">—</p></div>
+        </div>
+        <table class="preview-table">
+          <thead><tr><th>Description</th><th>Qté</th><th>Prix unit.</th><th>Total HT</th></tr></thead>
+          <tbody id="dvpv-lines"></tbody>
+        </table>
+        <div class="preview-foot">
+          <div class="inv-totals" style="max-width:260px;">
+            <div class="t-row"><span>Sous-total HT</span><span id="dvpv-ht">0,00 €</span></div>
+            <div class="t-row"><span>Frais km</span><span id="dvpv-km">0,00 €</span></div>
+            <div class="t-row"><span id="dvpv-vat-label">TVA (21%)</span><span id="dvpv-vat">0,00 €</span></div>
+            <div class="t-row grand"><span>TOTAL TTC&nbsp;</span><span id="dvpv-ttc">0,00 €</span></div>
+          </div>
+        </div>
+        <div class="preview-note" id="dvpv-note"></div>
         <div style="text-align:center; margin-top:2rem; font-size:0.75rem; color:#999;">Généré via Delivrax.be</div>
       </div>
     </div>
@@ -1132,6 +1249,10 @@
       <div class="section-title" style="font-size:1.8rem; margin-bottom:0.3rem;">📋 Historique <span>des factures</span></div>
       <div class="admin-notice">Factures enregistrées dans ce navigateur.</div>
       <div class="hist-list" id="histList"></div>
+
+      <div class="section-title" style="font-size:1.8rem; margin:2rem 0 0.3rem;">🚚 Historique <span>des devis</span></div>
+      <div class="admin-notice">Devis enregistrés dans ce navigateur.</div>
+      <div class="hist-list" id="histListDevis"></div>
     </div>
 
   </div>
@@ -1220,7 +1341,7 @@ document.querySelectorAll('.admin-tab-btn').forEach(btn => {
     document.querySelectorAll('.admin-view').forEach(v => v.classList.remove('active'));
     btn.classList.add('active');
     document.getElementById(btn.dataset.view).classList.add('active');
-    if (btn.dataset.view === 'histView') renderHistory();
+    if (btn.dataset.view === 'histView') { renderHistory(); renderDevisHistory(); }
   });
 });
 
@@ -1436,6 +1557,238 @@ function renderHistory() {
 /* Init */
 addLine('Mise à disposition véhicule avec chauffeur', 1, 55);
 document.getElementById('invDate').valueAsDate = new Date();
+
+/* ================= Devis builder ================= */
+const dvLinesBody = document.getElementById('dvLinesBody');
+let dvLineId = 0;
+
+function addDevisLine(desc = '', qty = 1, price = 0) {
+  const id = 'dvl' + (dvLineId++);
+  const tr = document.createElement('tr');
+  tr.id = id;
+  tr.innerHTML = `
+    <td><input type="text" class="dvl-desc" placeholder="Ex : Mise à disposition véhicule + chauffeur" value="${desc}"/></td>
+    <td><input type="number" class="dvl-qty" min="0" step="1" value="${qty}"/></td>
+    <td><input type="number" class="dvl-price" min="0" step="0.01" value="${price}"/></td>
+    <td class="line-total">0,00 €</td>
+    <td><button class="line-del" title="Supprimer">✕</button></td>
+  `;
+  dvLinesBody.appendChild(tr);
+  tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalcDevis));
+  tr.querySelector('.line-del').addEventListener('click', () => { tr.remove(); recalcDevis(); });
+  recalcDevis();
+}
+document.getElementById('btnAddLineDevis').addEventListener('click', () => addDevisLine());
+
+function recalcDevis() {
+  let ht = 0;
+  dvLinesBody.querySelectorAll('tr').forEach(tr => {
+    const qty = parseFloat(tr.querySelector('.dvl-qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.dvl-price').value) || 0;
+    const tot = qty * price;
+    tr.querySelector('.line-total').textContent = eur(tot);
+    ht += tot;
+  });
+  const km = parseFloat(document.getElementById('dvKm').value) || 0;
+  const kmRate = parseFloat(document.getElementById('dvKmRate').value) || 0;
+  const kmTotal = km * kmRate;
+  const vatRate = parseFloat(document.getElementById('dvVatRate').value) || 0;
+  const base = ht + kmTotal;
+  const vat = base * (vatRate / 100);
+  const ttc = base + vat;
+
+  document.getElementById('dvSumHT').textContent = eur(ht);
+  document.getElementById('dvKmTotal').textContent = eur(kmTotal);
+  document.getElementById('dvSumVat').textContent = eur(vat);
+  document.getElementById('dvSumTTC').textContent = eur(ttc);
+
+  updateDevisPreview({ ht, kmTotal, vat, ttc, vatRate });
+}
+document.getElementById('dvKm').addEventListener('input', recalcDevis);
+document.getElementById('dvKmRate').addEventListener('input', recalcDevis);
+document.getElementById('dvVatRate').addEventListener('change', recalcDevis);
+
+function updateDevisPreview(sums) {
+  document.getElementById('dvpv-number').textContent = document.getElementById('dvNumber').value || '—';
+  document.getElementById('dvpv-date').textContent = document.getElementById('dvDate').value || '—';
+  document.getElementById('dvpv-due').textContent = document.getElementById('dvValidity').value || '—';
+
+  // Réutilise vos informations d'émetteur saisies dans l'onglet Facturation
+  const issuerParts = [
+    document.getElementById('issName').value,
+    document.getElementById('issAddress').value,
+    document.getElementById('issPhone').value,
+    document.getElementById('issEmail').value,
+    document.getElementById('issVat').value ? 'TVA : ' + document.getElementById('issVat').value : '',
+  ].filter(Boolean);
+  document.getElementById('dvpv-issuer').textContent = issuerParts.join('\n') || '—';
+
+  const clientParts = [
+    document.getElementById('dvCliName').value,
+    document.getElementById('dvCliEmail').value,
+    document.getElementById('dvCliPhone').value
+  ].filter(Boolean);
+  document.getElementById('dvpv-client').textContent = clientParts.join('\n') || '—';
+
+  const depart = document.getElementById('dvDepart').value;
+  const arrivee = document.getElementById('dvArrivee').value;
+  const km = document.getElementById('dvKm').value;
+  const trajetParts = [
+    depart ? 'Départ : ' + depart : '',
+    arrivee ? 'Arrivée : ' + arrivee : '',
+    km ? 'Distance : ' + km + ' km' : ''
+  ].filter(Boolean);
+  document.getElementById('dvpv-trajet').textContent = trajetParts.join('\n') || '—';
+  document.getElementById('dvpv-service').textContent = document.getElementById('dvService').value || '—';
+
+  const pvLines = document.getElementById('dvpv-lines');
+  pvLines.innerHTML = '';
+  dvLinesBody.querySelectorAll('tr').forEach(tr => {
+    const desc = tr.querySelector('.dvl-desc').value;
+    const qty = parseFloat(tr.querySelector('.dvl-qty').value) || 0;
+    const price = parseFloat(tr.querySelector('.dvl-price').value) || 0;
+    if (!desc && !qty && !price) return;
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${desc}</td><td>${qty}</td><td>${eur(price)}</td><td>${eur(qty*price)}</td>`;
+    pvLines.appendChild(row);
+  });
+
+  document.getElementById('dvpv-ht').textContent = eur(sums.ht);
+  document.getElementById('dvpv-km').textContent = eur(sums.kmTotal);
+  document.getElementById('dvpv-vat-label').textContent = `TVA (${sums.vatRate}%)`;
+  document.getElementById('dvpv-vat').textContent = eur(sums.vat);
+  document.getElementById('dvpv-ttc').textContent = eur(sums.ttc);
+  document.getElementById('dvpv-note').textContent = document.getElementById('dvNote').value;
+}
+
+['dvCliName','dvCliEmail','dvCliPhone','dvDepart','dvArrivee','dvService','dvNumber','dvDate','dvValidity','dvNote']
+  .forEach(id => document.getElementById(id).addEventListener('input', recalcDevis));
+document.getElementById('dvService').addEventListener('change', recalcDevis);
+
+/* Buttons - Devis */
+document.getElementById('btnNewDevis').addEventListener('click', () => {
+  if (!confirm('Créer un nouveau devis ? Les champs actuels seront réinitialisés.')) return;
+  document.querySelectorAll('#devisView input, #devisView textarea, #devisView select').forEach(el => { if (el.id !== 'dvKmRate') el.value = ''; });
+  document.getElementById('dvKmRate').value = 0.42;
+  document.getElementById('dvVatRate').value = 21;
+  dvLinesBody.innerHTML = '';
+  addDevisLine();
+  recalcDevis();
+});
+
+document.getElementById('btnPrintDevis').addEventListener('click', () => window.print());
+document.getElementById('btnPdfDevis').addEventListener('click', () => {
+  saveDevisToHistory();
+  alert('Astuce : utilisez "Imprimer" puis choisissez "Enregistrer en PDF" comme imprimante pour télécharger le devis.');
+  window.print();
+});
+document.getElementById('btnWhatsappDevis').addEventListener('click', () => {
+  saveDevisToHistory();
+  const num = document.getElementById('dvNumber').value || '—';
+  const ttc = document.getElementById('dvSumTTC').textContent;
+  const client = document.getElementById('dvCliName').value || 'Client';
+  const depart = document.getElementById('dvDepart').value || '—';
+  const arrivee = document.getElementById('dvArrivee').value || '—';
+  const msg = `Bonjour ${client}, voici votre devis Delivrax n°${num} pour un trajet de ${depart} à ${arrivee}. Montant estimé : ${ttc} (TVAC). Merci de votre confiance !`;
+  const phone = (document.getElementById('dvCliPhone').value || '').replace(/[^0-9+]/g,'');
+  const url = `https://wa.me/${phone.replace('+','')}?text=${encodeURIComponent(msg)}`;
+  window.open(url, '_blank');
+});
+
+document.getElementById('btnEmailDevis').addEventListener('click', () => {
+  saveDevisToHistory();
+  const num = document.getElementById('dvNumber').value || '—';
+  const client = document.getElementById('dvCliName').value || 'Client';
+  const ttc = document.getElementById('dvSumTTC').textContent;
+  const validity = document.getElementById('dvValidity').value || 'à confirmer';
+  const issName = document.getElementById('issName').value || 'Delivrax';
+  const depart = document.getElementById('dvDepart').value || '—';
+  const arrivee = document.getElementById('dvArrivee').value || '—';
+  const km = document.getElementById('dvKm').value || '0';
+
+  const lines = [];
+  dvLinesBody.querySelectorAll('tr').forEach(tr => {
+    const desc = tr.querySelector('.dvl-desc').value;
+    const qty = tr.querySelector('.dvl-qty').value;
+    const price = tr.querySelector('.dvl-price').value;
+    if (desc) lines.push(`- ${desc} (x${qty}) : ${eur(parseFloat(qty)*parseFloat(price)||0)}`);
+  });
+
+  const subject = `Devis ${issName} n°${num}`;
+  const body =
+`Bonjour ${client},
+
+Veuillez trouver ci-dessous votre devis n°${num}.
+
+Trajet : ${depart} → ${arrivee} (${km} km)
+
+${lines.join('\n')}
+
+Total TTC estimé : ${ttc}
+Devis valable jusqu'au : ${validity}
+
+${document.getElementById('dvNote').value || ''}
+
+Merci de votre confiance,
+${issName}`;
+
+  const cliEmail = document.getElementById('dvCliEmail').value || '';
+  const url = `mailto:${encodeURIComponent(cliEmail)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  window.location.href = url;
+});
+
+/* History - Devis (localStorage) */
+function saveDevisToHistory() {
+  const num = document.getElementById('dvNumber').value;
+  if (!num) return;
+  const data = {
+    number: num,
+    date: document.getElementById('dvDate').value,
+    client: document.getElementById('dvCliName').value,
+    trajet: `${document.getElementById('dvDepart').value || '—'} → ${document.getElementById('dvArrivee').value || '—'}`,
+    total: document.getElementById('dvSumTTC').textContent,
+    savedAt: new Date().toISOString()
+  };
+  let hist = JSON.parse(localStorage.getItem('delivrax_devis') || '[]');
+  hist = hist.filter(h => h.number !== num);
+  hist.unshift(data);
+  localStorage.setItem('delivrax_devis', JSON.stringify(hist));
+}
+
+function renderDevisHistory() {
+  const list = document.getElementById('histListDevis');
+  const hist = JSON.parse(localStorage.getItem('delivrax_devis') || '[]');
+  if (!hist.length) {
+    list.innerHTML = '<div class="hist-empty">Aucun devis enregistré pour le moment.</div>';
+    return;
+  }
+  list.innerHTML = '';
+  hist.forEach(h => {
+    const div = document.createElement('div');
+    div.className = 'hist-item';
+    div.innerHTML = `
+      <div class="h-main">
+        <strong>Devis n°${h.number}</strong>
+        <span>${h.client || 'Client non renseigné'} — ${h.trajet} — ${h.date || 'date non renseignée'} — ${h.total}</span>
+      </div>
+      <div class="h-actions">
+        <button class="del" data-num="${h.number}">Supprimer</button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+  list.querySelectorAll('.del').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let hist = JSON.parse(localStorage.getItem('delivrax_devis') || '[]');
+      hist = hist.filter(h => h.number !== btn.dataset.num);
+      localStorage.setItem('delivrax_devis', JSON.stringify(hist));
+      renderDevisHistory();
+    });
+  });
+}
+
+addDevisLine('Mise à disposition véhicule avec chauffeur', 1, 55);
+document.getElementById('dvDate').valueAsDate = new Date();
 </script>
 
 <script>
